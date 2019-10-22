@@ -1,7 +1,7 @@
 public class MoveRule 
 {
 	// There are a lot of return points to make early failures more efficient.
-	public boolean MoveRule.CheckMove(Card card, CardStack, destStack) 
+	public boolean MoveRule.CheckMove(Card card, CardStack destStack) 
 	{
 		
 		if (destStack.Type != this.DestStackType)
@@ -46,6 +46,32 @@ public class MoveRule
 				break;
 			default:
 				// Nothing to do here.
+		}
+		
+		
+		// Check destination stack traits
+		if (destStack.IstEmpty() 
+				&& destStack.initialCard != "")
+		{
+			if (destStack.initialCard.Length == 2)
+			{
+			// Sp]lit initialCard into 2 chars.  First one is Rank, second char is suit
+				if (initCard[0] != '*' 
+					&& initCard[0] != card.Rank)
+				{
+					return false;
+				}
+			}
+			else 
+			{
+				// Special rules like "FirstCardPlayed" for bald eagle
+			}
+			
+		}
+		else 
+		{
+			if (destStack.cardLimit >= destStack.Cards.size() + 1)
+				return false;
 		}
 		
 		return true;

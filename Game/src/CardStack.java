@@ -7,7 +7,7 @@ public class CardStack
 	public StackShape Shape;
 	public boolean lockCards;
 	
-	
+	public String initialCard; 
 	
 	public List<Card> Stack.TakeCard(Card card) 
 	{
