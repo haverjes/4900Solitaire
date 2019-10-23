@@ -1,0 +1,103 @@
+<Root>
+
+
+	<GameFile name="Klondike">
+		<!--  	Board section defines everything that is to be displayed and interactable.  
+				This includes the deck of cards being used, and the layout of cards.
+				
+				Note on the examples below:  I pulled the x|y numbers out of thin air, but they vaugely demonstrate the relative layout of everything.
+		-->
+		<Board>
+			<Deck numDecks="1" />
+			<Stack type="DrawDeck" xpos="10" ypos="200" drawToStackID="1" />
+			<Stack type="Waste" id="1" xpos="50" ypos="200" />
+			<!--  Foundations are defined for each suit.  Each one is defined as starting out empty, and specifies the first card that can be played on it.
+					The firstCard examples here represent "Ace of any suit".  This attribute would only be needed if initialCard is not empty.
+			-->
+			<Stack type="Foundation" xpos="100" ypos="200" initialCard="" firstCard="A*" />
+			<Stack type="Foundation" xpos="150" ypos="200" initialCard="" firstCard="A*" />
+			<Stack type="Foundation" xpos="200" ypos="200" initialCard="" firstCard="A*" />
+			<Stack type="Foundation" xpos="250" ypos="200" initialCard="" firstCard="A*" />
+			
+			<!--  Tab, or tableau,  Can have varying card counts.  
+				Orientation:  Whether cards placed face up or down.  'DownTopUp' means all are face down, except the top card.
+				splayed refers to how the cards are fanned out, the defined position being that of the first card.   
+			-->
+			<Stack type="Tab" xpos="10" ypos="100" cardCount="1" orientation="DownTopUp" shape="FanDown"/>
+			<Stack type="Tab" xpos="50" ypos="100" cardCount="2" orientation="DownTopUp" shape="FanDown"/>
+			<Stack type="Tab" xpos="90" ypos="100" cardCount="3" orientation="DownTopUp" shape="FanDown"/>
+			<Stack type="Tab" xpos="130" ypos="100" cardCount="4" orientation="DownTopUp" shape="FanDown"/>
+			<Stack type="Tab" xpos="170" ypos="100" cardCount="5" orientation="DownTopUp" shape="FanDown"/>
+			<Stack type="Tab" xpos="210" ypos="100" cardCount="6" orientation="DownTopUp" shape="FanDown"/>
+			<Stack type="Tab" xpos="250" ypos="100" cardCount="7" orientation="DownTopUp" shape="FanDown"/>
+		</Board>
+		
+		<!--  	Move Rules:  Define the rules controlling how cards can be moved. 
+				The examples below have a 'value' attribute, indicating whether or not the type of move is allowed.
+		-->
+		<MoveRules>
+
+			
+			<!--  The rules for moving to a foundation can be different than a tableau.  
+					In klondike, foundations are built up from an ace and remain the same suit.
+					Tableaus are played on in a decreasing sequence, and the color must alternate.
+			-->
+			<MoveRule destType="Foundation" value="1" cardSequence="Up" suitRequirement="SameSuit" allowGroup="0"/>
+			<MoveRule destType="Tab" value="1" cardSequence="Down" suitRequirement="AlternatingColor" allowGroup="1"/>
+		</MoveRules>
+	</GameFile>
+	
+
+	
+	<GameFile name="Binary Star">
+		
+		<Board>
+			<Deck numDecks="2" />
+			<Stack type="Foundation" xpos="10" ypos="200" initialCard="1S" lockCards="0"/>
+			<Stack type="Foundation" xpos="100" ypos="200" initialCard="KH" lockCards="0"/>
+			<Stack type="Tab" xpos="10" ypos="100" cardCount="6" orientation="AllFaceUp" shape="FanDown" lockCards="0"/>
+			<!--  Repeat for total of 17 tableaus -->
+		</Board>
+		<MoveRules>
+			<!--  Here, group moves and moving a card onto a tableau are not valid.  -->
+			<MoveRule destType="Foundation" value="1" cardSequence="UpOrDown" suitRequirement="none" allowGroup="0"/>
+		</MoveRules>
+	</GameFile>
+	
+	
+	
+	
+	<GameFile name="Bonanza Creek">
+		<Board>
+			<Deck numDecks="1" />
+			<Stack type="Foundation" xpos="100" ypos="200" initialCard="" firstCard="A*" lockCards="1"/>
+			<Stack type="Foundation" xpos="150" ypos="200" initialCard="" firstCard="A*" lockCards="1"/>
+			<Stack type="Foundation" xpos="200" ypos="200" initialCard="" firstCard="A*" lockCards="1"/>
+			<Stack type="Foundation" xpos="250" ypos="200" initialCard="" firstCard="A*" lockCards="1"/>
+			
+			<Stack type="Tab" xpos="10" ypos="100" cardCount="1" orientation="Up" shape="FanDown"/>
+			<Stack type="Tab" xpos="50" ypos="100" cardCount="3" orientation="1Down2Up" shape="FanDown"/>
+			<Stack type="Tab" xpos="130" ypos="100" cardCount="6" orientation="1Down5Up" shape="FanDown"/>
+			<Stack type="Tab" xpos="170" ypos="100" cardCount="6" orientation="1Down5Up" shape="FanDown"/>
+			<Stack type="Tab" xpos="210" ypos="100" cardCount="6" orientation="2Down4Up" shape="FanDown"/>
+			<Stack type="Tab" xpos="250" ypos="100" cardCount="6" orientation="2Down4Up" shape="FanDown"/>
+			<Stack type="Tab" xpos="300" ypos="100" cardCount="6" orientation="3Down3Up" shape="FanDown"/>
+			<Stack type="Tab" xpos="350" ypos="100" cardCount="6" orientation="3Down3Up" shape="FanDown"/>
+			<Stack type="Tab" xpos="400" ypos="100" cardCount="6" orientation="4Down2Up" shape="FanDown"/>
+			<Stack type="Tab" xpos="450" ypos="100" cardCount="6" orientation="4Down2Up" shape="FanDown"/>
+			
+		</Board> 
+		<MoveRules>
+			<!--  Here, group moves and moving a card onto a tableau are not valid.  -->
+			<MoveRule destType="Foundation" value="1" cardSequence="Up" suitRequirement="SameSuit" allowGroup="0"/>
+			<MoveRule destType="Tab" value="1" cardSequence="Down" suitRequirement="SameSuit" allowGroup="1"/>
+		</MoveRules>
+	</GameFile>
+	
+	
+</Root>
+
+
+
+
+

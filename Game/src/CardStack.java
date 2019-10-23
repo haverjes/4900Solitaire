@@ -1,53 +1,141 @@
-public class CardStack 
+import java.util.*;  
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.util.ListIterator;
+import java.util.Vector;
+
+import javax.swing.JComponent;
+
+public class CardStack extends JComponent implements ICardStack
 {
-	public List<Card> Cards;
+	enum StackType 
+	{
+		TAB, FOUNDATION, WASTE, DRAW
+	}
+	
+	public List<Card> cards;
 	public int yPos;
 	public int xPos;
 	
 	public StackShape Shape;
-	public boolean lockCards;
+	public boolean lockcards;
 	
 	public String initialCard; 
+	public String firstCard;
 	
-	public List<Card> Stack.TakeCard(Card card) 
+	protected final int SPREAD = 18;
+	protected int _x = 0;
+	protected int _y = 0;
+	
+	
+	public boolean getLockCards() { return lockcards; }
+	public void setLockCards(boolean v) { lockcards = v; }
+	
+	
+	public List<Card> TakeCard(Card card) 
 	{
-		int nIndex = this.Cards.indexOf(card);
+		int nIndex = this.cards.indexOf(card);
 		List<Card> retCardList = new ArrayList<Card>();
-		int nLastIndex = this.Cards.size() - 1;
+		int nLastIndex = this.cards.size() - 1;
 		
 		
-		for (int i = nIndex; i < this.Cards.size(); i++)
+		for (int i = nIndex; i < this.cards.size(); i++)
 		{
-			retCardList.add(this.Cards.get(i));
+			retCardList.add(this.cards.get(i));
 		}
 		
 		// Remove the cards from the list.
-		this.Cards.removeRange(nIndex, nLastIndex)
+		this.cards.removeRange(nIndex, nLastIndex);
 		
 		// Ensure topcard is face up, if stack not empty
-		if (this.Cards.size() > 0) 
-			this.Cards.get(nLastIndex).faceUp = true;
+		if (this.cards.size() > 0) 
+			this.cards.get(nLastIndex).faceUp = true;
 		
 		return retCardList;
 	}
 
 	// Add the list of carsd in order and update each card's Callback member.
-	public void Stack.PlaceCards(List<Card> cardList) 
+	public void PlaceCards(List<Card> cardList) 
 	{
 		for (Card card: cardList)
 		{
-			this.Cards.add(card);
+			this.cards.add(card);
 			card.StackCallBack = this;
 		}
 	}
 	
-	Card getTopCard() 
+	public Card getTopCard() 
 	{
-		return this.Cards.get(this.Cards.size() - 1);
+		return this.cards.get(this.cards.size() - 1);
 	}
 	
 	public int getCardIndex(Card card) 
 	{
-		return nIndex = this.Cards.indexOf(card);
+		return nIndex = this.cards.indexOf(card);
+	}
+	
+	
+	
+	/***********************
+	*  Drawing methods
+	*
+	************************/
+	public boolean contains(Point p)
+	{
+		Rectangle rect = new Rectangle(_x, _y, Card.CARD_WIDTH + 10, Card.CARD_HEIGHT * 3);
+		return (rect.contains(p));
+	}
+
+	public void setXY(int x, int y)
+	{
+		_x = x;
+		_y = y;
+		// System.out.println("CardStack SET _x: " + _x + " _y: " + _y);
+		setBounds(_x, _y, Card.CARD_WIDTH + 10, Card.CARD_HEIGHT * 3);
+	}
+
+	public Point getXY()
+	{
+		// System.out.println("CardStack GET _x: " + _x + " _y: " + _y);
+		return new Point(_x, _y);
+	}
+
+	@Override
+	protected void paintComponent(Graphics g)
+	{
+		super.paintComponent(g);
+		if (playStack)
+		{
+			removeAll();
+			ListIterator<Card> iter = v.listIterator();
+			Point prev = new Point(); // positioning relative to the container
+			Point prevWhereAmI = new Point();// abs positioning on the board
+			if (iter.hasNext())
+			{
+				Card c = iter.next();
+				// this origin is point(0,0) inside the cardstack container
+				prev = new Point();// c.getXY(); // starting deck pos
+				add(Solitaire.moveCard(c, prev.x, prev.y));
+				// setting x & y position
+				c.setWhereAmI(getXY());
+				prevWhereAmI = getXY();
+			} else
+			{
+				removeAll();
+			}
+
+			for (; iter.hasNext();)
+			{
+				Card c = iter.next();
+				c.setXY(new Point(prev.x, prev.y + SPREAD));
+				add(Solitaire.moveCard(c, prev.x, prev.y + SPREAD));
+				prev = c.getXY();
+				// setting x & y position
+				c.setWhereAmI(new Point(prevWhereAmI.x, prevWhereAmI.y + SPREAD));
+				prevWhereAmI = c.getWhereAmI();
+			}
+
+		}
 	}
 }
