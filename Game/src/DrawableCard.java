@@ -14,7 +14,7 @@ class DrawableCard extends JPanel
 	
 	
 	public int rank;
-	public Suit suit;
+	public Card.Suit suit;
 	public boolean faceUp;
 
 	
@@ -33,7 +33,7 @@ class DrawableCard extends JPanel
 	final static public int CARD_WIDTH = 100;
 	final static public int CORNER_ANGLE = 25;
 
-	DrawableCard(Suit cardSuit, int value)
+	DrawableCard(Card.Suit cardSuit, int value)
 	{
 		suit = cardSuit;
 		rank = value;

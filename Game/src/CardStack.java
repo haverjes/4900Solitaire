@@ -9,10 +9,16 @@ import javax.swing.JComponent;
 
 public class CardStack extends JComponent implements ICardStack
 {
-	enum StackType 
+	public static enum StackType 
 	{
 		TAB, FOUNDATION, WASTE, DRAW
 	}
+	
+	public static enum StackShape 
+	{
+		STACK, FANDOWN
+	}
+	
 	
 	public List<Card> cards;
 	public int yPos;
@@ -46,7 +52,10 @@ public class CardStack extends JComponent implements ICardStack
 		}
 		
 		// Remove the cards from the list.
-		this.cards.removeRange(nIndex, nLastIndex);
+		//this.cards.removeRange(nIndex, nLastIndex);  
+		// removeRange is a protected method, presumably because Java is managed by complete assholes.
+		this.cards.subList(nIndex, nLastIndex).clear();  // God! java is a stupid language.
+		
 		
 		// Ensure topcard is face up, if stack not empty
 		if (this.cards.size() > 0) 
@@ -61,7 +70,7 @@ public class CardStack extends JComponent implements ICardStack
 		for (Card card: cardList)
 		{
 			this.cards.add(card);
-			card.StackCallBack = this;
+			card.stackCallBack = this;
 		}
 	}
 	
@@ -72,7 +81,7 @@ public class CardStack extends JComponent implements ICardStack
 	
 	public int getCardIndex(Card card) 
 	{
-		return nIndex = this.cards.indexOf(card);
+		return this.cards.indexOf(card);
 	}
 	
 	

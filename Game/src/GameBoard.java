@@ -37,10 +37,10 @@ public class GameBoard
 	// Call DragDropMove() for the card on every cardstack.
 	public boolean ClickMove(Card card) 
 	{
-		if (!card.stackCallBack.LockCards)
+		if (!card.stackCallBack.getLockCards)
 			return false;
 		
-		for(Cardstack cardStack: this.CardStacks)
+		for(CardStack cardStack: this.Stacks)
 		{
 			if (DragDropMove(card, cardStack))
 			{

@@ -1,15 +1,17 @@
 // CardStack Interface
+import java.util.*; 
 
-enum StackShape 
-{
-	STACK, FANDOWN
-}
 
 interface ICardStack 
 {
-	List<Card> cards;
-	int xPos;
-	int yPos;
-	StackShape shape;
-	boolean lockCards;
+	List<Card> getCards();
+	void setCards(List<Card> a);
+	int getxPos();
+	void setxPos(int a);
+	int getyPos();
+	void setyPos(int a);
+	CardStack.StackShape getShape();
+	void setShape(CardStack.StackShape a);
+	boolean getLockCards();
+	void setLockCards(boolean a);
 }
