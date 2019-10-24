@@ -5,9 +5,9 @@ import java.awt.Rectangle;
 import java.util.ListIterator;
 import java.util.Vector;
 
-import javax.swing.JComponent;
+//import javax.swing.JComponent;
 
-public class CardStack extends JComponent implements ICardStack
+public class CardStack //extends JComponent //implements ICardStack
 {
 	public static enum StackType 
 	{
@@ -29,6 +29,9 @@ public class CardStack extends JComponent implements ICardStack
 	
 	public String initialCard; 
 	public String firstCard;
+	public int cardLimit;
+	
+	public StackType Type;
 	
 	protected final int SPREAD = 18;
 	protected int _x = 0;
@@ -38,6 +41,11 @@ public class CardStack extends JComponent implements ICardStack
 	public boolean getLockCards() { return lockcards; }
 	public void setLockCards(boolean v) { lockcards = v; }
 	
+	public CardStack() 
+	{
+		cards = new ArrayList<Card>();
+		
+	}
 	
 	public List<Card> TakeCard(Card card) 
 	{
@@ -85,11 +93,12 @@ public class CardStack extends JComponent implements ICardStack
 	}
 	
 	
-	
+
 	/***********************
 	*  Drawing methods
 	*
 	************************/
+/*
 	public boolean contains(Point p)
 	{
 		Rectangle rect = new Rectangle(_x, _y, Card.CARD_WIDTH + 10, Card.CARD_HEIGHT * 3);
@@ -147,4 +156,5 @@ public class CardStack extends JComponent implements ICardStack
 
 		}
 	}
+	*/
 }

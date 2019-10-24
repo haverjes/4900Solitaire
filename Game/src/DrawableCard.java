@@ -11,15 +11,17 @@ import javax.swing.JPanel;
 
 class DrawableCard extends JPanel
 {
+	final static public int CARD_HEIGHT = 150;
+	final static public int CARD_WIDTH = 100;
+	final static public int CORNER_ANGLE = 25;
 	
-	
-	public int rank;
-	public Card.Suit suit;
-	public boolean faceUp;
+	// public int rank;
+	// public Card.Suit suit;
+	// public boolean faceUp;
 
-	
+	private card;  // the card object
+
 	private Point _location; // location relative to container
-
 	private Point whereAmI; // used to create abs postion rectangle for contains
 	// functions
 
@@ -29,15 +31,11 @@ class DrawableCard extends JPanel
 	private final int x_offset = 10;
 	private final int y_offset = 20;
 	private final int new_x_offset = x_offset + (CARD_WIDTH - 30);
-	final static public int CARD_HEIGHT = 150;
-	final static public int CARD_WIDTH = 100;
-	final static public int CORNER_ANGLE = 25;
+	
 
-	DrawableCard(Card.Suit cardSuit, int value)
+	DrawableCard(Card basicCard)
 	{
-		suit = cardSuit;
-		rank = value;
-		faceUp = false;
+		card = basicCard;
 		_location = new Point();
 		x = 0;
 		y = 0;
@@ -46,22 +44,22 @@ class DrawableCard extends JPanel
 		whereAmI = new Point();
 	}
 
-	DrawableCard()
-	{
-		_suit = Card.Suit.CLUBS;
-		rank = 1;
-		faceUp = false;
-		_location = new Point();
-		x = 0;
-		y = 0;
-		_location.x = x;
-		_location.y = y;
-		whereAmI = new Point();
-	}
+	// DrawableCard()
+	// {
+		// _suit = Card.Suit.CLUBS;
+		// rank = 1;
+		// faceUp = false;
+		// _location = new Point();
+		// x = 0;
+		// y = 0;
+		// _location.x = x;
+		// _location.y = y;
+		// whereAmI = new Point();
+	// }
 
 	
 
-	
+	public Card getCard() { return card; }
 
 	public void setWhereAmI(Point p)
 	{
@@ -80,7 +78,7 @@ class DrawableCard extends JPanel
 
 	public Boolean getFaceStatus()
 	{
-		return faceUp;
+		return card.faceUp;
 	}
 
 	public void setXY(Point p)
@@ -94,13 +92,13 @@ class DrawableCard extends JPanel
 
 	public Card setFaceup()
 	{
-		faceUp = true;
+		card.faceUp = true;
 		return this;
 	}
 
 	public Card setFacedown()
 	{
-		faceUp = false;
+		card.faceUp = false;
 		return this;
 	}
 
@@ -134,9 +132,9 @@ class DrawableCard extends JPanel
 		g2d.setColor(Color.black);
 		g2d.draw(rect2);
 		// DRAW THE CARD SUIT AND VALUE IF FACEUP
-		if (faceUp)
+		if (card.faceUp)
 		{
-			switch (_suit)
+			switch (card.suit)
 			{
 			case HEARTS:
 				drawSuit(g2d, "Hearts", Color.RED);
@@ -152,7 +150,7 @@ class DrawableCard extends JPanel
 				break;
 			}
 			int new_x_offset = x_offset + (CARD_WIDTH - 30);
-			switch (rank)
+			switch (card.rank)
 			{
 			case 1:
 				drawValue(g2d, "A");

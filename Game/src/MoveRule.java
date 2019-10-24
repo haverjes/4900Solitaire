@@ -1,10 +1,5 @@
 import java.util.*;  
 
-
-
-
-
-
 public class MoveRule 
 {
 	enum CardSequence {	UP, DOWN, UPORDOWN }
@@ -18,6 +13,8 @@ public class MoveRule
 	public boolean allowGroup;
 	public boolean rankRollover;
 	
+	
+	
 	// There are a lot of return points to make early failures more efficient.
 	public boolean CheckMove(Card card, CardStack destStack) 
 	{
@@ -27,39 +24,39 @@ public class MoveRule
 			return false;
 		
 		// get card index, if group move isn't allowed
-		if (!this.GroupMoveAllowed && card != card.StackCallBack.Cards.last()) 
+		if (!this.allowGroup && card != card.stackCallBack.getTopCard()) 
 		{
 			return false;
 		}
 		
 		Card lastCard = destStack.getTopCard();
 		
-		switch (this.SuitRequirement) 
+		switch (this.suitPattern) 
 		{
-			case suitPattern.ALTCOLOR:
+			case ALTCOLOR:
 				if (!IsAltColor(card, lastCard))
 					return false;
 				break;
-			case suitPattern.SAME:
-				if (card.Suit != lastCard.Suit)
+			case SAME:
+				if (card.suit != lastCard.suit)
 					return false;
 				break;
 			default:
 				// Nothing to do here.
 		}
 		
-		int diff = RankDiff(newCard, lastCard);
+		int diff = RankDiff(card, lastCard);
 		switch (this.cardSequence) 
 		{
-			case cardSequence.UP:
+			case UP:
 				if (diff != 1)  // TODO:  Add Rollover
 					return false;
 				break;
-			case cardSequence.DOWN:
+			case DOWN:
 				if (diff != -1)  // TODO:  Add Rollover
 					return false;
 				break;
-			case cardSequence.UPORDOWN:
+			case UPORDOWN:
 				if (diff != 1  && diff != -1)  // TODO:  Add Rollover
 					return false;
 				break;
@@ -69,12 +66,15 @@ public class MoveRule
 		
 		
 		// Check destination stack traits
-		if (destStack.IstEmpty() 
+		if (destStack.cards.isEmpty() 
 				&& destStack.firstCard != "")
 		{
-			if (destStack.firstCard.Length == 2)
+			if (destStack.firstCard.length() == 2)
 			{
-			// Sp]lit firstCard into 2 chars.  First one is Rank, second char is suit
+			
+				// Sp]lit firstCard into 2 chars.  First one is Rank, second char is suit
+				//char[] firstCard = destStack.firstCard.split("");
+				char[] firstCard = destStack.firstCard.toCharArray();
 				if (firstCard[0] != '*' 
 					&& firstCard[0] != card.rank)
 				{
@@ -85,20 +85,20 @@ public class MoveRule
 				{
 					switch (firstCard[0])
 					{
-						case "S":
-							if (card.suit != Suit.SPADES) 
+						case 'S':
+							if (card.suit != Card.Suit.SPADES) 
 								return false;
 							break;
-						case "C":
-							if (card.suit != Suit.CLUBS) 
+						case 'C':
+							if (card.suit != Card.Suit.CLUBS) 
 								return false;
 							break;
-						case "D":
-							if (card.suit != Suit.DIAMONDS) 
+						case 'D':
+							if (card.suit != Card.Suit.DIAMONDS) 
 								return false;
 							break;
-						case "H":
-							if (card.suit != Suit.HEARTS) 
+						case 'H':
+							if (card.suit != Card.Suit.HEARTS) 
 								return false;
 							break;
 					}
@@ -112,7 +112,7 @@ public class MoveRule
 		}
 		else 
 		{
-			if (destStack.cardLimit >= destStack.Cards.size() + 1)
+			if (destStack.cardLimit >= destStack.cards.size() + 1)
 				return false;
 		}
 		
@@ -130,7 +130,7 @@ public class MoveRule
 
 	boolean IsBlack(Card card)
 	{
-		if (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS)
+		if (card.suit == Card.Suit.SPADES || card.suit == Card.Suit.CLUBS)
 			return true;
 		
 		return false;
@@ -139,11 +139,11 @@ public class MoveRule
 	int RankDiff(Card newCard, Card topCard) 
 	{
 		// TopCard - NewCard		
-		int diff = newCard.Rank - topCard.Rank;
+		int diff = newCard.rank - topCard.rank;
 		
 		// if abs(diff) == 12, then one is a King and the other an Ace.  
 		// Get the rollover value by reversing the sign.
-		if (this.RankRollover && (diff == 12 || diff == -12)) 
+		if (this.rankRollover && (diff == 12 || diff == -12)) 
 		{
 			diff = diff / 12 * -1; 
 		}

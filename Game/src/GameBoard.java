@@ -6,7 +6,13 @@ public class GameBoard
 	public List<MoveRule> Rules;
 	public List<Card> Cards;
 	
-	
+	public GameBoard() 
+	{
+		Stacks = new ArrayList<CardStack>();
+		Rules = new ArrayList<MoveRule>();
+		Cards = new ArrayList<Card>();
+		
+	}
 	
 	protected void MoveCard(Card card, CardStack destStack) 
 	{
@@ -37,7 +43,7 @@ public class GameBoard
 	// Call DragDropMove() for the card on every cardstack.
 	public boolean ClickMove(Card card) 
 	{
-		if (!card.stackCallBack.getLockCards)
+		if (!card.stackCallBack.getLockCards())
 			return false;
 		
 		for(CardStack cardStack: this.Stacks)
@@ -50,6 +56,20 @@ public class GameBoard
 		return false;
 	}
 	
-	
+	public void generateCards(int decks) 
+	{
+		int totalCards = 0;
+		for (int deck = 0; deck < decks; deck++) 
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				for (int j = 1; j < 14; j++) 
+				{
+					this.Cards.add(new Card(j, i, totalCards));
+					totalCards++;
+				}
+			}
+		}
+	}
 	
 }
