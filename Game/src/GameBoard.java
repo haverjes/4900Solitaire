@@ -11,7 +11,6 @@ public class GameBoard
 		Stacks = new ArrayList<CardStack>();
 		Rules = new ArrayList<MoveRule>();
 		Cards = new ArrayList<Card>();
-		
 	}
 	
 	protected void MoveCard(Card card, CardStack destStack) 

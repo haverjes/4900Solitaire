@@ -28,7 +28,11 @@ public class CardStack //extends JComponent //implements ICardStack
 	public boolean lockcards;
 	
 	public String initialCard; 
-	public String firstCard;
+	public int initFaceDown;
+	
+	public int firstCardRank; 
+	public Card.Suit firstCardSuit; 
+	
 	public int cardLimit;
 	
 	public StackType Type;
@@ -92,7 +96,15 @@ public class CardStack //extends JComponent //implements ICardStack
 		return this.cards.indexOf(card);
 	}
 	
+	public int getCardCount() { return cards.size(); }
 	
+	public void dealCard(Card card) 
+	{
+		if (getCardCount() < initFaceDown) 
+			card.faceUp = false;
+		
+		cards.add(card);
+	}
 
 	/***********************
 	*  Drawing methods
@@ -157,4 +169,25 @@ public class CardStack //extends JComponent //implements ICardStack
 		}
 	}
 	*/
+	
+	static public StackType getStackType(String s) 
+	{
+		switch (s)
+		{
+			case "Tab":
+				return StackType.TAB;
+				// break;
+			case "Foundation":
+				return StackType.FOUNDATION;
+				// break;
+			case "Draw":
+				return StackType.DRAW;
+				// break;
+			case "Waste":
+				return StackType.WASTE;
+				// break;
+			default:
+				return null;
+		}
+	}
 }

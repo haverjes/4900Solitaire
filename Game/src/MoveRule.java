@@ -14,6 +14,14 @@ public class MoveRule
 	public boolean rankRollover;
 	
 	
+	public MoveRule(CardStack.StackType destStack, CardSequence seq, SuitRequirement suitReq, boolean groupMove, boolean rollover)
+	{
+		destStackType = destStack;
+		cardSequence = seq;
+		suitPattern = suitReq;
+		allowGroup = groupMove;
+		rankRollover = rollover;
+	}
 	
 	// There are a lot of return points to make early failures more efficient.
 	public boolean CheckMove(Card card, CardStack destStack) 
@@ -66,48 +74,21 @@ public class MoveRule
 		
 		
 		// Check destination stack traits
-		if (destStack.cards.isEmpty() 
-				&& destStack.firstCard != "")
+		if (destStack.cards.isEmpty())
 		{
-			if (destStack.firstCard.length() == 2)
-			{
 			
-				// Sp]lit firstCard into 2 chars.  First one is Rank, second char is suit
-				//char[] firstCard = destStack.firstCard.split("");
-				char[] firstCard = destStack.firstCard.toCharArray();
-				if (firstCard[0] != '*' 
-					&& firstCard[0] != card.rank)
-				{
-					return false;
-				}
-				
-				if (firstCard[0] != '*') 
-				{
-					switch (firstCard[0])
-					{
-						case 'S':
-							if (card.suit != Card.Suit.SPADES) 
-								return false;
-							break;
-						case 'C':
-							if (card.suit != Card.Suit.CLUBS) 
-								return false;
-							break;
-						case 'D':
-							if (card.suit != Card.Suit.DIAMONDS) 
-								return false;
-							break;
-						case 'H':
-							if (card.suit != Card.Suit.HEARTS) 
-								return false;
-							break;
-					}
-				}
-			}
-			else 
+			if (destStack.firstCardRank > 0
+				&& destStack.firstCardRank != card.rank)
 			{
-				// Special rules like "FirstCardPlayed" for bald eagle
+				return false;
 			}
+			
+			if (destStack.firstCardSuit != null
+				&& destStack.firstCardSuit != card.suit) 
+			{
+				return false;
+			}
+			
 			
 		}
 		else 
