@@ -1,9 +1,9 @@
 import java.util.*;  
-import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.util.ListIterator;
-import java.util.Vector;
+//import java.awt.Graphics;
+//import java.awt.Point;
+//import java.awt.Rectangle;
+//import java.util.ListIterator;
+//import java.util.Vector;
 
 //import javax.swing.JComponent;
 
@@ -87,6 +87,12 @@ public class CardStack //extends JComponent //implements ICardStack
 		}
 	}
 	
+	public void PlaceCard(Card card) 
+	{	
+			this.cards.add(card);
+			card.stackCallBack = this;
+	}
+	
 	public Card getTopCard() 
 	{
 		return this.cards.get(this.cards.size() - 1);
@@ -107,6 +113,14 @@ public class CardStack //extends JComponent //implements ICardStack
 		cards.add(card);
 	}
 
+	public String toString() 
+	{
+		String sRet = String.valueOf(this.cards.size());
+		for(Card card: this.cards)
+			sRet = sRet + " - " + card.toString();
+		
+		return sRet;
+	}
 	/***********************
 	*  Drawing methods
 	*

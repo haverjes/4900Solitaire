@@ -1,4 +1,4 @@
-import java.util.*;  
+//import java.util.*;  
 
 public class MoveRule 
 {
@@ -59,15 +59,15 @@ public class MoveRule
 		switch (this.cardSequence) 
 		{
 			case UP:
-				if (diff != 1)  // TODO:  Add Rollover
+				if (diff != 1)  
 					return false;
 				break;
 			case DOWN:
-				if (diff != -1)  // TODO:  Add Rollover
+				if (diff != -1)  
 					return false;
 				break;
 			case UPORDOWN:
-				if (diff != 1  && diff != -1)  // TODO:  Add Rollover
+				if (diff != 1  && diff != -1)  
 					return false;
 				break;
 			default:

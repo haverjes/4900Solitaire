@@ -15,18 +15,19 @@ public class XML_Loader
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document xDoc = builder.parse(xmlFile);
 			
-			// Generate cards
-			// Build stacks
+			
+			
 			xDoc.getDocumentElement().normalize();
 			Element root = xDoc.getDocumentElement();
 			
 			Element xboard = (Element) root.getElementsByTagName("Board").item(0);
 			Element xrules = (Element) root.getElementsByTagName("MoveRules").item(0);
 			
-			Element xDeck = (Element) xboard.getElementsByTagName("Decks").item(0);
+			// Set the number of card decks to use and generate the card list.
+			Element xDeck = (Element) xboard.getElementsByTagName("Deck").item(0);
 			retGB.generateCards(Integer.parseInt(xDeck.getAttribute("numDecks")));
 			
-
+			// Build stacks
 			NodeList xStackDefs = xboard.getElementsByTagName("Stack");
 			for (int i = 0; i < xStackDefs.getLength(); i++ )
 			{
@@ -34,6 +35,7 @@ public class XML_Loader
 				retGB.Stacks.add(MakeCardStack((Element)xStack));
 			}
 			
+			// Build rules
 			NodeList xMoveDefs = xrules.getElementsByTagName("MoveRule");
 			for (int i = 0; i < xMoveDefs.getLength(); i++ )
 			{
@@ -43,6 +45,9 @@ public class XML_Loader
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		retGB.dealCards();
+		
 		return retGB;
 	}
 	
@@ -68,9 +73,9 @@ public class XML_Loader
 		
 		if (xStack.hasAttribute("firstCard")) 
 		{
-			char[] sFirstCard = xStack.getAttribute("firstCard").toCharArray();
-			newStack.firstCardRank = Card.convertRankInt(sFirstCard[0]);
-			newStack.firstCardSuit = Card.convertSuit(sFirstCard[1]);
+			String sFirstCard = xStack.getAttribute("firstCard");
+			newStack.firstCardRank = Card.convertRankInt(sFirstCard.substring(0, sFirstCard.length() - 1));
+			newStack.firstCardSuit = Card.convertSuit(sFirstCard.substring(sFirstCard.length() - 1));
 		}
 		
 		if (xStack.hasAttribute("cardCount")) 
@@ -96,8 +101,8 @@ public class XML_Loader
 	
 	public static MoveRule MakeNewRule(Element xRule) 
 	{
-		boolean allowGroup = (Integer.parseInt(xRule.getAttribute("allowGroup")) > 0) ;
-		boolean rankRollover = (Integer.parseInt(xRule.getAttribute("rankRollover")) > 0);
+		boolean allowGroup = (xRule.hasAttribute("allowGroup") && Integer.parseInt(xRule.getAttribute("allowGroup")) > 0) ;
+		boolean rankRollover = (xRule.hasAttribute("rankRollover") && Integer.parseInt(xRule.getAttribute("rankRollover")) > 0);
 		MoveRule newRule = new MoveRule(xRule.getAttribute("destType"),
 			xRule.getAttribute("cardSequence"),
 			xRule.getAttribute("suitRequirement"),

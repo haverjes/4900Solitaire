@@ -1,5 +1,5 @@
 // Card Class
-import java.util.*;  
+//import java.util.*;  
 
 
 
@@ -35,72 +35,55 @@ class Card
 		return (this == stackCallBack.getTopCard());
 	}
 
-/*
-	static public char convertRankLetter(int r) 
+	public String toString() 
+	{
+		return convertRankStr(this.rank) + convertSuitStr(this.suit);
+	}
+	
+	static public String convertRankStr(int r) 
 	{
 		switch (r)
 			{
 			case 1:
-				return 'A';
-				break;
-			case 2:
-				return '2';
-				break;
-			case 3:
-				return '3';
-				break;
-			case 4:
-				return '4';
-				break;
-			case 5:
-				return '5';
-				break;
-			case 6:
-				return '6';
-				break;
-			case 7:
-				return '7';
-				break;
-			case 8:
-				return '8';
-				break;
-			case 9:
-				return '9';
-				break;
-			case 10:
-				return '10';
-				break;
+				return "A";
+				// break;
 			case 11:
-				return 'J';
-				break;
+				return "J";
+				// break;
 			case 12:
-				return 'Q';
-				break;
+				return "Q";
+				// break;
 			case 13:
-				return 'K';
-				break;
+				return "K";
+				// break;
+			default:
+				return String.valueOf(r);
 			}
 	}
-	*/
-	static public int convertRankInt(char r) 
+	static public int convertRankInt(String r) 
 	{
 		switch (r)
 			{
-			case 'A':
+			case "A":
 				return 1;
 				// break;
-			case 'J':
+			case "J":
 				return 11;
 				// break;
-			case 'Q':
+			case "Q":
 				return 12;
 				// break;
-			case 'K':
+			case "K":
 				return 13;
 				// break;
 			default:
-				return Character.getNumericValue(r);
+				return Integer.parseInt(r);
 			}
+	}
+	
+	static public Suit convertSuit(String s) 
+	{
+		return convertSuit(s.charAt(0));
 	}
 	
 	static public Suit convertSuit(char s) 
@@ -123,5 +106,24 @@ class Card
 				return null;
 		}
 	}
-	
+	static public String convertSuitStr(Suit s) 
+	{
+		switch (s)
+		{
+			case SPADES:
+					return "S";
+				// break;
+			case CLUBS:
+					return "C";
+				// break;
+			case DIAMONDS:
+					return "D";
+				// break;
+			case HEARTS:
+					return "H";
+				// break;
+			default:
+				return null;
+		}
+	}	
 }
