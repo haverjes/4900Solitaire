@@ -14,11 +14,13 @@ public class MoveRule
 	public boolean rankRollover;
 	
 	
-	public MoveRule(CardStack.StackType destStack, CardSequence seq, SuitRequirement suitReq, boolean groupMove, boolean rollover)
+	public MoveRule(String destStack, String seq, String suitReq, boolean groupMove, boolean rollover)
 	{
-		destStackType = destStack;
-		cardSequence = seq;
-		suitPattern = suitReq;
+		
+		
+		destStackType = CardStack.StackType.valueOf(destStack.toUpperCase());
+		cardSequence = CardSequence.valueOf(seq.toUpperCase());
+		suitPattern = SuitRequirement.valueOf(suitReq.toUpperCase());
 		allowGroup = groupMove;
 		rankRollover = rollover;
 	}

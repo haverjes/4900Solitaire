@@ -9,30 +9,40 @@ public class XML_Loader
 	{
 		GameBoard retGB = new GameBoard();
 		
-		File xmlFile = new File(file);
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder = factory.newDocumentBuilder();
-		Document xDoc = builder.parse(xmlFile);
-		
-		// Generate cards
-		// Build stacks
-		
-		Element root = xDoc.getDocumentElement();
-		
-		retGB.generateCards(root.getElementsByTagName("Board")[0].getElementsByTagName("Decks").getAttribute("numDecks"));
-		
-		Element[] xStackDefs = root.getElementsByTagName("Board")[0].getElementsByTagName("Stack");
-		for (Element xStack: xStackDefs )
-		{
-			retGB.Stacks.add(MakeCardStack(xStack));
+		try {
+			File xmlFile = new File(file);
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document xDoc = builder.parse(xmlFile);
+			
+			// Generate cards
+			// Build stacks
+			xDoc.getDocumentElement().normalize();
+			Element root = xDoc.getDocumentElement();
+			
+			Element xboard = (Element) root.getElementsByTagName("Board").item(0);
+			Element xrules = (Element) root.getElementsByTagName("MoveRules").item(0);
+			
+			Element xDeck = (Element) xboard.getElementsByTagName("Decks").item(0);
+			retGB.generateCards(Integer.parseInt(xDeck.getAttribute("numDecks")));
+			
+
+			NodeList xStackDefs = xboard.getElementsByTagName("Stack");
+			for (int i = 0; i < xStackDefs.getLength(); i++ )
+			{
+				Node xStack = xStackDefs.item(i);
+				retGB.Stacks.add(MakeCardStack((Element)xStack));
+			}
+			
+			NodeList xMoveDefs = xrules.getElementsByTagName("MoveRule");
+			for (int i = 0; i < xMoveDefs.getLength(); i++ )
+			{
+				Node xRule = xMoveDefs.item(i);
+				retGB.Rules.add(MakeNewRule((Element)xRule));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
-		Element[] xMoveDefs = root.getElementsByTagName("MoveRules")[0].getElementsByTagName("MoveRule");
-		for (Element xRule: xMoveDefs )
-		{
-			retGB.Rules.add(MakeNewRule(xRule));
-		}
-		
 		return retGB;
 	}
 	
@@ -49,8 +59,8 @@ public class XML_Loader
 		
 		newStack.Type = CardStack.getStackType(xStack.getAttribute("type"));
 		
-		newStack.xPos = String.valueOf(xStack.getAttribute("xpos"));
-		newStack.yPos = String.valueOf(xStack.getAttribute("ypos"));
+		newStack.xPos = Integer.parseInt(xStack.getAttribute("xpos"));
+		newStack.yPos = Integer.parseInt(xStack.getAttribute("ypos"));
 		
 		
 		if (xStack.hasAttribute("initialCard")) 
@@ -65,19 +75,19 @@ public class XML_Loader
 		
 		if (xStack.hasAttribute("cardCount")) 
 		{
-			newStack.cardCount = String.valueOf(xStack.getAttribute("cardCount"));
+			newStack.initCardCount = Integer.parseInt(xStack.getAttribute("cardCount"));
 		}
 		
 		if (xStack.hasAttribute("cardLimit")) 
 		{
-			newStack.cardLimit = String.valueOf(xStack.getAttribute("cardLimit"));
+			newStack.cardLimit = Integer.parseInt(xStack.getAttribute("cardLimit"));
 		}
 		
 		
 		
 		if (xStack.hasAttribute("initFaceDown")) 
 		{
-			newStack.initFaceDown = String.valueOf(xStack.getAttribute("initFaceDown"));
+			newStack.initFaceDown = Integer.parseInt(xStack.getAttribute("initFaceDown"));
 		}
 		// Continue for each attribute
 		
@@ -86,11 +96,11 @@ public class XML_Loader
 	
 	public static MoveRule MakeNewRule(Element xRule) 
 	{
-		boolean allowGroup = (String.valueOf(xRule.getAttribute("allowGroup")) > 0) ? true : false;
-		boolean rankRollover = (String.valueOf(xRule.getAttribute("rankRollover")) > 0) ? true : false;
+		boolean allowGroup = (Integer.parseInt(xRule.getAttribute("allowGroup")) > 0) ;
+		boolean rankRollover = (Integer.parseInt(xRule.getAttribute("rankRollover")) > 0);
 		MoveRule newRule = new MoveRule(xRule.getAttribute("destType"),
 			xRule.getAttribute("cardSequence"),
-			xRule.getAttribute("cardSequence"),
+			xRule.getAttribute("suitRequirement"),
 			allowGroup, 
 			rankRollover);
 		

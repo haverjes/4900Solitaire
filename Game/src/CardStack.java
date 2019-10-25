@@ -29,6 +29,7 @@ public class CardStack //extends JComponent //implements ICardStack
 	
 	public String initialCard; 
 	public int initFaceDown;
+	public int initCardCount;
 	
 	public int firstCardRank; 
 	public Card.Suit firstCardSuit; 
@@ -130,7 +131,7 @@ public class CardStack //extends JComponent //implements ICardStack
 		// System.out.println("CardStack GET _x: " + _x + " _y: " + _y);
 		return new Point(_x, _y);
 	}
-
+	
 	@Override
 	protected void paintComponent(Graphics g)
 	{
