@@ -1,3 +1,4 @@
+package Game;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
@@ -8,11 +9,35 @@ class XML_LoaderTest1 {
 	
 	@Test
 	final void testLoadXML() {
-		testGB = XML_Loader.LoadXML(".\\Game\\Tests\\GameFileUnitTest_1.xml");
 		
-		System.out.print(testGB.toString());
+		try {
+			testGB = XML_Loader.LoadXML(".\\Game\\Tests\\GameFileUnitTest_1.xml");
+			
+			System.out.println(testGB.toString());
+
 		
-		fail("Not yet implemented"); // TODO
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
+	
+	@Test
+	final void testBasicMove() {
+		testGB = XML_Loader.LoadXML(".\\Game\\Tests\\GameUnitTest_Move1.xml");
+		
+		System.out.println(testGB.toString());
+		
+		Card cCard = testGB.Stacks.get(1).getTopCard();
+		
+		assertTrue(testGB.ClickMove(cCard));
+		
+		
+		cCard = testGB.Stacks.get(2).getTopCard();
+		assertTrue(!testGB.ClickMove(cCard));
+		
+		//fail("Not yet implemented"); // TODO
+		System.out.println("----------------------------");
+		System.out.println(testGB.toString());
+	}
 }

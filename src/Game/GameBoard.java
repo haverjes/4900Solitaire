@@ -1,3 +1,4 @@
+package Game;
 import java.util.*;
 import java.util.stream.Collectors;  
 
@@ -24,6 +25,7 @@ public class GameBoard
 	
 	public boolean DragDropMove(Card card, CardStack destStack) 
 	{
+		System.out.println("Attempting to move " + card.toString() + " to " + destStack.toString());
 		if (card.stackCallBack.getLockCards())
 			return false;
 			
@@ -43,7 +45,7 @@ public class GameBoard
 	// Call DragDropMove() for the card on every cardstack.
 	public boolean ClickMove(Card card) 
 	{
-		if (!card.stackCallBack.getLockCards())
+		if (card.stackCallBack.getLockCards())
 			return false;
 		
 		for(CardStack cardStack: this.Stacks)

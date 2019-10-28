@@ -1,5 +1,7 @@
+package Game;
 //XML_Loader.java
 import org.w3c.dom.*;
+
 import javax.xml.parsers.*;
 import java.io.*;
 

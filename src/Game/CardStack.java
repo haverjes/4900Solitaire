@@ -1,3 +1,5 @@
+package Game;
+
 import java.util.*;  
 //import java.awt.Graphics;
 //import java.awt.Point;
@@ -56,7 +58,7 @@ public class CardStack //extends JComponent //implements ICardStack
 	{
 		int nIndex = this.cards.indexOf(card);
 		List<Card> retCardList = new ArrayList<Card>();
-		int nLastIndex = this.cards.size() - 1;
+//		int nLastIndex = this.cards.size() - 1;
 		
 		
 		for (int i = nIndex; i < this.cards.size(); i++)
@@ -65,14 +67,12 @@ public class CardStack //extends JComponent //implements ICardStack
 		}
 		
 		// Remove the cards from the list.
-		//this.cards.removeRange(nIndex, nLastIndex);  
-		// removeRange is a protected method, presumably because Java is managed by complete assholes.
-		this.cards.subList(nIndex, nLastIndex).clear();  // God! java is a stupid language.
+		this.cards.removeAll(retCardList);
 		
 		
 		// Ensure topcard is face up, if stack not empty
 		if (this.cards.size() > 0) 
-			this.cards.get(nLastIndex).faceUp = true;
+			this.getTopCard().faceUp = true;
 		
 		return retCardList;
 	}
@@ -95,7 +95,10 @@ public class CardStack //extends JComponent //implements ICardStack
 	
 	public Card getTopCard() 
 	{
-		return this.cards.get(this.cards.size() - 1);
+		if (cards.size() > 0)
+			return this.cards.get(this.cards.size() - 1);
+		else
+			return null;
 	}
 	
 	public int getCardIndex(Card card) 
