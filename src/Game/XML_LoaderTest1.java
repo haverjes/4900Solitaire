@@ -36,7 +36,7 @@ class XML_LoaderTest1 {
 		cCard = testGB.Stacks.get(2).getTopCard();
 		assertTrue(!testGB.ClickMove(cCard));
 		
-		//fail("Not yet implemented"); // TODO
+
 		System.out.println("----------------------------");
 		System.out.println(testGB.toString());
 	}
