@@ -1,16 +1,21 @@
 package Game;
 
 import java.util.*;  
-//import java.awt.Graphics;
-//import java.awt.Point;
-//import java.awt.Rectangle;
-//import java.util.ListIterator;
-//import java.util.Vector;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.util.ListIterator;
 
-//import javax.swing.JComponent;
+import javax.swing.JComponent;
 
-public class CardStack //extends JComponent //implements ICardStack
+public class CardStack extends JComponent //implements ICardStack
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+
 	public static enum StackType 
 	{
 		TAB, FOUNDATION, WASTE, DRAW
@@ -128,7 +133,7 @@ public class CardStack //extends JComponent //implements ICardStack
 	*  Drawing methods
 	*
 	************************/
-/*
+
 	public boolean contains(Point p)
 	{
 		Rectangle rect = new Rectangle(_x, _y, Card.CARD_WIDTH + 10, Card.CARD_HEIGHT * 3);
@@ -153,10 +158,10 @@ public class CardStack //extends JComponent //implements ICardStack
 	protected void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
-		if (playStack)
+		if (this.Shape == StackShape.FANDOWN)
 		{
 			removeAll();
-			ListIterator<Card> iter = v.listIterator();
+			ListIterator<Card> iter = cards.listIterator();
 			Point prev = new Point(); // positioning relative to the container
 			Point prevWhereAmI = new Point();// abs positioning on the board
 			if (iter.hasNext())
@@ -164,7 +169,7 @@ public class CardStack //extends JComponent //implements ICardStack
 				Card c = iter.next();
 				// this origin is point(0,0) inside the cardstack container
 				prev = new Point();// c.getXY(); // starting deck pos
-				add(Solitaire.moveCard(c, prev.x, prev.y));
+				add(SolitaireEngine.moveCard(c, prev.x, prev.y));
 				// setting x & y position
 				c.setWhereAmI(getXY());
 				prevWhereAmI = getXY();
@@ -177,7 +182,7 @@ public class CardStack //extends JComponent //implements ICardStack
 			{
 				Card c = iter.next();
 				c.setXY(new Point(prev.x, prev.y + SPREAD));
-				add(Solitaire.moveCard(c, prev.x, prev.y + SPREAD));
+				add(SolitaireEngine.moveCard(c, prev.x, prev.y + SPREAD));
 				prev = c.getXY();
 				// setting x & y position
 				c.setWhereAmI(new Point(prevWhereAmI.x, prevWhereAmI.y + SPREAD));
@@ -186,7 +191,7 @@ public class CardStack //extends JComponent //implements ICardStack
 
 		}
 	}
-	*/
+
 	
 	static public StackType getStackType(String s) 
 	{

@@ -1,13 +1,18 @@
 package Game;
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;  
 
-public class GameBoard 
+public class GameBoard implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public List<CardStack> Stacks;
 	public List<MoveRule> Rules;
 	public List<Card> Cards;
-	
+	public String rulesText;
 	public GameBoard() 
 	{
 		Stacks = new ArrayList<CardStack>();
@@ -63,11 +68,11 @@ public class GameBoard
 		int totalCards = 0;
 		for (int deck = 0; deck < decks; deck++) 
 		{
-			for (int i = 0; i < 4; i++)
+			for (int suitIndex = 0; suitIndex < 4; suitIndex++)
 			{
-				for (int j = 1; j < 14; j++) 
+				for (int rankIndex = 1; rankIndex < 14; rankIndex++) 
 				{
-					this.Cards.add(new Card(j, i, totalCards));
+					this.Cards.add(new Card(rankIndex, suitIndex, totalCards));
 					totalCards++;
 				}
 			}

@@ -37,6 +37,10 @@ public class XML_Loader
 				retGB.Stacks.add(MakeCardStack((Element)xStack));
 			}
 			
+			// Get the game rules (CDATA, so requires extra functions because Java handle XML ssssooooo well.
+			Element xTextRule = (Element) xboard.getElementsByTagName("Rules").item(0);
+			retGB.rulesText = getCharacterDataFromElement(xTextRule);
+			
 			// Build rules
 			NodeList xMoveDefs = xrules.getElementsByTagName("MoveRule");
 			for (int i = 0; i < xMoveDefs.getLength(); i++ )
@@ -53,6 +57,24 @@ public class XML_Loader
 		return retGB;
 	}
 	
+	public static String getCharacterDataFromElement(Element e) {
+		if (e == null)
+			return "";
+		
+	    NodeList list = e.getChildNodes();
+	    String data;
+
+	    for(int index = 0; index < list.getLength(); index++){
+	        if(list.item(index) instanceof CharacterData){
+	            CharacterData child = (CharacterData) list.item(index);
+	            data = child.getData();
+
+	            if(data != null && data.trim().length() > 0)
+	                return child.getData();
+	        }
+	    }
+	    return "";
+	}
 	
 	public static CardStack MakeCardStack(Element xStack) 
 	{

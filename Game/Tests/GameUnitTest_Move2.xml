@@ -1,0 +1,17 @@
+<GameFile name="BasicBoardTest">
+	
+	<Board>
+		<Deck numDecks="1" />
+		<Stack type="Foundation" xpos="10" ypos="200" initialCard="1S" lockCards="0"/>
+		
+		<Stack type="Tab" xpos="10" ypos="100" cardCount="1" initFaceDown="0" shape="FanDown" initialCard="11S" lockCards="0"/>
+		<Stack type="Tab" xpos="10" ypos="100" cardCount="1" initFaceDown="0" shape="FanDown" initialCard="10D" lockCards="0"/>
+		<Stack type="Tab" xpos="10" ypos="100" cardCount="1" initFaceDown="0" shape="FanDown" initialCard="9S" lockCards="0"/>
+		<Stack type="Tab" xpos="10" ypos="100" cardCount="1" initFaceDown="0" shape="FanDown" initialCard="8S" lockCards="0"/>
+		<Stack type="Tab" xpos="10" ypos="100" cardCount="1" initFaceDown="0" shape="FanDown" initialCard="7S" lockCards="0"/>
+	</Board>
+	<MoveRules>
+		<MoveRule destType="Foundation" value="1" cardSequence="UpOrDown" suitRequirement="none" allowGroup="0"/>
+		<MoveRule destType="Tab" value="1" cardSequence="Down" suitRequirement="none" allowGroup="1"/>
+	</MoveRules>
+</GameFile>
