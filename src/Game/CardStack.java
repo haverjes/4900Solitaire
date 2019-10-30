@@ -186,11 +186,11 @@ public class CardStack extends JComponent //implements ICardStack
 			for (; iter.hasNext();)
 			{
 				Card c = iter.next();
-				c.setXY(new Point(prev.x, prev.y + SPREAD));
-				add(SolitaireEngine.moveCard(c, prev.x, prev.y + SPREAD));
+				c.setXY(new Point(prev.x, prev.y - SPREAD));
+				add(SolitaireEngine.moveCard(c, prev.x, prev.y - SPREAD));
 				prev = c.getXY();
 				// setting x & y position
-				c.setWhereAmI(new Point(prevWhereAmI.x, prevWhereAmI.y + SPREAD));
+				c.setWhereAmI(new Point(prevWhereAmI.x, prevWhereAmI.y - SPREAD));
 				prevWhereAmI = c.getWhereAmI();
 			}
 

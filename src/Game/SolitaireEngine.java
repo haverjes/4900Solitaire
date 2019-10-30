@@ -445,7 +445,7 @@ public class SolitaireEngine
 		contentPane.add(table);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		XMLFile = ".\\Game\\Tests\\GameUnitTest_Move2.xml";
+		XMLFile = ".\\Game\\Tests\\GameUnitTest_Move1.xml";
 		playNewGame(XMLFile);
 
 		table.addMouseListener(new CardMovementManager());
