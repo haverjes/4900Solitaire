@@ -52,8 +52,19 @@ public class SolitaireEngine
 	private static JTextField timeBox = new JTextField();// displays the time
 	private static JTextField statusBox = new JTextField();// status messages
 	
-	//private static final Card newCardButton = new Card();// reveal waste card
+	
+	// TIMER UTILITIES
+	private static Timer timer = new Timer();
+	private static ScoreClock scoreClock = new ScoreClock();
 
+	// MISC TRACKING VARIABLES
+	private static boolean timeRunning = false;// timer running?
+	private static int score = 0;// keep track of the score
+	private static int time = 0;// keep track of seconds elapsed
+	
+	// Store last XML File loaded.
+	public static String XMLFile;
+	
 	// moves a card to abs location within a component
 	protected static Card moveCard(Card c, int x, int y)
 	{
@@ -62,8 +73,87 @@ public class SolitaireEngine
 		return c;
 	}
 	
+	protected static void setScore(int deltaScore)
+	{
+		score += deltaScore;
+		String newScore = "Score: " + score;
+		scoreBox.setText(newScore);
+		scoreBox.repaint();
+	}
+	
+	private static class ScoreClock extends TimerTask
+	{
+		@Override
+		public void run()
+		{
+			updateTimer();
+		}
+	}
+	private static class NewGameListener implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			//TODO: Create window to select XML file.
+			playNewGame(XMLFile);
+		}
+
+	}
+
+	// GAME TIMER UTILITIES
+	protected static void updateTimer()
+	{
+		time += 1;
+		// every 10 seconds elapsed we take away 2 points
+		if (time % 10 == 0)
+		{
+			setScore(-2);
+		}
+		String stringtime = "Seconds: " + time;
+		timeBox.setText(stringtime);
+		timeBox.repaint();
+	}
+
+	protected static void startTimer()
+	{
+		scoreClock = new ScoreClock();
+		// set the timer to update every second
+		timer.scheduleAtFixedRate(scoreClock, 1000, 1000);
+		timeRunning = true;
+	}
+
+	// the pause timer button uses this
+	protected static void toggleTimer()
+	{		
+		if (timeRunning && scoreClock != null)
+		{
+			scoreClock.cancel();
+			timeRunning = false;
+		} else
+		{
+			startTimer();
+		}
+	}
+	
+	private static class ToggleTimerListener implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			toggleTimer();
+			if (!timeRunning)
+			{
+				toggleTimerButton.setText("Start Timer");
+			} else
+			{
+				toggleTimerButton.setText("Pause Timer");
+			}
+		}
+
+	}
+
 	// Most of the code from MySolitaire is used here, instead pulling the rules from the GameBoard
-	private static class ShowRulesListener implements ActionListener
+	public static final class ShowRulesListener implements ActionListener
 	{
 		@Override
 		public void actionPerformed(ActionEvent e)
@@ -90,7 +180,7 @@ public class SolitaireEngine
 	 * All the rules for validating a move, moving the cards, and handling group moves are
 	 * done in the GameBoard object
 	 */
-	private static class CardMovementManager extends MouseAdapter
+	public static final class CardMovementManager extends MouseAdapter
 	{
 		private Card prevCard = null;// tracking card for waste stack
 		private Card movedCard = null;// card moved from waste stack
@@ -120,71 +210,26 @@ public class SolitaireEngine
 			 * the selected card in case player wants to move a stack rather
 			 * than a single card
 			 */
-			for (int x = 0; x < mainGameBoard.Stacks.size(); x++)
+			for (int x = 0; x < mainGameBoard.Stacks.size() && !stopSearch ; x++)
 			{
-				if (stopSearch)
-					break;
+				
 				source = mainGameBoard.Stacks.get(x);
 				// pinpointing exact card pressed
 				for (Component ca : source.getComponents())
 				{
 					Card c = (Card) ca;
-					if (c.getFaceStatus() && source.contains(start))
-					{
-						transferStack.putFirst(c);
-					}
-					if (c.contains(start) && source.contains(start) && c.getFaceStatus())
+
+					if (c.contains(start) && source.contains(start) && c.faceUp)
 					{
 						card = c;
 						stopSearch = true;
-						System.out.println("Transfer Size: " + transferStack.showSize());
+//						System.out.println("Transfer Size: " + transferStack.showSize());
 						break;
 					}
 				}
 
 			}
-			// SHOW (WASTE) CARD OPERATIONS
-			// display new show card
-			if (newCardButton.contains(start) && deck.showSize() > 0)
-			{
-				if (putBackOnDeck && prevCard != null)
-				{
-					System.out.println("Putting back on show stack: ");
-					prevCard.getValue();
-					prevCard.getSuit();
-					deck.putFirst(prevCard);
-				}
-
-				System.out.print("poping deck ");
-				deck.showSize();
-				if (prevCard != null)
-					table.remove(prevCard);
-				Card c = deck.pop().setFaceup();
-				table.add(Solitaire.moveCard(c, SHOW_POS.x, SHOW_POS.y));
-				c.repaint();
-				table.repaint();
-				prevCard = c;
-			}
-
-			// preparing to move show card
-			if (newCardPlace.contains(start) && prevCard != null)
-			{
-				movedCard = prevCard;
-			}
-
-			// FINAL (FOUNDATION) CARD OPERATIONS
-			for (int x = 0; x < NUM_FINAL_DECKS; x++)
-			{
-
-				if (final_cards[x].contains(start))
-				{
-					source = final_cards[x];
-					card = source.getLast();
-					transferStack.putFirst(card);
-					sourceIsFinalDeck = true;
-					break;
-				}
-			}
+			
 			putBackOnDeck = true;
 
 		}
@@ -196,270 +241,38 @@ public class SolitaireEngine
 			// used for status bar updates
 			boolean validMoveMade = false;
 
-			// SHOW CARD MOVEMENTS
-			if (movedCard != null)
-			{
-				// Moving from SHOW TO PLAY
-				for (int x = 0; x < NUM_PLAY_DECKS; x++)
-				{
-					dest = playCardStack[x];
-					// to empty play stack, only kings can go
-					if (dest.empty() && movedCard != null && dest.contains(stop)
-							&& movedCard.getValue() == Card.Value.KING)
-					{
-						System.out.print("moving new card to empty spot ");
-						movedCard.setXY(dest.getXY());
-						table.remove(prevCard);
-						dest.putFirst(movedCard);
-						table.repaint();
-						movedCard = null;
-						putBackOnDeck = false;
-						setScore(5);
-						validMoveMade = true;
-						break;
-					}
-					// to populated play stack
-					if (movedCard != null && dest.contains(stop) && !dest.empty() && dest.getFirst().getFaceStatus()
-							&& validPlayStackMove(movedCard, dest.getFirst()))
-					{
-						System.out.print("moving new card ");
-						movedCard.setXY(dest.getFirst().getXY());
-						table.remove(prevCard);
-						dest.putFirst(movedCard);
-						table.repaint();
-						movedCard = null;
-						putBackOnDeck = false;
-						setScore(5);
-						validMoveMade = true;
-						break;
-					}
-				}
-				// Moving from SHOW TO FINAL
-				for (int x = 0; x < NUM_FINAL_DECKS; x++)
-				{
-					dest = final_cards[x];
-					// only aces can go first
-					if (dest.empty() && dest.contains(stop))
-					{
-						if (movedCard.getValue() == Card.Value.ACE)
-						{
-							dest.push(movedCard);
-							table.remove(prevCard);
-							dest.repaint();
-							table.repaint();
-							movedCard = null;
-							putBackOnDeck = false;
-							setScore(10);
-							validMoveMade = true;
-							break;
-						}
-					}
-					if (!dest.empty() && dest.contains(stop) && validFinalStackMove(movedCard, dest.getLast()))
-					{
-						System.out.println("Destin" + dest.showSize());
-						dest.push(movedCard);
-						table.remove(prevCard);
-						dest.repaint();
-						table.repaint();
-						movedCard = null;
-						putBackOnDeck = false;
-						checkForWin = true;
-						setScore(10);
-						validMoveMade = true;
-						break;
-					}
-				}
-			}// END SHOW STACK OPERATIONS
 
 			// PLAY STACK OPERATIONS
 			if (card != null && source != null)
 			{ // Moving from PLAY TO PLAY
-				for (int x = 0; x < NUM_PLAY_DECKS; x++)
+				for (int x = 0; x < mainGameBoard.Stacks.size(); x++)
 				{
-					dest = playCardStack[x];
+					dest = mainGameBoard.Stacks.get(x);
+					
+
 					// MOVING TO POPULATED STACK
-					if (card.getFaceStatus() == true && dest.contains(stop) && source != dest && !dest.empty()
-							&& validPlayStackMove(card, dest.getFirst()) && transferStack.showSize() == 1)
+					if (card.faceUp == true && dest.contains(stop) && source != dest )
 					{
-						Card c = null;
-						if (sourceIsFinalDeck)
-							c = source.pop();
-						else
-							c = source.popFirst();
-
-						c.repaint();
-						// if playstack, turn next card up
-						if (source.getFirst() != null)
-						{
-							Card temp = source.getFirst().setFaceup();
-							temp.repaint();
-							source.repaint();
-						}
-
-						dest.setXY(dest.getXY().x, dest.getXY().y);
-						dest.putFirst(c);
-
+						
+						validMoveMade = mainGameBoard.DragDropMove(card, dest);
+						
+						
 						dest.repaint();
 
 						table.repaint();
 
 						System.out.print("Destination ");
-						dest.showSize();
-						if (sourceIsFinalDeck)
-							setScore(15);
-						else
-							setScore(10);
-						validMoveMade = true;
+//						dest.showSize();
+//						if (sourceIsFinalDeck)
+//							setScore(15);
+//						else
+//							setScore(10);
+
 						break;
-					} else if (dest.empty() && card.getValue() == Card.Value.KING && transferStack.showSize() == 1)
-					{// MOVING TO EMPTY STACK, ONLY KING ALLOWED
-						Card c = null;
-						if (sourceIsFinalDeck)
-							c = source.pop();
-						else
-							c = source.popFirst();
-
-						c.repaint();
-						// if playstack, turn next card up
-						if (source.getFirst() != null)
-						{
-							Card temp = source.getFirst().setFaceup();
-							temp.repaint();
-							source.repaint();
-						}
-
-						dest.setXY(dest.getXY().x, dest.getXY().y);
-						dest.putFirst(c);
-
-						dest.repaint();
-
-						table.repaint();
-
-						System.out.print("Destination ");
-						dest.showSize();
-						setScore(5);
-						validMoveMade = true;
-						break;
-					}
-					// Moving STACK of cards from PLAY TO PLAY
-					// to EMPTY STACK
-					if (dest.empty() && dest.contains(stop) && !transferStack.empty()
-							&& transferStack.getFirst().getValue() == Card.Value.KING)
-					{
-						System.out.println("King To Empty Stack Transfer");
-						while (!transferStack.empty())
-						{
-							System.out.println("popping from transfer: " + transferStack.getFirst().getValue());
-							dest.putFirst(transferStack.popFirst());
-							source.popFirst();
-						}
-						if (source.getFirst() != null)
-						{
-							Card temp = source.getFirst().setFaceup();
-							temp.repaint();
-							source.repaint();
-						}
-
-						dest.setXY(dest.getXY().x, dest.getXY().y);
-						dest.repaint();
-
-						table.repaint();
-						setScore(5);
-						validMoveMade = true;
-						break;
-					}
-					// to POPULATED STACK
-					if (dest.contains(stop) && !transferStack.empty() && source.contains(start)
-							&& validPlayStackMove(transferStack.getFirst(), dest.getFirst()))
-					{
-						System.out.println("Regular Stack Transfer");
-						while (!transferStack.empty())
-						{
-							System.out.println("popping from transfer: " + transferStack.getFirst().getValue());
-							dest.putFirst(transferStack.popFirst());
-							source.popFirst();
-						}
-						if (source.getFirst() != null)
-						{
-							Card temp = source.getFirst().setFaceup();
-							temp.repaint();
-							source.repaint();
-						}
-
-						dest.setXY(dest.getXY().x, dest.getXY().y);
-						dest.repaint();
-
-						table.repaint();
-						setScore(5);
-						validMoveMade = true;
-						break;
-					}
+					} 
+					
 				}
-				// from PLAY TO FINAL
-				for (int x = 0; x < NUM_FINAL_DECKS; x++)
-				{
-					dest = final_cards[x];
-
-					if (card.getFaceStatus() == true && source != null && dest.contains(stop) && source != dest)
-					{// TO EMPTY STACK
-						if (dest.empty())// empty final should only take an ACE
-						{
-							if (card.getValue() == Card.Value.ACE)
-							{
-								Card c = source.popFirst();
-								c.repaint();
-								if (source.getFirst() != null)
-								{
-
-									Card temp = source.getFirst().setFaceup();
-									temp.repaint();
-									source.repaint();
-								}
-
-								dest.setXY(dest.getXY().x, dest.getXY().y);
-								dest.push(c);
-
-								dest.repaint();
-
-								table.repaint();
-
-								System.out.print("Destination ");
-								dest.showSize();
-								card = null;
-								setScore(10);
-								validMoveMade = true;
-								break;
-							}// TO POPULATED STACK
-						} else if (validFinalStackMove(card, dest.getLast()))
-						{
-							Card c = source.popFirst();
-							c.repaint();
-							if (source.getFirst() != null)
-							{
-
-								Card temp = source.getFirst().setFaceup();
-								temp.repaint();
-								source.repaint();
-							}
-
-							dest.setXY(dest.getXY().x, dest.getXY().y);
-							dest.push(c);
-
-							dest.repaint();
-
-							table.repaint();
-
-							System.out.print("Destination ");
-							dest.showSize();
-							card = null;
-							checkForWin = true;
-							setScore(10);
-							validMoveMade = true;
-							break;
-						}
-					}
-
-				}
+				
 			}// end cycle through play decks
 
 			// SHOWING STATUS MESSAGE IF MOVE INVALID
@@ -472,17 +285,14 @@ public class SolitaireEngine
 			{
 				boolean gameNotOver = false;
 				// cycle through final decks, if they're all full then game over
-				for (int x = 0; x < NUM_FINAL_DECKS; x++)
+				
+				if (!mainGameBoard.checkVictory())
 				{
-					dest = final_cards[x];
-					if (dest.showSize() != 13)
-					{
-						// one deck is not full, so game is not over
-						gameNotOver = true;
-						break;
-					}
+					// one deck is not full, so game is not over
+					gameNotOver = true;
+					
 				}
-				if (!gameNotOver)
+				else
 					gameOver = true;
 			}
 
@@ -559,4 +369,90 @@ public class SolitaireEngine
         } 
 		
 	}
+	
+	
+	private static void playNewGame(String sXMLFile)
+	{
+		
+		table.removeAll();
+		// reset stacks if user starts a new game in the middle of one
+		
+		
+		// place new card distribution button
+		//table.add(moveCard(newCardButton, DECK_POS.x, DECK_POS.y));
+		// initialize & place play (tableau) decks/stacks
+		
+		mainGameBoard = XML_Loader.LoadXML(sXMLFile);
+		for (int x = 0; x < mainGameBoard.Stacks.size(); x++)
+		{
+			CardStack stack = mainGameBoard.Stacks.get(x);
+			table.add(stack);
+		}
+		// reset time
+		time = 0;
+
+		newGameButton.addActionListener(new NewGameListener());
+		newGameButton.setBounds(0, TABLE_HEIGHT - 70, 120, 30);
+
+		showRulesButton.addActionListener(new ShowRulesListener());
+		showRulesButton.setBounds(120, TABLE_HEIGHT - 70, 120, 30);
+
+//		gameTitle.setText("<b>Shamari's Solitaire</b> <br> COP3252 <br> Spring 2012");
+//		gameTitle.setEditable(false);
+//		gameTitle.setOpaque(false);
+//		gameTitle.setBounds(245, 20, 100, 100);
+
+		scoreBox.setBounds(240, TABLE_HEIGHT - 70, 120, 30);
+		scoreBox.setText("Score: 0");
+		scoreBox.setEditable(false);
+		scoreBox.setOpaque(false);
+
+		timeBox.setBounds(360, TABLE_HEIGHT - 70, 120, 30);
+		timeBox.setText("Seconds: 0");
+		timeBox.setEditable(false);
+		timeBox.setOpaque(false);
+
+		startTimer();
+
+		toggleTimerButton.setBounds(480, TABLE_HEIGHT - 70, 125, 30);
+		toggleTimerButton.addActionListener(new ToggleTimerListener());
+
+		statusBox.setBounds(605, TABLE_HEIGHT - 70, 180, 30);
+		statusBox.setEditable(false);
+		statusBox.setOpaque(false);
+
+		table.add(statusBox);
+		table.add(toggleTimerButton);
+		table.add(gameTitle);
+		table.add(timeBox);
+		table.add(newGameButton);
+		table.add(showRulesButton);
+		table.add(scoreBox);
+		table.repaint();
+	}
+	
+	public static void main(String[] args)
+	{
+
+		Container contentPane;
+
+		frame.setSize(TABLE_WIDTH, TABLE_HEIGHT);
+
+		table.setLayout(null);
+		table.setBackground(new Color(0, 180, 0));
+
+		contentPane = frame.getContentPane();
+		contentPane.add(table);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		XMLFile = ".\\Game\\Tests\\GameUnitTest_Move2.xml";
+		playNewGame(XMLFile);
+
+		table.addMouseListener(new CardMovementManager());
+		table.addMouseMotionListener(new CardMovementManager());
+
+		frame.setVisible(true);
+
+	}
+	
 }

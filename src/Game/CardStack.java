@@ -133,10 +133,14 @@ public class CardStack extends JComponent //implements ICardStack
 	*  Drawing methods
 	*
 	************************/
-
+	protected int getStackHeight() 
+	{
+		return Card.CARD_HEIGHT + this.getCardCount() * SPREAD;
+	}
 	public boolean contains(Point p)
 	{
-		Rectangle rect = new Rectangle(_x, _y, Card.CARD_WIDTH + 10, Card.CARD_HEIGHT * 3);
+		int bottom = _y - getStackHeight();
+		Rectangle rect = new Rectangle(_x, bottom, Card.CARD_WIDTH + 10, getStackHeight());
 		return (rect.contains(p));
 	}
 
@@ -145,7 +149,8 @@ public class CardStack extends JComponent //implements ICardStack
 		_x = x;
 		_y = y;
 		// System.out.println("CardStack SET _x: " + _x + " _y: " + _y);
-		setBounds(_x, _y, Card.CARD_WIDTH + 10, Card.CARD_HEIGHT * 3);
+		int bottom = _y - getStackHeight();
+		setBounds(_x, bottom, Card.CARD_WIDTH + 10, getStackHeight());
 	}
 
 	public Point getXY()

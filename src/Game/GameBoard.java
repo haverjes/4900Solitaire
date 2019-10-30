@@ -121,13 +121,8 @@ public class GameBoard implements Serializable
 				if (curStack.initCardCount > 0 && curStack.initCardCount - curStack.getCardCount() > 0)  
 				{
 					// This stack should have initial cards, and not enough have been dealt to it.
-					Card c = drawCard(tempDeck);
-					if (curStack.initFaceDown > 0 && curStack.initFaceDown - curStack.getCardCount() > 0)
-						c.faceUp = false;
-					else
-						c.faceUp = true;
-						
-					curStack.PlaceCard(c);
+
+					curStack.dealCard(drawCard(tempDeck));
 				}
 			}
 		}
@@ -159,5 +154,10 @@ public class GameBoard implements Serializable
 			sRet = sRet + "\n" + stack.toString();
 		
 		return sRet;
+	}
+
+	public boolean checkVictory() {
+		// TODO Auto-generated method stub
+		return this.Stacks.stream().filter(s -> s.Type == CardStack.StackType.TAB && s.getCardCount() > 0).count() == 0;
 	}
 }
