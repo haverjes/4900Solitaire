@@ -17,8 +17,6 @@ public class MoveRule
 	
 	public MoveRule(String destStack, String seq, String suitReq, boolean groupMove, boolean rollover)
 	{
-		
-		
 		destStackType = CardStack.StackType.valueOf(destStack.toUpperCase());
 		cardSequence = CardSequence.valueOf(seq.toUpperCase());
 		suitPattern = SuitRequirement.valueOf(suitReq.toUpperCase());

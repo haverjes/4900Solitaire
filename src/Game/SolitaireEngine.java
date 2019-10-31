@@ -182,10 +182,11 @@ public class SolitaireEngine
 	 */
 	public static final class CardMovementManager extends MouseAdapter
 	{
-		private Card prevCard = null;// tracking card for waste stack
-		private Card movedCard = null;// card moved from waste stack
-		private boolean sourceIsFinalDeck = false;
-		private boolean putBackOnDeck = true;// used for waste card recycling
+		// Some of these are culture specific to MySolitaire
+//		private Card prevCard = null;// tracking card for waste stack
+//		private Card movedCard = null;// card moved from waste stack
+//		private boolean sourceIsFinalDeck = false;
+//		private boolean putBackOnDeck = true;// used for waste card recycling
 		private boolean checkForWin = false;// should we check if game is over?
 		private boolean gameOver = true;// easier to negate this than affirm it
 		private Point start = null;// where mouse was clicked
@@ -204,12 +205,7 @@ public class SolitaireEngine
 			boolean stopSearch = false;
 			statusBox.setText("");
 			
-
-			/*
-			 * Here we use transferStack to temporarily hold all the cards above
-			 * the selected card in case player wants to move a stack rather
-			 * than a single card
-			 */
+			
 			for (int x = 0; x < mainGameBoard.Stacks.size() && !stopSearch ; x++)
 			{
 				
@@ -230,7 +226,6 @@ public class SolitaireEngine
 
 			}
 			
-			putBackOnDeck = true;
 
 		}
 
@@ -261,13 +256,13 @@ public class SolitaireEngine
 
 						table.repaint();
 
-						System.out.print("Destination ");
+//						System.out.print("Destination ");
 //						dest.showSize();
 //						if (sourceIsFinalDeck)
 //							setScore(15);
 //						else
 //							setScore(10);
-
+						//TODO: Implement scoring in GameBoard?
 						break;
 					} 
 					
@@ -281,20 +276,16 @@ public class SolitaireEngine
 				statusBox.setText("That Is Not A Valid Move");
 			}
 			// CHECKING FOR WIN
-			if (checkForWin)
-			{
-				boolean gameNotOver = false;
+//			if (checkForWin)  // Commented:  Might reenable later.
+//			{
 				// cycle through final decks, if they're all full then game over
 				
-				if (!mainGameBoard.checkVictory())
+				if (mainGameBoard.checkVictory())
 				{
-					// one deck is not full, so game is not over
-					gameNotOver = true;
-					
-				}
-				else
 					gameOver = true;
-			}
+				}
+					
+//			}
 
 			if (checkForWin && gameOver)
 			{
@@ -307,7 +298,7 @@ public class SolitaireEngine
 			source = null;
 			dest = null;
 			card = null;
-			sourceIsFinalDeck = false;
+			//sourceIsFinalDeck = false;
 			checkForWin = false;
 			gameOver = false;
 		}// end mousePressed()
@@ -370,18 +361,21 @@ public class SolitaireEngine
 		
 	}
 	
-	
+	//TODO: Something is missing in how I'm adding stuff to the table
+	//		Cards are not being drawn regardless of what x/y coords I give it.
+	//
+	//TODO: Separate code for creating a new game from adding everything in the gameboard to the JFrame
+	//		- Will be nice to have separate when we implement Save/Load features.
 	private static void playNewGame(String sXMLFile)
 	{
 		
 		table.removeAll();
 		// reset stacks if user starts a new game in the middle of one
-		
-		
+
 		// place new card distribution button
 		//table.add(moveCard(newCardButton, DECK_POS.x, DECK_POS.y));
-		// initialize & place play (tableau) decks/stacks
-		
+
+		// Load the gameboard using XML_Loader
 		mainGameBoard = XML_Loader.LoadXML(sXMLFile);
 		for (int x = 0; x < mainGameBoard.Stacks.size(); x++)
 		{
@@ -397,6 +391,9 @@ public class SolitaireEngine
 		showRulesButton.addActionListener(new ShowRulesListener());
 		showRulesButton.setBounds(120, TABLE_HEIGHT - 70, 120, 30);
 
+		
+		// Just a basic text box from the origial code.  
+		// Preserved in comments for reference should we want to add our own text.
 //		gameTitle.setText("<b>Shamari's Solitaire</b> <br> COP3252 <br> Spring 2012");
 //		gameTitle.setEditable(false);
 //		gameTitle.setOpaque(false);

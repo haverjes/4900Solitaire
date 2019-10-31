@@ -24,7 +24,6 @@ public class GameBoard implements Serializable
 	{
 		List<Card> cardsToMove = card.stackCallBack.TakeCard(card);
 		destStack.PlaceCards(cardsToMove);
-		
 	}
 	
 	
@@ -157,7 +156,6 @@ public class GameBoard implements Serializable
 	}
 
 	public boolean checkVictory() {
-		// TODO Auto-generated method stub
 		return this.Stacks.stream().filter(s -> s.Type == CardStack.StackType.TAB && s.getCardCount() > 0).count() == 0;
 	}
 }

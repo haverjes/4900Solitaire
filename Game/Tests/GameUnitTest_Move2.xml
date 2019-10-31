@@ -1,6 +1,11 @@
 <GameFile name="BasicBoardTest">
 	
 	<Board>
+		<Rules>
+		<![CDATA[
+		   Here are the rules.  Move and test!
+		]]>
+		</Rules>
 		<Deck numDecks="1" />
 		<Stack type="Foundation" xpos="10" ypos="200" initialCard="1S" lockCards="0"/>
 		
