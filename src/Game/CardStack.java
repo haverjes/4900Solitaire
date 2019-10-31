@@ -45,7 +45,7 @@ public class CardStack extends JComponent //implements ICardStack
 	
 	public StackType Type;
 	
-	protected final int SPREAD = 18;
+	public static final int SPREAD = 18;
 	protected int _x = 0;
 	protected int _y = 0;
 	
@@ -140,7 +140,7 @@ public class CardStack extends JComponent //implements ICardStack
 	public boolean contains(Point p)
 	{
 		int bottom = _y - getStackHeight();
-		Rectangle rect = new Rectangle(_x, bottom, Card.CARD_WIDTH + 10, getStackHeight());
+		Rectangle rect = new Rectangle(xPos, bottom, Card.CARD_WIDTH + 10, getStackHeight());
 		return (rect.contains(p));
 	}
 
@@ -148,6 +148,8 @@ public class CardStack extends JComponent //implements ICardStack
 	{
 		_x = x;
 		_y = y;
+		xPos = x;
+		yPos = y;
 		// System.out.println("CardStack SET _x: " + _x + " _y: " + _y);
 		int bottom = _y - getStackHeight();
 		setBounds(_x, bottom, Card.CARD_WIDTH + 10, getStackHeight());
@@ -156,7 +158,7 @@ public class CardStack extends JComponent //implements ICardStack
 	public Point getXY()
 	{
 		// System.out.println("CardStack GET _x: " + _x + " _y: " + _y);
-		return new Point(_x, _y);
+		return new Point(xPos, yPos);
 	}
 	
 	@Override
@@ -194,6 +196,15 @@ public class CardStack extends JComponent //implements ICardStack
 				prevWhereAmI = c.getWhereAmI();
 			}
 
+		}
+		else
+		{
+			removeAll();
+			if (cards.size() > 0)
+			{
+				Point prev = new Point(); // positioning relative to the container
+				add(SolitaireEngine.moveCard(this.getTopCard(), prev.x, prev.y));
+			}
 		}
 	}
 

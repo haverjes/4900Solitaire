@@ -251,9 +251,7 @@ public class SolitaireEngine
 						
 						validMoveMade = mainGameBoard.DragDropMove(card, dest);
 						
-						
 						dest.repaint();
-
 						table.repaint();
 
 //						System.out.print("Destination ");
@@ -276,7 +274,7 @@ public class SolitaireEngine
 				statusBox.setText("That Is Not A Valid Move");
 			}
 			// CHECKING FOR WIN
-//			if (checkForWin)  // Commented:  Might reenable later.
+//			if (checkForWin)  // Commented:  Might re-enable later.
 //			{
 				// cycle through final decks, if they're all full then game over
 				
@@ -309,10 +307,8 @@ public class SolitaireEngine
 		try { 
 			  
             // Saving of object in a file 
-            FileOutputStream file = new FileOutputStream 
-                                           (filename); 
-            ObjectOutputStream out = new ObjectOutputStream 
-                                           (file); 
+            FileOutputStream file = new FileOutputStream(filename); 
+            ObjectOutputStream out = new ObjectOutputStream(file); 
   
             // Method for serialization of object 
             out.writeObject(mainGameBoard); 
@@ -336,10 +332,8 @@ public class SolitaireEngine
 		try { 
 			  
             // Reading the object from a file 
-            FileInputStream file = new FileInputStream 
-                                         (filename); 
-            ObjectInputStream in = new ObjectInputStream 
-                                         (file); 
+            FileInputStream file = new FileInputStream(filename); 
+            ObjectInputStream in = new ObjectInputStream(file); 
   
             // Method for deserialization of object 
             mainGameBoard = (GameBoard)in.readObject(); 
@@ -380,8 +374,15 @@ public class SolitaireEngine
 		for (int x = 0; x < mainGameBoard.Stacks.size(); x++)
 		{
 			CardStack stack = mainGameBoard.Stacks.get(x);
+			stack.setXY(stack.xPos, stack.yPos);
 			table.add(stack);
 		}
+		
+		// Random thing to try forcing card draws.
+//		for (Card card: mainGameBoard.Cards) 
+//		{
+//			card.drawCard();
+//		}
 		// reset time
 		time = 0;
 
@@ -426,6 +427,15 @@ public class SolitaireEngine
 		table.add(showRulesButton);
 		table.add(scoreBox);
 		table.repaint();
+		
+		System.out.println("Done setting up");
+	}
+	
+	
+	public void setFrameSize() 
+	{
+		// get max x value of all stacks, set WIDTH to MaxX + CARDWIDTH
+		// repeat for y using.
 	}
 	
 	public static void main(String[] args)

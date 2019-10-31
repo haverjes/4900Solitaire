@@ -3,6 +3,7 @@
 package Game;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -52,6 +53,12 @@ class Card extends JPanel
 		rank = r;
 		suit = Suit.values()[s];
 		ID = id;
+		_location = new Point();
+		x = 0;
+		y = 0;
+		_location.x = x;
+		_location.y = y;
+		whereAmI = new Point();
 	}
 	
 	public int getStackIndex() 
@@ -179,6 +186,19 @@ class Card extends JPanel
 		x = p.x;
 		y = p.y;
 
+	}
+	
+	public void drawCard()
+	{
+		if (stackCallBack == null)
+			return;
+		int stackX = this.stackCallBack.xPos;
+		int stackY = this.stackCallBack.yPos;
+		
+		int newY = stackY + (this.getStackIndex() * CardStack.SPREAD);
+				
+		setBounds(new Rectangle(new Point(stackX, newY), new Dimension(Card.CARD_WIDTH + 10, Card.CARD_HEIGHT + 10)));
+		setXY(new Point(stackX, newY));
 	}
 	
 	@Override
