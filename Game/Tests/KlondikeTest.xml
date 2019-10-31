@@ -1,0 +1,66 @@
+<GameFile name="Klondike">
+	
+	<Board>
+		<Deck numDecks="1" />
+		<Rules>
+		<![CDATA[
+		   <b>Klondike Solitaire Rules</b>
+				<br><br> (From Wikipedia) Taking a shuffled standard 52-card deck of playing cards (without Jokers),
+				one upturned card is dealt on the left of the playing area, then six downturned cards
+				(from left to right).<p> On top of the downturned cards, an upturned card is dealt on the 
+				left-most downturned pile, and downturned cards on the rest until all piles have an 
+				upturned card. The piles should look like the figure to the right.<p>The four foundations 
+				(light rectangles in the upper right of the figure) are built up by suit from Ace 
+				(low in this game) to King, and the tableau piles can be built down by alternate colors,
+				and partial or complete piles can be moved if they are built down by alternate colors also. 
+				Any empty piles can be filled with a King or a pile of cards with a King.<p> The point of 
+				the game is to build up a stack of cards starting with 2 and ending with King, all of 
+				the same suit. Once this is accomplished, the goal is to move this to a foundation, 
+				where the player has previously placed the Ace of that suit. Once the player has done this, 
+				they will have \finished\ that suit- the goal being, of course, to finish all suits, 
+				at which time the player will have won.<br><br><b> Scoring </b><br><br>
+				Moving cards directly from the Waste stack to a Foundation awards 10 points. However, 
+				if the card is first moved to a Tableau, and then to a Foundation, then an extra 5 points 
+				are received for a total of 15. Thus in order to receive a maximum score, no cards should be moved 
+				directly from the Waste to Foundation.<p>	Time can also play a factor in Windows Solitaire, if the Timed game option is selected. For every 10 seconds of play, 2 points are taken away.
+				<b><br><br>Notes On My Implementation</b><br><br>
+				Drag cards to and from any stack. As long as the move is valid the card, or stack of 
+				cards, will be repositioned in the desired spot. The game follows the standard scoring and time
+				model explained above with only one waste card shown at a time.
+				<p> The timer starts running as soon as 
+				the game begins, but it may be paused by pressing the pause button at the bottom of
+				the screen. 
+		]]>
+		</Rules>
+		<Stack type="DrawDeck" xpos="5" ypos="5" drawToStackID="1" shape="Stack" />
+		<Stack type="Waste" id="1" xpos="50" ypos="5" shape="Stack" />
+		<!--  Foundations are defined for each suit.  Each one is defined as starting out empty, and specifies the first card that can be played on it.
+				The firstCard examples here represent "Ace of any suit".  This attribute would only be needed if initialCard is not empty.
+		-->
+		<Stack type="Foundation" xpos="355" ypos="5" initialCard="" firstCard="A*" lockCards="0" shape="Stack" />
+		<Stack type="Foundation" xpos="470" ypos="5" initialCard="" firstCard="A*" lockCards="0" shape="Stack" />
+		<Stack type="Foundation" xpos="585" ypos="5" initialCard="" firstCard="A*" lockCards="0" shape="Stack" />
+		<Stack type="Foundation" xpos="700" ypos="5" initialCard="" firstCard="A*" lockCards="0" shape="Stack" />
+		
+		<!--  Tab, or tableau,  Can have varying card counts.  
+			Orientation:  Whether cards placed face up or down.  'DownTopUp' means all are face down, except the top card.
+			splayed refers to how the cards are fanned out, the defined position being that of the first card.   
+		-->
+		<Stack type="Tab" xpos="10" ypos="200" cardCount="1" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="125" ypos="200" cardCount="2" initFaceDown="1" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="240" ypos="200" cardCount="3" initFaceDown="2" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="355" ypos="200" cardCount="4" initFaceDown="3" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="470" ypos="200" cardCount="5" initFaceDown="4" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="585" ypos="200" cardCount="6" initFaceDown="5" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="700" ypos="200" cardCount="7" initFaceDown="6" shape="FanDown" firstCard="K*" lockCards="0"/>
+	
+		
+		
+	</Board>
+	<MoveRules>
+		<MoveRule destType="Foundation" cardSequence="Up" suitRequirement="SAME" allowGroup="0"/>
+		<MoveRule destType="Tab" cardSequence="Down" suitRequirement="ALTCOLOR" allowGroup="1"/>
+	</MoveRules>
+</GameFile>
+
+

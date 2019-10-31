@@ -73,7 +73,10 @@ class Card extends JPanel
 
 	public String toString() 
 	{
-		return convertRankStr(this.rank) + convertSuitStr(this.suit);
+		String sRet = convertRankStr(this.rank) + convertSuitStr(this.suit);
+		if (!this.faceUp)
+			sRet = sRet.toLowerCase();
+		return sRet;
 	}
 	
 	static public String convertRankStr(int r) 

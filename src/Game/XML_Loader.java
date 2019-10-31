@@ -79,12 +79,12 @@ public class XML_Loader
 	{
 		CardStack newStack = new CardStack();
 		
-		String sShape = xStack.getAttribute("shape");
-		if (sShape == "FanDown") 
-			newStack.Shape = CardStack.StackShape.FANDOWN;
-		else
-			newStack.Shape = CardStack.StackShape.STACK;
-		
+//		String sShape = xStack.getAttribute("shape");
+//		if (sShape == "FanDown") 
+//			newStack.Shape = CardStack.StackShape.FANDOWN;
+//		else
+//			newStack.Shape = CardStack.StackShape.STACK;
+		newStack.Shape = CardStack.getStackShape(xStack.getAttribute("shape"));
 		newStack.Type = CardStack.getStackType(xStack.getAttribute("type"));
 		
 		newStack.xPos = Integer.parseInt(xStack.getAttribute("xpos"));

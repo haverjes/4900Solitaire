@@ -204,23 +204,28 @@ public class SolitaireEngine
 			start = e.getPoint();
 			boolean stopSearch = false;
 			statusBox.setText("");
-			
+			System.out.println("Grabbing mouse");
 			
 			for (int x = 0; x < mainGameBoard.Stacks.size() && !stopSearch ; x++)
 			{
 				
 				source = mainGameBoard.Stacks.get(x);
 				// pinpointing exact card pressed
-				for (Component ca : source.getComponents())
+				
+				if (source.contains(start) ) 
 				{
-					Card c = (Card) ca;
-
-					if (c.contains(start) && source.contains(start) && c.faceUp)
+					System.out.println("In stack: " + source.toString());
+					for (Component ca : source.getComponents())
 					{
-						card = c;
-						stopSearch = true;
-//						System.out.println("Transfer Size: " + transferStack.showSize());
-						break;
+						Card c = (Card) ca;
+	
+						if (c.contains(start)  && c.faceUp)
+						{
+							card = c;
+							stopSearch = true;
+							System.out.println("Grabbed card: " + card.toString());
+							break;
+						}
 					}
 				}
 
@@ -236,7 +241,7 @@ public class SolitaireEngine
 			// used for status bar updates
 			boolean validMoveMade = false;
 
-
+			System.out.println("Releasng mouse");
 			// PLAY STACK OPERATIONS
 			if (card != null && source != null)
 			{ // Moving from PLAY TO PLAY
@@ -452,7 +457,7 @@ public class SolitaireEngine
 		contentPane.add(table);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		XMLFile = ".\\Game\\Tests\\GameUnitTest_Move1.xml";
+		XMLFile = ".\\Game\\Tests\\KlondikeTest.xml";
 		playNewGame(XMLFile);
 
 		table.addMouseListener(new CardMovementManager());

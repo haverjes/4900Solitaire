@@ -1,9 +1,12 @@
 package Game;
 
-import java.util.*;  
+import java.util.*;
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.geom.RoundRectangle2D;
 import java.util.ListIterator;
 
 import javax.swing.JComponent;
@@ -117,8 +120,10 @@ public class CardStack extends JComponent //implements ICardStack
 	{
 		if (getCardCount() < initFaceDown) 
 			card.faceUp = false;
-		
+		else
+			card.faceUp = true;
 		cards.add(card);
+		card.stackCallBack = this;
 	}
 
 	public String toString() 
@@ -140,7 +145,7 @@ public class CardStack extends JComponent //implements ICardStack
 	public boolean contains(Point p)
 	{
 		int bottom = _y - getStackHeight();
-		Rectangle rect = new Rectangle(xPos, bottom, Card.CARD_WIDTH + 10, getStackHeight());
+		Rectangle rect = new Rectangle(xPos, yPos, Card.CARD_WIDTH + 10, getStackHeight());
 		return (rect.contains(p));
 	}
 
@@ -151,8 +156,9 @@ public class CardStack extends JComponent //implements ICardStack
 		xPos = x;
 		yPos = y;
 		// System.out.println("CardStack SET _x: " + _x + " _y: " + _y);
-		int bottom = _y - getStackHeight();
-		setBounds(_x, bottom, Card.CARD_WIDTH + 10, getStackHeight());
+		int bottom = _y + getStackHeight();
+		//setBounds(_x, bottom, Card.CARD_WIDTH + 10, getStackHeight());
+		setBounds(_x, _y, Card.CARD_WIDTH + 10, getStackHeight());
 	}
 
 	public Point getXY()
@@ -188,13 +194,24 @@ public class CardStack extends JComponent //implements ICardStack
 			for (; iter.hasNext();)
 			{
 				Card c = iter.next();
-				c.setXY(new Point(prev.x, prev.y - SPREAD));
-				add(SolitaireEngine.moveCard(c, prev.x, prev.y - SPREAD));
+				c.setXY(new Point(prev.x, prev.y + SPREAD));
+				add(SolitaireEngine.moveCard(c, prev.x, prev.y + SPREAD));
 				prev = c.getXY();
 				// setting x & y position
-				c.setWhereAmI(new Point(prevWhereAmI.x, prevWhereAmI.y - SPREAD));
+				c.setWhereAmI(new Point(prevWhereAmI.x, prevWhereAmI.y + SPREAD));
 				prevWhereAmI = c.getWhereAmI();
 			}
+			
+//			prevWhereAmI = getXY();
+//			for (int nIndex = 0; nIndex < cards.size(); nIndex++)
+//			{
+//				
+//				Card curCard = cards.get(nIndex);
+//				prevWhereAmI = new Point(0, (nIndex * SPREAD));
+//				add(SolitaireEngine.moveCard(curCard, prevWhereAmI.x, prevWhereAmI.y));
+//				curCard.setWhereAmI(prevWhereAmI);
+//			}
+			
 
 		}
 		else
@@ -204,6 +221,17 @@ public class CardStack extends JComponent //implements ICardStack
 			{
 				Point prev = new Point(); // positioning relative to the container
 				add(SolitaireEngine.moveCard(this.getTopCard(), prev.x, prev.y));
+			}
+			else
+			{
+				// draw back of card if empty
+				Graphics2D g2d = (Graphics2D) g;
+				RoundRectangle2D rect = new RoundRectangle2D.Double(0, 0, Card.CARD_WIDTH, Card.CARD_HEIGHT,
+						Card.CORNER_ANGLE, Card.CORNER_ANGLE);
+				g2d.setColor(Color.LIGHT_GRAY);
+				g2d.fill(rect);
+				g2d.setColor(Color.black);
+				g2d.draw(rect);
 			}
 		}
 	}
@@ -227,6 +255,18 @@ public class CardStack extends JComponent //implements ICardStack
 				// break;
 			default:
 				return null;
+		}
+	}
+	
+	static public StackShape getStackShape(String s) 
+	{
+		switch (s)
+		{
+			case "FanDown":
+				return StackShape.FANDOWN;
+				// break;
+			default:
+				return StackShape.STACK;
 		}
 	}
 }

@@ -38,40 +38,7 @@ public class MoveRule
 			return false;
 		}
 		
-		Card lastCard = destStack.getTopCard();
 		
-		switch (this.suitPattern) 
-		{
-			case ALTCOLOR:
-				if (!IsAltColor(card, lastCard))
-					return false;
-				break;
-			case SAME:
-				if (card.suit != lastCard.suit)
-					return false;
-				break;
-			default:
-				// Nothing to do here.
-		}
-		
-		int diff = RankDiff(card, lastCard);
-		switch (this.cardSequence) 
-		{
-			case UP:
-				if (diff != 1)  
-					return false;
-				break;
-			case DOWN:
-				if (diff != -1)  
-					return false;
-				break;
-			case UPORDOWN:
-				if (diff != 1  && diff != -1)  
-					return false;
-				break;
-			default:
-				// Nothing to do here.
-		}
 		
 		
 		// Check destination stack traits
@@ -96,6 +63,41 @@ public class MoveRule
 		{
 			if (destStack.cardLimit >= destStack.cards.size() + 1)
 				return false;
+			
+			Card lastCard = destStack.getTopCard();
+			
+			switch (this.suitPattern) 
+			{
+				case ALTCOLOR:
+					if (!IsAltColor(card, lastCard))
+						return false;
+					break;
+				case SAME:
+					if (card.suit != lastCard.suit)
+						return false;
+					break;
+				default:
+					// Nothing to do here.
+			}
+			
+			int diff = RankDiff(card, lastCard);
+			switch (this.cardSequence) 
+			{
+				case UP:
+					if (diff != 1)  
+						return false;
+					break;
+				case DOWN:
+					if (diff != -1)  
+						return false;
+					break;
+				case UPORDOWN:
+					if (diff != 1  && diff != -1)  
+						return false;
+					break;
+				default:
+					// Nothing to do here.
+			}
 		}
 		
 		return true;

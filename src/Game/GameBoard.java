@@ -92,15 +92,17 @@ public class GameBoard implements Serializable
 				int initRank = Card.convertRankInt(stack.initialCard.substring(0, stack.initialCard.length() - 1));
 				
 				// Find cards that match that rank and suit
-				List<Card> initCard = tempDeck.stream()
+				List<Card> initCards = tempDeck.stream()
 						.filter(c -> c.rank == initRank && c.suit == initSuit)
 						.collect(Collectors.toList());
 				
 				// Put the first math onto the stack and remove it from 
-				if (initCard.size() > 0)
+				if (initCards.size() > 0)
 				{
-					stack.PlaceCard(initCard.get(0));
-					tempDeck.remove(initCard.get(0));
+					Card initCard = initCards.get(0);
+					initCard.faceUp = true;
+					stack.PlaceCard(initCard);
+					tempDeck.remove(initCard);
 				}
 				else 
 				{

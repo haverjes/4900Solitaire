@@ -36,6 +36,8 @@ class XML_LoaderTest1 {
 		}
 		System.out.println(testGB.toString());
 		
+		// check cards are face up.
+		assertTrue(testGB.Stacks.get(1).getTopCard().faceUp);
 		// first Tab 
 		Card cCard = testGB.Stacks.get(1).getTopCard();
 		assertTrue(testGB.ClickMove(cCard));
