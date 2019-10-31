@@ -1,0 +1,47 @@
+<GameFile name="Klondike">
+	
+	<Board>
+		<Deck numDecks="2" />
+		<Rules>
+		<![CDATA[Nothin yet.
+		]]>
+		</Rules>
+
+		<!--  Foundations are defined for each suit.  Each one is defined as starting out empty, and specifies the first card that can be played on it.
+				The firstCard examples here represent "Ace of any suit".  This attribute would only be needed if initialCard is not empty.
+		-->
+		<Stack type="Foundation" xpos="5" ypos="5" initialCard="1S" lockCards="0" shape="Stack" />
+		<Stack type="Foundation" xpos="470" ypos="5" initialCard="KH" lockCards="0" shape="Stack" />
+		
+		
+		<!--  Tab, or tableau,  Can have varying card counts.  
+			Orientation:  Whether cards placed face up or down.  'DownTopUp' means all are face down, except the top card.
+			splayed refers to how the cards are fanned out, the defined position being that of the first card.   
+		-->
+		<Stack type="Tab" xpos="10" ypos="200" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="125" ypos="200" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="240" ypos="200" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="355" ypos="200" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="470" ypos="200" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="585" ypos="200" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="700" ypos="200" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="815" ypos="200" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="940" ypos="200" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="10" ypos="500" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="125" ypos="500" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="240" ypos="500" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="355" ypos="500" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="470" ypos="500" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="585" ypos="500" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="700" ypos="500" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="815" ypos="500" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+	
+		
+		
+	</Board>
+	<MoveRules>
+		<MoveRule destType="Foundation" cardSequence="UpOrDown" suitRequirement="NONE" allowGroup="0" rankRollover="1"/>
+	</MoveRules>
+</GameFile>
+
+

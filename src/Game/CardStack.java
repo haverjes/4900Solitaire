@@ -62,6 +62,12 @@ public class CardStack extends JComponent //implements ICardStack
 		
 	}
 	
+	public Card getReverseIndex(int n)
+	{
+		return cards.get(cards.size() - 1 - n);
+	}
+	
+	
 	public List<Card> TakeCard(Card card) 
 	{
 		int nIndex = this.cards.indexOf(card);
@@ -175,52 +181,59 @@ public class CardStack extends JComponent //implements ICardStack
 		{
 			removeAll();
 			ListIterator<Card> iter = cards.listIterator();
+			//ListIterator<Card> iter = cards.listIterator(cards);
 			Point prev = new Point(); // positioning relative to the container
 			Point prevWhereAmI = new Point();// abs positioning on the board
-			if (iter.hasNext())
-			{
-				Card c = iter.next();
-				// this origin is point(0,0) inside the cardstack container
-				prev = new Point();// c.getXY(); // starting deck pos
-				add(SolitaireEngine.moveCard(c, prev.x, prev.y));
-				// setting x & y position
-				c.setWhereAmI(getXY());
-				prevWhereAmI = getXY();
-			} else
-			{
-				removeAll();
-			}
-
-			for (; iter.hasNext();)
-			{
-				Card c = iter.next();
-				c.setXY(new Point(prev.x, prev.y + SPREAD));
-				add(SolitaireEngine.moveCard(c, prev.x, prev.y + SPREAD));
-				prev = c.getXY();
-				// setting x & y position
-				c.setWhereAmI(new Point(prevWhereAmI.x, prevWhereAmI.y + SPREAD));
-				prevWhereAmI = c.getWhereAmI();
-			}
-			
-//			prevWhereAmI = getXY();
-//			for (int nIndex = 0; nIndex < cards.size(); nIndex++)
+//			if (iter.hasNext())
 //			{
-//				
-//				Card curCard = cards.get(nIndex);
-//				prevWhereAmI = new Point(0, (nIndex * SPREAD));
-//				add(SolitaireEngine.moveCard(curCard, prevWhereAmI.x, prevWhereAmI.y));
-//				curCard.setWhereAmI(prevWhereAmI);
+//				Card c = iter.next();
+//				// this origin is point(0,0) inside the cardstack container
+//				prev = new Point();// c.getXY(); // starting deck pos
+//				add(SolitaireEngine.moveCard(c, prev.x, prev.y));
+//				// setting x & y position
+//				c.setWhereAmI(getXY());
+//				prevWhereAmI = getXY();
+//			} 
+//			else
+//			{
+//				removeAll();
 //			}
-			
+//
+//			for (; iter.hasNext();)
+//			{
+//				Card c = iter.next();
+//				c.setXY(new Point(prev.x, prev.y + SPREAD));
+//				add(SolitaireEngine.moveCard(c, prev.x, prev.y + SPREAD));
+//				prev = c.getXY();
+//				// setting x & y position
+//				c.setWhereAmI(new Point(prevWhereAmI.x, prevWhereAmI.y + SPREAD));
+//				prevWhereAmI = c.getWhereAmI();
+//			}
+//			
+			prevWhereAmI = getXY();
+			if (cards.size() > 0) 
+			{
+				for (int nIndex = cards.size() - 1; nIndex >= 0; nIndex--)
+				{
+					
+					Card curCard = cards.get(nIndex);
+					prev = new Point(0, (nIndex * SPREAD));
+					curCard.setXY(prev);
+					add(SolitaireEngine.moveCard(curCard, prev.x, prev.y));
+					curCard.setWhereAmI(new Point(prevWhereAmI.x, prevWhereAmI.y + (nIndex * SPREAD)));
+				}
+			}
 
 		}
 		else
 		{
+			Point prevWhereAmI = getXY();
 			removeAll();
 			if (cards.size() > 0)
 			{
 				Point prev = new Point(); // positioning relative to the container
 				add(SolitaireEngine.moveCard(this.getTopCard(), prev.x, prev.y));
+				this.getTopCard().setWhereAmI(new Point(prevWhereAmI.x, prevWhereAmI.y));
 			}
 			else
 			{

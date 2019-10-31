@@ -37,8 +37,8 @@ public class SolitaireEngine
 	protected static GameBoard mainGameBoard;
 	
 	// CONSTANTS
-	public static final int TABLE_HEIGHT = Card.CARD_HEIGHT * 4;
-	public static final int TABLE_WIDTH = (Card.CARD_WIDTH * 7) + 100;
+	public static int TABLE_HEIGHT = Card.CARD_HEIGHT * 4;
+	public static int TABLE_WIDTH = (Card.CARD_WIDTH * 7) + 100;
 	
 	// GUI COMPONENTS (top level)
 	private static final JFrame frame = new JFrame("Klondike Solitaire");
@@ -183,12 +183,9 @@ public class SolitaireEngine
 	public static final class CardMovementManager extends MouseAdapter
 	{
 		// Some of these are culture specific to MySolitaire
-//		private Card prevCard = null;// tracking card for waste stack
-//		private Card movedCard = null;// card moved from waste stack
-//		private boolean sourceIsFinalDeck = false;
-//		private boolean putBackOnDeck = true;// used for waste card recycling
+
 		private boolean checkForWin = false;// should we check if game is over?
-		private boolean gameOver = true;// easier to negate this than affirm it
+		private boolean gameOver = false;// easier to negate this than affirm it
 		private Point start = null;// where mouse was clicked
 		private Point stop = null;// where mouse was released
 		private Card card = null; // card to be moved
@@ -215,6 +212,7 @@ public class SolitaireEngine
 				if (source.contains(start) ) 
 				{
 					System.out.println("In stack: " + source.toString());
+					
 					for (Component ca : source.getComponents())
 					{
 						Card c = (Card) ca;
@@ -241,7 +239,7 @@ public class SolitaireEngine
 			// used for status bar updates
 			boolean validMoveMade = false;
 
-			System.out.println("Releasng mouse");
+			System.out.println("Releasing mouse");
 			// PLAY STACK OPERATIONS
 			if (card != null && source != null)
 			{ // Moving from PLAY TO PLAY
@@ -258,13 +256,7 @@ public class SolitaireEngine
 						
 						dest.repaint();
 						table.repaint();
-
-//						System.out.print("Destination ");
-//						dest.showSize();
-//						if (sourceIsFinalDeck)
-//							setScore(15);
-//						else
-//							setScore(10);
+						
 						//TODO: Implement scoring in GameBoard?
 						break;
 					} 
@@ -278,19 +270,15 @@ public class SolitaireEngine
 			{
 				statusBox.setText("That Is Not A Valid Move");
 			}
-			// CHECKING FOR WIN
-//			if (checkForWin)  // Commented:  Might re-enable later.
-//			{
-				// cycle through final decks, if they're all full then game over
-				
-				if (mainGameBoard.checkVictory())
-				{
-					gameOver = true;
-				}
-					
-//			}
 
-			if (checkForWin && gameOver)
+			// CHECKING FOR WIN				
+			if (mainGameBoard.checkVictory())
+			{
+				gameOver = true;
+			}
+
+
+			if (gameOver)
 			{
 				JOptionPane.showMessageDialog(table, "Congratulations! You've Won!");
 				statusBox.setText("Game Over!");
@@ -301,9 +289,11 @@ public class SolitaireEngine
 			source = null;
 			dest = null;
 			card = null;
+			toggleTimer();
 			//sourceIsFinalDeck = false;
 			checkForWin = false;
 			gameOver = false;
+	
 		}// end mousePressed()
 	}
 
@@ -360,19 +350,15 @@ public class SolitaireEngine
 		
 	}
 	
-	//TODO: Something is missing in how I'm adding stuff to the table
-	//		Cards are not being drawn regardless of what x/y coords I give it.
-	//
+	
 	//TODO: Separate code for creating a new game from adding everything in the gameboard to the JFrame
 	//		- Will be nice to have separate when we implement Save/Load features.
 	private static void playNewGame(String sXMLFile)
 	{
-		
-		table.removeAll();
 		// reset stacks if user starts a new game in the middle of one
+		table.removeAll();
+		
 
-		// place new card distribution button
-		//table.add(moveCard(newCardButton, DECK_POS.x, DECK_POS.y));
 
 		// Load the gameboard using XML_Loader
 		mainGameBoard = XML_Loader.LoadXML(sXMLFile);
@@ -383,18 +369,10 @@ public class SolitaireEngine
 			table.add(stack);
 		}
 		
-		// Random thing to try forcing card draws.
-//		for (Card card: mainGameBoard.Cards) 
-//		{
-//			card.drawCard();
-//		}
-		// reset time
+
 		time = 0;
-
-		newGameButton.addActionListener(new NewGameListener());
+		timer = new Timer();
 		newGameButton.setBounds(0, TABLE_HEIGHT - 70, 120, 30);
-
-		showRulesButton.addActionListener(new ShowRulesListener());
 		showRulesButton.setBounds(120, TABLE_HEIGHT - 70, 120, 30);
 
 		
@@ -418,12 +396,13 @@ public class SolitaireEngine
 		startTimer();
 
 		toggleTimerButton.setBounds(480, TABLE_HEIGHT - 70, 125, 30);
-		toggleTimerButton.addActionListener(new ToggleTimerListener());
-
+		
 		statusBox.setBounds(605, TABLE_HEIGHT - 70, 180, 30);
 		statusBox.setEditable(false);
 		statusBox.setOpaque(false);
 
+		setFrameSize(); 
+		
 		table.add(statusBox);
 		table.add(toggleTimerButton);
 		table.add(gameTitle);
@@ -437,10 +416,31 @@ public class SolitaireEngine
 	}
 	
 	
-	public void setFrameSize() 
+	static public void setFrameSize() 
 	{
 		// get max x value of all stacks, set WIDTH to MaxX + CARDWIDTH
 		// repeat for y using.
+		
+		int frameW = mainGameBoard.Stacks.stream().mapToInt(v -> v.xPos).max().orElse(0) + Card.CARD_WIDTH + Card.CORNER_ANGLE;
+		int frameH = mainGameBoard.Stacks.stream().mapToInt(v -> v.yPos).max().orElse(0) + (2 * Card.CARD_HEIGHT + 40);
+
+		if (frameH < TABLE_HEIGHT)
+			frameH = TABLE_HEIGHT;
+		
+		if (frameW < TABLE_WIDTH)
+			frameW = TABLE_WIDTH;
+		
+		
+		frame.setSize(frameW, frameH);
+		newGameButton.setBounds(0, frameH - 70, 120, 30);
+		showRulesButton.setBounds(120, frameH - 70, 120, 30);
+		scoreBox.setBounds(240, frameH - 70, 120, 30);
+		timeBox.setBounds(360, frameH - 70, 120, 30);
+		toggleTimerButton.setBounds(480, frameH - 70, 125, 30);
+
+		statusBox.setBounds(605, frameH - 70, frameW - 605, 30);
+		
+		
 	}
 	
 	public static void main(String[] args)
@@ -457,7 +457,12 @@ public class SolitaireEngine
 		contentPane.add(table);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		XMLFile = ".\\Game\\Tests\\KlondikeTest.xml";
+		XMLFile = ".\\Game\\Tests\\BinaryStarTest.xml";
+		
+		toggleTimerButton.addActionListener(new ToggleTimerListener());
+		newGameButton.addActionListener(new NewGameListener());
+		showRulesButton.addActionListener(new ShowRulesListener());
+		
 		playNewGame(XMLFile);
 
 		table.addMouseListener(new CardMovementManager());

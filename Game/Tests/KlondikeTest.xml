@@ -33,7 +33,7 @@
 		]]>
 		</Rules>
 		<Stack type="DrawDeck" xpos="5" ypos="5" drawToStackID="1" shape="Stack" />
-		<Stack type="Waste" id="1" xpos="50" ypos="5" shape="Stack" />
+		<Stack type="Waste" id="1" xpos="125" ypos="5" shape="Stack" />
 		<!--  Foundations are defined for each suit.  Each one is defined as starting out empty, and specifies the first card that can be played on it.
 				The firstCard examples here represent "Ace of any suit".  This attribute would only be needed if initialCard is not empty.
 		-->
