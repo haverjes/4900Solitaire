@@ -422,7 +422,7 @@ public class SolitaireEngine
 		// repeat for y using.
 		
 		int frameW = mainGameBoard.Stacks.stream().mapToInt(v -> v.xPos).max().orElse(0) + Card.CARD_WIDTH + Card.CORNER_ANGLE;
-		int frameH = mainGameBoard.Stacks.stream().mapToInt(v -> v.yPos).max().orElse(0) + (2 * Card.CARD_HEIGHT + 40);
+		int frameH = mainGameBoard.Stacks.stream().mapToInt(v -> v.yPos).max().orElse(0) + (3 * Card.CARD_HEIGHT + 40);
 
 		if (frameH < TABLE_HEIGHT)
 			frameH = TABLE_HEIGHT;
@@ -457,7 +457,7 @@ public class SolitaireEngine
 		contentPane.add(table);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		XMLFile = ".\\Game\\Tests\\BinaryStarTest.xml";
+		XMLFile = ".\\Game\\Tests\\BonanzaCreek.xml";
 		
 		toggleTimerButton.addActionListener(new ToggleTimerListener());
 		newGameButton.addActionListener(new NewGameListener());

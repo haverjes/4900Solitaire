@@ -48,7 +48,7 @@ public class CardStack extends JComponent //implements ICardStack
 	
 	public StackType Type;
 	
-	public static final int SPREAD = 18;
+	public static final int SPREAD = 22;
 	protected int _x = 0;
 	protected int _y = 0;
 	
