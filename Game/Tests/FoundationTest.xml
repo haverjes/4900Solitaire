@@ -1,0 +1,30 @@
+<GameFile name="FoundationTest">
+	<Board>
+		<Deck numDecks="1" />
+		<Rules>
+		<![CDATA[Nothin yet.
+		]]>
+		</Rules>
+		<Stack type="Foundation" xpos="10" ypos="5"  initialCard="AD" firstCard="A*" lockCards="1" shape="Stack"/>
+		<Stack type="Foundation" xpos="125" ypos="5" initialCard="AH" firstCard="A*" lockCards="1" shape="Stack"/>
+		<Stack type="Foundation" xpos="240" ypos="5" initialCard="" firstCard="A*" lockCards="1" shape="Stack"/>
+		<Stack type="Foundation" xpos="355" ypos="5" initialCard="" firstCard="A*" lockCards="1" shape="Stack"/>
+		
+		<Stack type="Tab" xpos="10" ypos="200" initialCard="2D" initFaceDown="0" shape="FanDown"/>
+		<Stack type="Tab" xpos="125" ypos="200" initialCard="3D" initFaceDown="0" shape="FanDown"/>
+		<Stack type="Tab" xpos="240" ypos="200" initialCard="2H" initFaceDown="0" shape="FanDown"/>
+		<Stack type="Tab" xpos="355" ypos="200" initialCard="3H" initFaceDown="0" shape="FanDown"/>
+		<Stack type="Tab" xpos="470" ypos="200" initialCard="AS" initFaceDown="0" shape="FanDown"/>
+		<Stack type="Tab" xpos="585" ypos="200" initialCard="AC" initFaceDown="0" shape="FanDown"/>
+		<Stack type="Tab" xpos="700" ypos="200" initialCard="2C" initFaceDown="0" shape="FanDown"/>
+		<Stack type="Tab" xpos="815" ypos="200" initialCard="2S" initFaceDown="0" shape="FanDown"/>
+		<Stack type="Tab" xpos="940" ypos="200" initialCard="3C" initFaceDown="0" shape="FanDown"/>
+		<Stack type="Tab" xpos="1055" ypos="200" initialCard="3S" initFaceDown="0" shape="FanDown"/>
+		
+	</Board> 
+	<MoveRules>
+		<!--  Here, group moves and moving a card onto a tableau are not valid.  -->
+		<MoveRule destType="Foundation" cardSequence="UpOrDown" suitRequirement="None" allowGroup="0"/>
+		<MoveRule destType="Tab" cardSequence="Down" suitRequirement="Same" allowGroup="1"/>
+	</MoveRules>
+</GameFile>

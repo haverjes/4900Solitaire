@@ -7,7 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.RoundRectangle2D;
-import java.util.ListIterator;
+
 
 import javax.swing.JComponent;
 
@@ -18,7 +18,7 @@ public class CardStack extends JComponent //implements ICardStack
 	 */
 	private static final long serialVersionUID = 1L;
 
-
+	
 	public static enum StackType 
 	{
 		TAB, FOUNDATION, WASTE, DRAW
@@ -68,11 +68,11 @@ public class CardStack extends JComponent //implements ICardStack
 	}
 	
 	
+	// Build a list of the selected card, and all cards on top of it.
 	public List<Card> TakeCard(Card card) 
 	{
 		int nIndex = this.cards.indexOf(card);
 		List<Card> retCardList = new ArrayList<Card>();
-//		int nLastIndex = this.cards.size() - 1;
 		
 		
 		for (int i = nIndex; i < this.cards.size(); i++)
@@ -88,6 +88,7 @@ public class CardStack extends JComponent //implements ICardStack
 		if (this.cards.size() > 0) 
 			this.getTopCard().faceUp = true;
 		
+		
 		return retCardList;
 	}
 
@@ -98,19 +99,27 @@ public class CardStack extends JComponent //implements ICardStack
 		{
 			this.cards.add(card);
 			card.stackCallBack = this;
+
 		}
+		
 	}
+	
+	
 	
 	public void PlaceCard(Card card) 
 	{	
 			this.cards.add(card);
 			card.stackCallBack = this;
+
 	}
 	
 	public Card getTopCard() 
 	{
 		if (cards.size() > 0)
+		{
+			//Card topCard = this.cards.get(this.cards.size() - 1); // line for degbugging/
 			return this.cards.get(this.cards.size() - 1);
+		}
 		else
 			return null;
 	}
@@ -146,7 +155,7 @@ public class CardStack extends JComponent //implements ICardStack
 	************************/
 	protected int getStackHeight() 
 	{
-		return Card.CARD_HEIGHT + this.getCardCount() * SPREAD;
+		return Card.CARD_HEIGHT + (this.getCardCount() * SPREAD);
 	}
 	public boolean contains(Point p)
 	{
@@ -161,9 +170,7 @@ public class CardStack extends JComponent //implements ICardStack
 		_y = y;
 		xPos = x;
 		yPos = y;
-		// System.out.println("CardStack SET _x: " + _x + " _y: " + _y);
-		int bottom = _y + getStackHeight();
-		//setBounds(_x, bottom, Card.CARD_WIDTH + 10, getStackHeight());
+
 		setBounds(_x, _y, Card.CARD_WIDTH + 10, getStackHeight());
 	}
 
@@ -176,41 +183,17 @@ public class CardStack extends JComponent //implements ICardStack
 	@Override
 	protected void paintComponent(Graphics g)
 	{
+		//setFont(g);
 		super.paintComponent(g);
 		if (this.Shape == StackShape.FANDOWN)
 		{
 			removeAll();
-			ListIterator<Card> iter = cards.listIterator();
-			//ListIterator<Card> iter = cards.listIterator(cards);
+			
+
 			Point prev = new Point(); // positioning relative to the container
-			Point prevWhereAmI = new Point();// abs positioning on the board
-//			if (iter.hasNext())
-//			{
-//				Card c = iter.next();
-//				// this origin is point(0,0) inside the cardstack container
-//				prev = new Point();// c.getXY(); // starting deck pos
-//				add(SolitaireEngine.moveCard(c, prev.x, prev.y));
-//				// setting x & y position
-//				c.setWhereAmI(getXY());
-//				prevWhereAmI = getXY();
-//			} 
-//			else
-//			{
-//				removeAll();
-//			}
-//
-//			for (; iter.hasNext();)
-//			{
-//				Card c = iter.next();
-//				c.setXY(new Point(prev.x, prev.y + SPREAD));
-//				add(SolitaireEngine.moveCard(c, prev.x, prev.y + SPREAD));
-//				prev = c.getXY();
-//				// setting x & y position
-//				c.setWhereAmI(new Point(prevWhereAmI.x, prevWhereAmI.y + SPREAD));
-//				prevWhereAmI = c.getWhereAmI();
-//			}
-//			
-			prevWhereAmI = getXY();
+			Point stackLocation = new Point();// abs positioning on the board
+
+			stackLocation = getXY();
 			if (cards.size() > 0) 
 			{
 				for (int nIndex = cards.size() - 1; nIndex >= 0; nIndex--)
@@ -220,7 +203,7 @@ public class CardStack extends JComponent //implements ICardStack
 					prev = new Point(0, (nIndex * SPREAD));
 					curCard.setXY(prev);
 					add(SolitaireEngine.moveCard(curCard, prev.x, prev.y));
-					curCard.setWhereAmI(new Point(prevWhereAmI.x, prevWhereAmI.y + (nIndex * SPREAD)));
+					curCard.setWhereAmI(new Point(stackLocation.x, stackLocation.y + (nIndex * SPREAD)));
 				}
 			}
 
@@ -231,6 +214,7 @@ public class CardStack extends JComponent //implements ICardStack
 			removeAll();
 			if (cards.size() > 0)
 			{
+				Card topCard = this.getTopCard();
 				Point prev = new Point(); // positioning relative to the container
 				add(SolitaireEngine.moveCard(this.getTopCard(), prev.x, prev.y));
 				this.getTopCard().setWhereAmI(new Point(prevWhereAmI.x, prevWhereAmI.y));

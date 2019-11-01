@@ -457,7 +457,9 @@ public class SolitaireEngine
 		contentPane.add(table);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		XMLFile = ".\\Game\\Tests\\BonanzaCreek.xml";
+		//XMLFile = ".\\Game\\Tests\\BonanzaCreek.xml";
+		XMLFile = ".\\Game\\Tests\\FoundationTest.xml";
+		//XMLFile = ".\\Game\\Tests\\BinaryStarTest.xml";
 		
 		toggleTimerButton.addActionListener(new ToggleTimerListener());
 		newGameButton.addActionListener(new NewGameListener());

@@ -4,6 +4,7 @@ package Game;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -29,7 +30,7 @@ class Card extends JPanel
 
 	private final int x_offset = 10;
 	private final int y_offset = 20;
-	private final int new_x_offset = x_offset + (CARD_WIDTH - 30);
+	private final int new_x_offset = x_offset + (CARD_WIDTH - 20);
 	final static public int CARD_HEIGHT = 150;
 	final static public int CARD_WIDTH = 100;
 	final static public int CORNER_ANGLE = 25;
@@ -149,19 +150,36 @@ class Card extends JPanel
 	
 	static public String convertSuitStr(Suit s) 
 	{
+//		switch (s)
+//		{
+//			case SPADES:
+//					return "S";
+//				// break;
+//			case CLUBS:
+//					return "C";
+//				// break;
+//			case DIAMONDS:
+//					return "D";
+//				// break;
+//			case HEARTS:
+//					return "H";
+//				// break;
+//			default:
+//				return null;
+//		}
 		switch (s)
 		{
 			case SPADES:
-					return "S";
+					return Character.toString((char)9824);
 				// break;
 			case CLUBS:
-					return "C";
+					return Character.toString((char)9831);
 				// break;
 			case DIAMONDS:
-					return "D";
+					return Character.toString((char)9830);
 				// break;
 			case HEARTS:
-					return "H";
+					return Character.toString((char)9825);
 				// break;
 			default:
 				return null;
@@ -220,13 +238,18 @@ class Card extends JPanel
 
 	private void drawValue(Graphics2D g, String value)
 	{
-		g.drawString(value, _location.x + new_x_offset, _location.y + y_offset);
-		g.drawString(value, _location.x + new_x_offset, _location.y + y_offset + CARD_HEIGHT - 25);
+		int stringWidth = g.getFontMetrics().stringWidth(value);
+		g.drawString(value, _location.x + new_x_offset - stringWidth, _location.y + y_offset);
+		g.drawString(value, _location.x + new_x_offset - stringWidth, _location.y + y_offset + CARD_HEIGHT - 25);
 	}
 
 	@Override
 	public void paintComponent(Graphics g)
 	{
+		Font currentFont = new Font (g.getFont().getFontName(), Font.PLAIN, 20);
+//		cardFont = currentFont.deriveFont(currentFont.getSize() * 20);
+		g.setFont(currentFont);
+		
 		Graphics2D g2d = (Graphics2D) g;
 		RoundRectangle2D rect2 = new RoundRectangle2D.Double(_location.x, _location.y, CARD_WIDTH, CARD_HEIGHT,
 				CORNER_ANGLE, CORNER_ANGLE);
@@ -237,21 +260,28 @@ class Card extends JPanel
 		// DRAW THE CARD SUIT AND VALUE IF FACEUP
 		if (this.faceUp)
 		{
-			switch (suit)
-			{
-			case HEARTS:
-				drawSuit(g2d, "Hearts", Color.RED);
-				break;
-			case DIAMONDS:
-				drawSuit(g2d, "Diamonds", Color.RED);
-				break;
-			case SPADES:
-				drawSuit(g2d, "Spades", Color.BLACK);
-				break;
-			case CLUBS:
-				drawSuit(g2d, "Clubs", Color.BLACK);
-				break;
-			}
+//			switch (suit)
+//			{
+//			case HEARTS:
+//				drawSuit(g2d, "Hearts", Color.RED);
+//				break;
+//			case DIAMONDS:
+//				drawSuit(g2d, "Diamonds", Color.RED);
+//				break;
+//			case SPADES:
+//				drawSuit(g2d, "Spades", Color.BLACK);
+//				break;
+//			case CLUBS:
+//				drawSuit(g2d, "Clubs", Color.BLACK);
+//				break;
+//			}
+			Color cColor;
+			if (suit == Suit.DIAMONDS ||suit == Suit.HEARTS)
+				cColor =  Color.RED;
+			else
+				cColor =  Color.BLACK;
+			
+			drawSuit(g2d, convertSuitStr(suit), cColor);
 			//int new_x_offset = x_offset + (CARD_WIDTH - 30);
 			
 			drawValue(g2d, convertRankStr(rank));

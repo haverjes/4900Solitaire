@@ -5,10 +5,10 @@
 		<![CDATA[Nothin yet.
 		]]>
 		</Rules>
-		<Stack type="Foundation" xpos="10" ypos="5" initialCard="" firstCard="A*" lockCards="1"/>
-		<Stack type="Foundation" xpos="125" ypos="5" initialCard="" firstCard="A*" lockCards="1"/>
-		<Stack type="Foundation" xpos="240" ypos="5" initialCard="" firstCard="A*" lockCards="1"/>
-		<Stack type="Foundation" xpos="355" ypos="5" initialCard="" firstCard="A*" lockCards="1"/>
+		<Stack type="Foundation" xpos="10" ypos="5"  initialCard="" firstCard="A*" lockCards="1" shape="Stack"/>
+		<Stack type="Foundation" xpos="125" ypos="5" initialCard="" firstCard="A*" lockCards="1" shape="Stack"/>
+		<Stack type="Foundation" xpos="240" ypos="5" initialCard="" firstCard="A*" lockCards="1" shape="Stack"/>
+		<Stack type="Foundation" xpos="355" ypos="5" initialCard="" firstCard="A*" lockCards="1" shape="Stack"/>
 		
 		<Stack type="Tab" xpos="10" ypos="200" cardCount="1" initFaceDown="0" shape="FanDown"/>
 		<Stack type="Tab" xpos="125" ypos="200" cardCount="3" initFaceDown="1" shape="FanDown"/>
