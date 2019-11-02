@@ -24,6 +24,8 @@ public class XML_Loader
 			Element xboard = (Element) root.getElementsByTagName("Board").item(0);
 			Element xrules = (Element) root.getElementsByTagName("MoveRules").item(0);
 			
+			retGB.GameTitle = root.hasAttribute("name") ? root.getAttribute("name") : "";
+			
 			// Set the number of card decks to use and generate the card list.
 			Element xDeck = (Element) xboard.getElementsByTagName("Deck").item(0);
 			retGB.generateCards(Integer.parseInt(xDeck.getAttribute("numDecks")));
@@ -64,7 +66,8 @@ public class XML_Loader
 	    String data;
 
 	    for(int index = 0; index < list.getLength(); index++){
-	        if(list.item(index) instanceof CharacterData){
+	        if(list.item(index) instanceof CharacterData)
+	        {
 	            CharacterData child = (CharacterData) list.item(index);
 	            data = child.getData();
 
@@ -93,6 +96,9 @@ public class XML_Loader
 		
 		if (xStack.hasAttribute("initialCard")) 
 			newStack.initialCard = xStack.getAttribute("initialCard");
+		
+		newStack.setLockCards((xStack.hasAttribute("lockCards") && Integer.parseInt(xStack.getAttribute("lockCards")) > 0));
+		
 		
 		if (xStack.hasAttribute("firstCard")) 
 		{

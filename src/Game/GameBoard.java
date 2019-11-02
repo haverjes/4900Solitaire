@@ -13,6 +13,7 @@ public class GameBoard implements Serializable
 	public List<MoveRule> Rules;
 	public List<Card> Cards;
 	public String rulesText;
+	public String GameTitle;
 	public GameBoard() 
 	{
 		Stacks = new ArrayList<CardStack>();

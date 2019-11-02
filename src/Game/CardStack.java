@@ -117,7 +117,7 @@ public class CardStack extends JComponent //implements ICardStack
 	{
 		if (cards.size() > 0)
 		{
-			//Card topCard = this.cards.get(this.cards.size() - 1); // line for degbugging/
+			Card topCard = this.cards.get(this.cards.size() - 1); // line for degbugging/
 			return this.cards.get(this.cards.size() - 1);
 		}
 		else
@@ -184,7 +184,9 @@ public class CardStack extends JComponent //implements ICardStack
 	protected void paintComponent(Graphics g)
 	{
 		//setFont(g);
+		setXY(getXY().x, getXY().y);
 		super.paintComponent(g);
+		
 		if (this.Shape == StackShape.FANDOWN)
 		{
 			removeAll();

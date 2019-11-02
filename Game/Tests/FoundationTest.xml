@@ -10,7 +10,7 @@
 		<Stack type="Foundation" xpos="240" ypos="5" initialCard="" firstCard="A*" lockCards="1" shape="Stack"/>
 		<Stack type="Foundation" xpos="355" ypos="5" initialCard="" firstCard="A*" lockCards="1" shape="Stack"/>
 		
-		<Stack type="Tab" xpos="10" ypos="200" initialCard="2D" initFaceDown="0" shape="FanDown"/>
+		<Stack type="Tab" xpos="10"  ypos="200" initialCard="2D" initFaceDown="0" shape="FanDown"/>
 		<Stack type="Tab" xpos="125" ypos="200" initialCard="3D" initFaceDown="0" shape="FanDown"/>
 		<Stack type="Tab" xpos="240" ypos="200" initialCard="2H" initFaceDown="0" shape="FanDown"/>
 		<Stack type="Tab" xpos="355" ypos="200" initialCard="3H" initFaceDown="0" shape="FanDown"/>

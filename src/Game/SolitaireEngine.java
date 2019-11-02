@@ -41,7 +41,7 @@ public class SolitaireEngine
 	public static int TABLE_WIDTH = (Card.CARD_WIDTH * 7) + 100;
 	
 	// GUI COMPONENTS (top level)
-	private static final JFrame frame = new JFrame("Klondike Solitaire");
+	private static  JFrame frame = new JFrame("Klondike Solitaire");
 	protected static final JPanel table = new JPanel();
 	// other components
 	private static JEditorPane gameTitle = new JEditorPane("text/html", "");
@@ -430,7 +430,7 @@ public class SolitaireEngine
 		if (frameW < TABLE_WIDTH)
 			frameW = TABLE_WIDTH;
 		
-		
+		frame.setTitle(mainGameBoard.GameTitle);
 		frame.setSize(frameW, frameH);
 		newGameButton.setBounds(0, frameH - 70, 120, 30);
 		showRulesButton.setBounds(120, frameH - 70, 120, 30);
@@ -458,8 +458,8 @@ public class SolitaireEngine
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		//XMLFile = ".\\Game\\Tests\\BonanzaCreek.xml";
-		XMLFile = ".\\Game\\Tests\\FoundationTest.xml";
-		//XMLFile = ".\\Game\\Tests\\BinaryStarTest.xml";
+		//XMLFile = ".\\Game\\Tests\\FoundationTest.xml";
+		XMLFile = ".\\Game\\Tests\\BinaryStarTest.xml";
 		
 		toggleTimerButton.addActionListener(new ToggleTimerListener());
 		newGameButton.addActionListener(new NewGameListener());
