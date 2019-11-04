@@ -17,7 +17,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import gamePlatform.main.Launcher;
-import gamePlatform.main.Screen;
 
 public class Menu extends JPanel {
 	
