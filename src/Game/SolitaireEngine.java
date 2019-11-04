@@ -15,6 +15,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
@@ -22,6 +23,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+
+import gamePlatform.main.Launcher;
+import gamePlatform.menus.MenuManager;
 
 
 /* General plan
@@ -40,14 +45,24 @@ public class SolitaireEngine
 	public static int TABLE_HEIGHT = Card.CARD_HEIGHT * 4;
 	public static int TABLE_WIDTH = (Card.CARD_WIDTH * 7) + 100;
 	
+	//Games that can be played.  Hardcoded in for now, but later should be set to what the current user has enabled
+	public static String[] XML_Options = {"Binary Star", "Bonanza Creek"};
+	
+	// MISC TRACKING VARIABLES
+		private static boolean timeRunning = false;// timer running?
+		private static int score = 0;// keep track of the score
+		private static int time = 0;// keep track of seconds elapsed
+	
 	// GUI COMPONENTS (top level)
-	private static  JFrame frame = new JFrame("Klondike Solitaire");
+	//protected static JFrame frame = new JFrame();
 	protected static final JPanel table = new JPanel();
 	// other components
 	private static JEditorPane gameTitle = new JEditorPane("text/html", "");
 	private static JButton showRulesButton = new JButton("Show Rules");
 	private static JButton newGameButton = new JButton("New Game");
 	private static JButton toggleTimerButton = new JButton("Pause Timer");
+	private static JButton quitGame = new JButton("Quit");
+	private static JComboBox selectXML = new JComboBox(XML_Options);
 	private static JTextField scoreBox = new JTextField();// displays the score
 	private static JTextField timeBox = new JTextField();// displays the time
 	private static JTextField statusBox = new JTextField();// status messages
@@ -56,11 +71,6 @@ public class SolitaireEngine
 	// TIMER UTILITIES
 	private static Timer timer = new Timer();
 	private static ScoreClock scoreClock = new ScoreClock();
-
-	// MISC TRACKING VARIABLES
-	private static boolean timeRunning = false;// timer running?
-	private static int score = 0;// keep track of the score
-	private static int time = 0;// keep track of seconds elapsed
 	
 	// Store last XML File loaded.
 	public static String XMLFile;
@@ -104,11 +114,12 @@ public class SolitaireEngine
 	protected static void updateTimer()
 	{
 		time += 1;
-		// every 10 seconds elapsed we take away 2 points
+		/*
 		if (time % 10 == 0)
 		{
 			setScore(-2);
 		}
+		*/
 		String stringtime = "Seconds: " + time;
 		timeBox.setText(stringtime);
 		timeBox.repaint();
@@ -158,6 +169,7 @@ public class SolitaireEngine
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
+			JFrame frame = (JFrame)SwingUtilities.getRoot(getTable());
 			JDialog ruleFrame = new JDialog(frame, true);
 			ruleFrame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			ruleFrame.setSize(TABLE_HEIGHT, TABLE_WIDTH);
@@ -169,6 +181,27 @@ public class SolitaireEngine
 			ruleFrame.add(scroll = new JScrollPane(rulesTextPane));
 
 			ruleFrame.setVisible(true);
+		}
+	}
+	
+	private static final class QuitListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			MenuManager.switchMenu(MenuManager.START_MENU);
+		}
+	}
+	
+	private static final class XML_Listener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			String fileSelected = (String)selectXML.getSelectedItem();
+			switch(fileSelected) { 
+				case "Bonanza Creek":
+					XMLFile = ".\\Game\\Tests\\BonanzaCreek.xml";
+					break;
+				case "Binary Star":
+					XMLFile = ".\\Game\\Tests\\BinaryStarTest.xml";
+			}
 		}
 	}
 	
@@ -226,10 +259,7 @@ public class SolitaireEngine
 						}
 					}
 				}
-
 			}
-			
-
 		}
 
 		@Override
@@ -253,6 +283,10 @@ public class SolitaireEngine
 					{
 						
 						validMoveMade = mainGameBoard.DragDropMove(card, dest);
+						
+						if((source.Type == CardStack.StackType.TAB) && (dest.Type == CardStack.StackType.FOUNDATION)) {
+							setScore(1);
+						}
 						
 						dest.repaint();
 						table.repaint();
@@ -293,7 +327,6 @@ public class SolitaireEngine
 			//sourceIsFinalDeck = false;
 			checkForWin = false;
 			gameOver = false;
-	
 		}// end mousePressed()
 	}
 
@@ -374,6 +407,7 @@ public class SolitaireEngine
 		timer = new Timer();
 		newGameButton.setBounds(0, TABLE_HEIGHT - 70, 120, 30);
 		showRulesButton.setBounds(120, TABLE_HEIGHT - 70, 120, 30);
+		quitGame.setBounds(240, TABLE_HEIGHT-70, 120,30);
 
 		
 		// Just a basic text box from the origial code.  
@@ -383,21 +417,24 @@ public class SolitaireEngine
 //		gameTitle.setOpaque(false);
 //		gameTitle.setBounds(245, 20, 100, 100);
 
-		scoreBox.setBounds(240, TABLE_HEIGHT - 70, 120, 30);
-		scoreBox.setText("Score: 0");
+		scoreBox.setBounds(360, TABLE_HEIGHT - 70, 120, 30);
+		scoreBox.setText("Score: ");
 		scoreBox.setEditable(false);
 		scoreBox.setOpaque(false);
 
-		timeBox.setBounds(360, TABLE_HEIGHT - 70, 120, 30);
+		timeBox.setBounds(480, TABLE_HEIGHT - 70, 120, 30);
 		timeBox.setText("Seconds: 0");
 		timeBox.setEditable(false);
 		timeBox.setOpaque(false);
 
 		startTimer();
 
-		toggleTimerButton.setBounds(480, TABLE_HEIGHT - 70, 125, 30);
+		toggleTimerButton.setBounds(600, TABLE_HEIGHT - 70, 120, 30);
 		
-		statusBox.setBounds(605, TABLE_HEIGHT - 70, 180, 30);
+		selectXML.setBounds(720, TABLE_HEIGHT - 70, 120, 30);
+		selectXML.setEditable(false);
+		
+		statusBox.setBounds(840, TABLE_HEIGHT - 70, 120, 30);
 		statusBox.setEditable(false);
 		statusBox.setOpaque(false);
 
@@ -410,6 +447,8 @@ public class SolitaireEngine
 		table.add(newGameButton);
 		table.add(showRulesButton);
 		table.add(scoreBox);
+		table.add(quitGame);
+		table.add(selectXML);
 		table.repaint();
 		
 		System.out.println("Done setting up");
@@ -420,7 +459,7 @@ public class SolitaireEngine
 	{
 		// get max x value of all stacks, set WIDTH to MaxX + CARDWIDTH
 		// repeat for y using.
-		
+		JFrame frame = (JFrame)SwingUtilities.getRoot(getTable());
 		int frameW = mainGameBoard.Stacks.stream().mapToInt(v -> v.xPos).max().orElse(0) + Card.CARD_WIDTH + Card.CORNER_ANGLE;
 		int frameH = mainGameBoard.Stacks.stream().mapToInt(v -> v.yPos).max().orElse(0) + (3 * Card.CARD_HEIGHT + 40);
 
@@ -434,11 +473,13 @@ public class SolitaireEngine
 		frame.setSize(frameW, frameH);
 		newGameButton.setBounds(0, frameH - 70, 120, 30);
 		showRulesButton.setBounds(120, frameH - 70, 120, 30);
-		scoreBox.setBounds(240, frameH - 70, 120, 30);
-		timeBox.setBounds(360, frameH - 70, 120, 30);
-		toggleTimerButton.setBounds(480, frameH - 70, 125, 30);
-
-		statusBox.setBounds(605, frameH - 70, frameW - 605, 30);
+		quitGame.setBounds(240, frameH-70, 120, 30);
+		scoreBox.setBounds(360, frameH - 70, 120, 30);
+		timeBox.setBounds(480, frameH - 70, 120, 30);
+		
+		toggleTimerButton.setBounds(600, frameH - 70, 120, 30);
+		selectXML.setBounds(720, frameH - 70, 120, 30);
+		statusBox.setBounds(840, frameH - 70, frameH - 840, 30);
 		
 		
 	}
@@ -448,30 +489,36 @@ public class SolitaireEngine
 
 		Container contentPane;
 
-		frame.setSize(TABLE_WIDTH, TABLE_HEIGHT);
+		//frame.setSize(TABLE_WIDTH, TABLE_HEIGHT);
 
 		table.setLayout(null);
 		table.setBackground(new Color(0, 180, 0));
 
-		contentPane = frame.getContentPane();
-		contentPane.add(table);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//contentPane = frame.getContentPane();
+		//contentPane.add(table);
+		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		//XMLFile = ".\\Game\\Tests\\BonanzaCreek.xml";
 		//XMLFile = ".\\Game\\Tests\\FoundationTest.xml";
-		XMLFile = ".\\Game\\Tests\\BinaryStarTest.xml";
+		//XMLFile = ".\\Game\\Tests\\BinaryStarTest.xml";
 		
 		toggleTimerButton.addActionListener(new ToggleTimerListener());
 		newGameButton.addActionListener(new NewGameListener());
 		showRulesButton.addActionListener(new ShowRulesListener());
+		quitGame.addActionListener(new QuitListener());
+		selectXML.addActionListener(new XML_Listener());
 		
 		playNewGame(XMLFile);
 
 		table.addMouseListener(new CardMovementManager());
 		table.addMouseMotionListener(new CardMovementManager());
 
-		frame.setVisible(true);
+		//frame.setVisible(true);
 
+	}
+
+	public static JPanel getTable() {
+		return table;
 	}
 	
 }
