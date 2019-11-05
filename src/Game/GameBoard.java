@@ -1,6 +1,7 @@
 package Game;
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;  
 
 public class GameBoard implements Serializable
@@ -53,9 +54,11 @@ public class GameBoard implements Serializable
 		if (card.stackCallBack.getLockCards())
 			return false;
 		
+		List<CardStack.StackType> validDestStacks = movableStackTypes();
+		
 		for(CardStack cardStack: this.Stacks)
 		{
-			if (DragDropMove(card, cardStack))
+			if (validDestStacks.contains(cardStack.Type) && DragDropMove(card, cardStack))
 			{
 				return true;
 			}
@@ -79,6 +82,17 @@ public class GameBoard implements Serializable
 		}
 	}
 	
+	protected List<CardStack.StackType> movableStackTypes() 
+	{
+		List<CardStack.StackType> olRet = new ArrayList<CardStack.StackType>();
+		for(MoveRule rule: this.Rules)
+		{
+			if (!olRet.contains(rule.destStackType))
+				olRet.add(rule.destStackType);
+		}
+		return olRet;
+		
+	}
 	public void dealCards() 
 	{
 		// make a copy of the main Cards list to be shrunk and shuffled.

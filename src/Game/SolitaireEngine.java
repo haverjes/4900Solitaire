@@ -236,6 +236,7 @@ public class SolitaireEngine
 			statusBox.setText("");
 			System.out.println("Grabbing mouse");
 			
+			//TODO: ClickCard
 			for (int x = 0; x < mainGameBoard.Stacks.size() && !stopSearch ; x++)
 			{
 				
@@ -288,7 +289,7 @@ public class SolitaireEngine
 							setScore(1);
 						}
 						
-						dest.repaint();
+						//dest.repaint();
 						table.repaint();
 						
 						//TODO: Implement scoring in GameBoard?
@@ -328,6 +329,62 @@ public class SolitaireEngine
 			checkForWin = false;
 			gameOver = false;
 		}// end mousePressed()
+		
+		@Override
+	    public void mouseClicked(MouseEvent e){
+	        if(e.getClickCount()==2){
+	        	Card card = getPointedCard(e.getPoint());
+	        	// your code here
+	        	
+	        	if (card != null && card.isTopCard())
+	        	{
+	        		if (mainGameBoard.ClickMove(card))
+	        		{
+	        			
+	        		}
+	        		else
+	        		{
+	        			statusBox.setText("No valid moves for this card.");
+	        		}
+	        		dest.repaint();
+					table.repaint();
+	        	}
+	        }
+	    }
+		
+		
+		protected Card getPointedCard(Point p) 
+		{
+			
+			for (int x = 0; x < mainGameBoard.Stacks.size(); x++)
+			{
+				
+				source = mainGameBoard.Stacks.get(x);
+				// pinpointing exact card pressed
+				
+				if (source.contains(p) ) 
+				{
+					System.out.println("In stack: " + source.toString());
+					
+					for (Component ca : source.getComponents())
+					{
+						Card c = (Card) ca;
+	
+						if (c.contains(p)  && c.faceUp)
+						{
+							card = c;
+							
+							System.out.println("Grabbed card: " + card.toString());
+							return c;
+							
+						}
+					}
+				}
+				
+			}
+			return null;
+		}
+		
 	}
 
 	public static void SaveGame(String filename)
@@ -460,6 +517,8 @@ public class SolitaireEngine
 		// get max x value of all stacks, set WIDTH to MaxX + CARDWIDTH
 		// repeat for y using.
 		JFrame frame = (JFrame)SwingUtilities.getRoot(getTable());
+		
+
 		int frameW = mainGameBoard.Stacks.stream().mapToInt(v -> v.xPos).max().orElse(0) + Card.CARD_WIDTH + Card.CORNER_ANGLE;
 		int frameH = mainGameBoard.Stacks.stream().mapToInt(v -> v.yPos).max().orElse(0) + (3 * Card.CARD_HEIGHT + 40);
 
