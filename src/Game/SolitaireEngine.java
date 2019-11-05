@@ -54,7 +54,7 @@ public class SolitaireEngine
 		private static int time = 0;// keep track of seconds elapsed
 	
 	// GUI COMPONENTS (top level)
-	//protected static JFrame frame = new JFrame();
+	protected static JFrame mainFrame = new JFrame();
 	protected static final JPanel table = new JPanel();
 	// other components
 	private static JEditorPane gameTitle = new JEditorPane("text/html", "");
@@ -62,7 +62,7 @@ public class SolitaireEngine
 	private static JButton newGameButton = new JButton("New Game");
 	private static JButton toggleTimerButton = new JButton("Pause Timer");
 	private static JButton quitGame = new JButton("Quit");
-	private static JComboBox selectXML = new JComboBox(XML_Options);
+	private static JComboBox selectXML = new JComboBox(XML_Loader.getXMLFiles().toArray());
 	private static JTextField scoreBox = new JTextField();// displays the score
 	private static JTextField timeBox = new JTextField();// displays the time
 	private static JTextField statusBox = new JTextField();// status messages
@@ -195,13 +195,14 @@ public class SolitaireEngine
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			String fileSelected = (String)selectXML.getSelectedItem();
-			switch(fileSelected) { 
-				case "Bonanza Creek":
-					XMLFile = ".\\Game\\Tests\\BonanzaCreek.xml";
-					break;
-				case "Binary Star":
-					XMLFile = ".\\Game\\Tests\\BinaryStarTest.xml";
-			}
+//			switch(fileSelected) { 
+//				case "Bonanza Creek":
+//					XMLFile = ".\\Game\\Tests\\BonanzaCreek.xml";
+//					break;
+//				case "Binary Star":
+//					XMLFile = ".\\Game\\Tests\\BinaryStarTest.xml";
+//			}
+			XMLFile = fileSelected;
 		}
 	}
 	
@@ -346,7 +347,7 @@ public class SolitaireEngine
 	        		{
 	        			statusBox.setText("No valid moves for this card.");
 	        		}
-	        		dest.repaint();
+	        		card.stackCallBack.repaint();
 					table.repaint();
 	        	}
 	        }
@@ -384,6 +385,24 @@ public class SolitaireEngine
 			}
 			return null;
 		}
+		protected CardStack getPointedStack(Point p) 
+		{
+			
+			for (int x = 0; x < mainGameBoard.Stacks.size(); x++)
+			{
+				
+				source = mainGameBoard.Stacks.get(x);
+				// pinpointing exact card pressed
+				
+				if (source.contains(p) ) 
+				{
+					return source;
+				}
+				
+			}
+			return null;
+		}
+		
 		
 	}
 
@@ -446,9 +465,12 @@ public class SolitaireEngine
 	private static void playNewGame(String sXMLFile)
 	{
 		// reset stacks if user starts a new game in the middle of one
+		
 		table.removeAll();
 		
-
+//		JScrollPane pane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+//		pane.setVisible(true);
+//		table.add(pane);
 
 		// Load the gameboard using XML_Loader
 		mainGameBoard = XML_Loader.LoadXML(sXMLFile);
@@ -462,9 +484,6 @@ public class SolitaireEngine
 
 		time = 0;
 		timer = new Timer();
-		newGameButton.setBounds(0, TABLE_HEIGHT - 70, 120, 30);
-		showRulesButton.setBounds(120, TABLE_HEIGHT - 70, 120, 30);
-		quitGame.setBounds(240, TABLE_HEIGHT-70, 120,30);
 
 		
 		// Just a basic text box from the origial code.  
@@ -474,24 +493,19 @@ public class SolitaireEngine
 //		gameTitle.setOpaque(false);
 //		gameTitle.setBounds(245, 20, 100, 100);
 
-		scoreBox.setBounds(360, TABLE_HEIGHT - 70, 120, 30);
 		scoreBox.setText("Score: ");
 		scoreBox.setEditable(false);
 		scoreBox.setOpaque(false);
 
-		timeBox.setBounds(480, TABLE_HEIGHT - 70, 120, 30);
 		timeBox.setText("Seconds: 0");
 		timeBox.setEditable(false);
 		timeBox.setOpaque(false);
 
 		startTimer();
 
-		toggleTimerButton.setBounds(600, TABLE_HEIGHT - 70, 120, 30);
 		
-		selectXML.setBounds(720, TABLE_HEIGHT - 70, 120, 30);
 		selectXML.setEditable(false);
 		
-		statusBox.setBounds(840, TABLE_HEIGHT - 70, 120, 30);
 		statusBox.setEditable(false);
 		statusBox.setOpaque(false);
 
@@ -518,7 +532,6 @@ public class SolitaireEngine
 		// repeat for y using.
 		JFrame frame = (JFrame)SwingUtilities.getRoot(getTable());
 		
-
 		int frameW = mainGameBoard.Stacks.stream().mapToInt(v -> v.xPos).max().orElse(0) + Card.CARD_WIDTH + Card.CORNER_ANGLE;
 		int frameH = mainGameBoard.Stacks.stream().mapToInt(v -> v.yPos).max().orElse(0) + (3 * Card.CARD_HEIGHT + 40);
 
@@ -547,37 +560,59 @@ public class SolitaireEngine
 	{
 
 		Container contentPane;
-
-		//frame.setSize(TABLE_WIDTH, TABLE_HEIGHT);
+//		
+		mainFrame.setSize(TABLE_WIDTH, TABLE_HEIGHT);
+		
+		contentPane = mainFrame.getContentPane();
+		contentPane.add(table);
+//		contentPane.add(getScrollTable());
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		String file;
+		if (args.length > 0)
+			file = args[0];
+		else 
+		{
+	//		file = ".\\Game\\Tests\\BonanzaCreek.xml";
+//			file = ".\\Game\\Tests\\FoundationTest.xml";
+			file = "BinaryStarTest.xml";
+		}
+		mainFrame.setVisible(true);
+		
+		initGame(file);
+		
+	}
+	
+	public static void initGame(String file)
+	{
 
 		table.setLayout(null);
 		table.setBackground(new Color(0, 180, 0));
 
-		//contentPane = frame.getContentPane();
-		//contentPane.add(table);
-		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		//XMLFile = ".\\Game\\Tests\\BonanzaCreek.xml";
-		//XMLFile = ".\\Game\\Tests\\FoundationTest.xml";
-		//XMLFile = ".\\Game\\Tests\\BinaryStarTest.xml";
-		
+
 		toggleTimerButton.addActionListener(new ToggleTimerListener());
 		newGameButton.addActionListener(new NewGameListener());
 		showRulesButton.addActionListener(new ShowRulesListener());
 		quitGame.addActionListener(new QuitListener());
 		selectXML.addActionListener(new XML_Listener());
 		
-		playNewGame(XMLFile);
+		playNewGame(file);
 
 		table.addMouseListener(new CardMovementManager());
 		table.addMouseMotionListener(new CardMovementManager());
 
-		//frame.setVisible(true);
-
+		
 	}
 
 	public static JPanel getTable() {
+
 		return table;
 	}
 	
+	public static JScrollPane getScrollTable() {
+		JScrollPane pane = new JScrollPane(table);
+		pane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		pane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		return pane;
+	}
 }

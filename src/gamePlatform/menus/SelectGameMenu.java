@@ -12,6 +12,10 @@ import gamePlatform.main.Launcher;
 
 public class SelectGameMenu extends Menu{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JButton playBinStar;
 	
 	public SelectGameMenu() {
@@ -36,10 +40,9 @@ public class SelectGameMenu extends Menu{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Launcher.mainScreen.setContentPane(SolitaireEngine.getTable());
-				Launcher.mainScreen.setTitle("Binary Star");
-				SolitaireEngine.XMLFile = ".\\\\Game\\\\Tests\\\\BinaryStarTest.xml";
-				String[] args = {};
-				SolitaireEngine.main(args);
+				//Launcher.mainScreen.setTitle("Binary Star");
+				String file = "BinaryStarTest.xml";
+				SolitaireEngine.initGame(file);
 			}
 		});
 	}

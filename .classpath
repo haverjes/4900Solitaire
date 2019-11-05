@@ -7,6 +7,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
-	<classpathentry kind="lib" path="C:/Users/haverjes/Downloads/dom-2.3.0-jaxb-1.0.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

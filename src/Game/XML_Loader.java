@@ -2,16 +2,20 @@ package Game;
 //XML_Loader.java
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
-import java.io.*;	
-
+import java.io.*;
+import java.nio.file.Paths;
+import java.util.*;
 public class XML_Loader 
 {
+	public final static String XML_FOLDER = ".\\Game";
+	
 	public static GameBoard LoadXML(String file) 
 	{
 		GameBoard retGB = new GameBoard();
+		String newfile = Paths.get(XML_FOLDER, file).toString();
 		
 		try {
-			File xmlFile = new File(file);
+			File xmlFile = new File(newfile);
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document xDoc = builder.parse(xmlFile);
@@ -140,4 +144,21 @@ public class XML_Loader
 		
 		return newRule;
 	}
+	
+	public static List<String> getXMLFiles() 
+	{
+		List<String> sRet = new ArrayList<String>();
+		File folder = new File(XML_FOLDER);
+		File[] listOfFiles = folder.listFiles((dir, name) -> name.endsWith(".xml"));
+
+		for (File file: listOfFiles)
+		{
+			
+			sRet.add(file.getName());
+		}
+		
+		return sRet;
+	}
 }
+
+
