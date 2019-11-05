@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -60,6 +61,7 @@ public class SolitaireEngine
 	private static JEditorPane gameTitle = new JEditorPane("text/html", "");
 	private static JButton showRulesButton = new JButton("Show Rules");
 	private static JButton newGameButton = new JButton("New Game");
+	
 	private static JButton toggleTimerButton = new JButton("Pause Timer");
 	private static JButton quitGame = new JButton("Quit");
 	private static JComboBox selectXML = new JComboBox(XML_Loader.getXMLFiles().toArray());
@@ -67,6 +69,8 @@ public class SolitaireEngine
 	private static JTextField timeBox = new JTextField();// displays the time
 	private static JTextField statusBox = new JTextField();// status messages
 	
+	private static JButton saveGameButton = new JButton("Save Game");
+	private static JButton loadGameButton = new JButton("Load Game");
 	
 	// TIMER UTILITIES
 	private static Timer timer = new Timer();
@@ -188,6 +192,39 @@ public class SolitaireEngine
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			MenuManager.switchMenu(MenuManager.START_MENU);
+		}
+	}
+	
+	private static final class SaveListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) 
+		{
+			JFileChooser j = new JFileChooser("."); 
+			  
+			// Open the save dialog 
+			int r = j.showSaveDialog(null); 
+			  
+            if (r == JFileChooser.APPROVE_OPTION) { 
+                // set the label to the path of the selected directory 
+                SaveGame(j.getSelectedFile().getAbsolutePath()); 
+            } 
+		}
+	}
+	
+	private static final class LoadListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) 
+		{
+			JFileChooser j = new JFileChooser("."); 
+			  
+			// Open the save dialog 
+		
+			int r = j.showSaveDialog(null); 
+			  
+            if (r == JFileChooser.APPROVE_OPTION) { 
+                // set the label to the path of the selected directory 
+                LoadGame(j.getSelectedFile().getAbsolutePath()); 
+            } 
 		}
 	}
 	
@@ -444,17 +481,19 @@ public class SolitaireEngine
   
             in.close(); 
             file.close(); 
-            
+            playNewGame();
             
         } 
   
         catch (IOException ex) { 
             System.out.println("IOException is caught"); 
+            System.out.println(ex);
         } 
   
         catch (ClassNotFoundException ex) { 
             System.out.println("ClassNotFoundException" + 
                                 " is caught"); 
+            System.out.println(ex);
         } 
 		
 	}
@@ -464,16 +503,19 @@ public class SolitaireEngine
 	//		- Will be nice to have separate when we implement Save/Load features.
 	private static void playNewGame(String sXMLFile)
 	{
+		mainGameBoard = XML_Loader.LoadXML(sXMLFile);
+		playNewGame();
+	}
+	
+	private static void playNewGame()
+	{
 		// reset stacks if user starts a new game in the middle of one
 		
 		table.removeAll();
-		
-//		JScrollPane pane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-//		pane.setVisible(true);
-//		table.add(pane);
+
 
 		// Load the gameboard using XML_Loader
-		mainGameBoard = XML_Loader.LoadXML(sXMLFile);
+		
 		for (int x = 0; x < mainGameBoard.Stacks.size(); x++)
 		{
 			CardStack stack = mainGameBoard.Stacks.get(x);
@@ -485,13 +527,6 @@ public class SolitaireEngine
 		time = 0;
 		timer = new Timer();
 
-		
-		// Just a basic text box from the origial code.  
-		// Preserved in comments for reference should we want to add our own text.
-//		gameTitle.setText("<b>Shamari's Solitaire</b> <br> COP3252 <br> Spring 2012");
-//		gameTitle.setEditable(false);
-//		gameTitle.setOpaque(false);
-//		gameTitle.setBounds(245, 20, 100, 100);
 
 		scoreBox.setText("Score: ");
 		scoreBox.setEditable(false);
@@ -520,6 +555,8 @@ public class SolitaireEngine
 		table.add(scoreBox);
 		table.add(quitGame);
 		table.add(selectXML);
+		table.add(saveGameButton);
+		table.add(loadGameButton);
 		table.repaint();
 		
 		System.out.println("Done setting up");
@@ -552,7 +589,8 @@ public class SolitaireEngine
 		toggleTimerButton.setBounds(600, frameH - 70, 120, 30);
 		selectXML.setBounds(720, frameH - 70, 120, 30);
 		statusBox.setBounds(840, frameH - 70, frameH - 840, 30);
-		
+		saveGameButton.setBounds(840, frameH - 140, 120, 30);
+		loadGameButton.setBounds(960, frameH - 140, 120, 30);
 		
 	}
 	
@@ -589,7 +627,9 @@ public class SolitaireEngine
 		table.setLayout(null);
 		table.setBackground(new Color(0, 180, 0));
 
-
+		
+		loadGameButton.addActionListener(new LoadListener());
+		saveGameButton.addActionListener(new SaveListener());
 		toggleTimerButton.addActionListener(new ToggleTimerListener());
 		newGameButton.addActionListener(new NewGameListener());
 		showRulesButton.addActionListener(new ShowRulesListener());

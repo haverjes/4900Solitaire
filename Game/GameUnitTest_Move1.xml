@@ -1,0 +1,18 @@
+<GameFile name="BasicBoardTest">
+	
+	<Board>
+		<Rules>
+		<![CDATA[
+		   GameEngine Unit Test: Move 1 <BR></BR>Here are the rules.  Move and test!
+		]]>
+		</Rules>
+		<Deck numDecks="1" />
+		<Stack type="Foundation" xpos="5" ypos="100" initialCard="1S" lockCards="0"/>
+		
+		<Stack type="Tab" xpos="50" ypos="400" cardCount="1" initFaceDown="0" shape="FanDown" initialCard="2S" lockCards="0"/>
+		<Stack type="Tab" xpos="200" ypos="400" cardCount="1" initFaceDown="0" shape="FanDown" initialCard="10S" lockCards="0"/>
+	</Board>
+	<MoveRules>
+		<MoveRule destType="Foundation" value="1" cardSequence="UpOrDown" suitRequirement="none" allowGroup="0"/>
+	</MoveRules>
+</GameFile>

@@ -177,4 +177,12 @@ public class GameBoard implements Serializable
 		// Take a count of all Tableaus that have any cards.  If Count > 0, game not over yet.
 		return this.Stacks.stream().filter(s -> s.Type == CardStack.StackType.TAB && s.getCardCount() > 0).count() == 0;
 	}
+	
+	public void redraw() 
+	{
+		for (CardStack stack: this.Stacks)
+		{
+			stack.repaint(); 
+		}
+	}
 }

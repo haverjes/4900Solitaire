@@ -1,0 +1,22 @@
+<GameFile name="BasicBoardTest">
+	
+	<Board>
+		<Rules>
+		<![CDATA[
+		   Here are the rules.  Move and test!
+		]]>
+		</Rules>
+		<Deck numDecks="1" />
+		<Stack type="Foundation" xpos="5" ypos="5" initialCard="6S" lockCards="0"/>
+		
+		<Stack type="Tab" xpos="10" ypos="200" cardCount="1" initFaceDown="0" shape="FanDown" initialCard="11S" lockCards="0"/>
+		<Stack type="Tab" xpos="125" ypos="200" cardCount="1" initFaceDown="0" shape="FanDown" initialCard="10D" lockCards="0"/>
+		<Stack type="Tab" xpos="240" ypos="200" cardCount="1" initFaceDown="0" shape="FanDown" initialCard="9S" lockCards="0"/>
+		<Stack type="Tab" xpos="355" ypos="200" cardCount="1" initFaceDown="0" shape="FanDown" initialCard="8S" lockCards="0"/>
+		<Stack type="Tab" xpos="470" ypos="200" cardCount="1" initFaceDown="0" shape="FanDown" initialCard="7S" lockCards="0"/>
+	</Board>
+	<MoveRules>
+		<MoveRule destType="Foundation" value="1" cardSequence="UpOrDown" suitRequirement="none" allowGroup="0"/>
+		<MoveRule destType="Tab" value="1" cardSequence="Down" suitRequirement="none" allowGroup="1"/>
+	</MoveRules>
+</GameFile>

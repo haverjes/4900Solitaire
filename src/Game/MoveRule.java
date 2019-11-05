@@ -1,8 +1,15 @@
 package Game;
 //import java.util.*;  
 
-public class MoveRule 
+import java.io.Serializable;
+
+public class MoveRule implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	enum CardSequence {	UP, DOWN, UPORDOWN }
 
 	enum SuitRequirement {SAME, NONE, ALTCOLOR }

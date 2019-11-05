@@ -1,0 +1,30 @@
+<GameFile name="Bonanza Creek">
+	<Board>
+		<Deck numDecks="1" />
+		<Rules>
+		<![CDATA[Nothin yet.
+		]]>
+		</Rules>
+		<Stack type="Foundation" xpos="10" ypos="5"  initialCard="" firstCard="A*" lockCards="1" shape="Stack"/>
+		<Stack type="Foundation" xpos="125" ypos="5" initialCard="" firstCard="A*" lockCards="1" shape="Stack"/>
+		<Stack type="Foundation" xpos="240" ypos="5" initialCard="" firstCard="A*" lockCards="1" shape="Stack"/>
+		<Stack type="Foundation" xpos="355" ypos="5" initialCard="" firstCard="A*" lockCards="1" shape="Stack"/>
+		
+		<Stack type="Tab" xpos="10" ypos="200" cardCount="1" initFaceDown="0" shape="FanDown"/>
+		<Stack type="Tab" xpos="125" ypos="200" cardCount="3" initFaceDown="1" shape="FanDown"/>
+		<Stack type="Tab" xpos="240" ypos="200" cardCount="6" initFaceDown="1" shape="FanDown"/>
+		<Stack type="Tab" xpos="355" ypos="200" cardCount="6" initFaceDown="1" shape="FanDown"/>
+		<Stack type="Tab" xpos="470" ypos="200" cardCount="6" initFaceDown="2" shape="FanDown"/>
+		<Stack type="Tab" xpos="585" ypos="200" cardCount="6" initFaceDown="2" shape="FanDown"/>
+		<Stack type="Tab" xpos="700" ypos="200" cardCount="6" initFaceDown="3" shape="FanDown"/>
+		<Stack type="Tab" xpos="815" ypos="200" cardCount="6" initFaceDown="3" shape="FanDown"/>
+		<Stack type="Tab" xpos="940" ypos="200" cardCount="6" initFaceDown="4" shape="FanDown"/>
+		<Stack type="Tab" xpos="1055" ypos="200" cardCount="6" initFaceDown="4" shape="FanDown"/>
+		
+	</Board> 
+	<MoveRules>
+		<!--  Here, group moves and moving a card onto a tableau are not valid.  -->
+		<MoveRule destType="Foundation" cardSequence="Up" suitRequirement="Same" allowGroup="0"/>
+		<MoveRule destType="Tab" cardSequence="Down" suitRequirement="Same" allowGroup="1"/>
+	</MoveRules>
+</GameFile>
