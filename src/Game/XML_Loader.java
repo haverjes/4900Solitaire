@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.util.*;
 public class XML_Loader 
 {
-	public final static String XML_FOLDER = ".\\Game";
+	public final static String XML_FOLDER = Paths.get(".","Game").toString();
 	
 	public static GameBoard LoadXML(String file) 
 	{
