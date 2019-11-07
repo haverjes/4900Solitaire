@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 //TODO: Copy all the drawing related code from MySolitaire\Card.java and adapt to match new class structure.
 
 
-class Card extends JPanel
+class Card extends JPanel 
 {
 
 	/**
@@ -31,7 +31,7 @@ class Card extends JPanel
 	private final int x_offset = 10;
 	private final int y_offset = 20;
 	private final int new_x_offset = x_offset + (CARD_WIDTH - 20);
-	final static public int CARD_HEIGHT = 150;
+	final static public int CARD_HEIGHT = 100;
 	final static public int CARD_WIDTH = 100;
 	final static public int CORNER_ANGLE = 25;
 	

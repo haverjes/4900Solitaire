@@ -41,7 +41,7 @@ import gamePlatform.menus.MenuManager;
 public class SolitaireEngine 
 {
 	protected static GameBoard mainGameBoard;
-	
+	protected static CardMovementManager mouseManager;
 	// CONSTANTS
 	public static int TABLE_HEIGHT = Card.CARD_HEIGHT * 4;
 	public static int TABLE_WIDTH = (Card.CARD_WIDTH * 7) + 100;
@@ -263,7 +263,7 @@ public class SolitaireEngine
 		
 		private CardStack source = null;
 		private CardStack dest = null;
-
+		private CardStack transferStack;
 
 
 		@Override
@@ -292,6 +292,7 @@ public class SolitaireEngine
 						if (c.contains(start)  && c.faceUp)
 						{
 							card = c;
+							getTransferStack(card);
 							stopSearch = true;
 							System.out.println("Grabbed card: " + card.toString());
 							break;
@@ -300,7 +301,14 @@ public class SolitaireEngine
 				}
 			}
 		}
-
+		
+		protected void getTransferStack(Card c)
+		{
+			transferStack = c.stackCallBack.TakeSubStack(card);
+			table.add(transferStack);
+			transferStack.repaint();
+		}
+		
 		@Override
 		public void mouseReleased(MouseEvent e)
 		{
@@ -327,7 +335,7 @@ public class SolitaireEngine
 							setScore(1);
 						}
 						
-						//dest.repaint();
+						dest.repaint();
 						table.repaint();
 						
 						//TODO: Implement scoring in GameBoard?
@@ -342,8 +350,20 @@ public class SolitaireEngine
 			if (!validMoveMade && dest != null && card != null)
 			{
 				statusBox.setText("That Is Not A Valid Move");
+
 			}
 
+			if (!validMoveMade)
+			{
+				source.PlaceCards(transferStack);
+				source.repaint();
+			}
+			if (transferStack.cards.size() == 0)
+			{
+				table.remove(transferStack);
+				transferStack = null;
+			}
+			
 			// CHECKING FOR WIN				
 			if (mainGameBoard.checkVictory())
 			{
@@ -390,6 +410,20 @@ public class SolitaireEngine
 	        }
 	    }
 		
+		@Override
+		public void mouseDragged(MouseEvent e)
+		{
+			if (transferStack != null) 
+			{
+				Point p = e.getPoint();
+				System.out.println("Dragging " + p.toString());
+//				transferStack.xPos = p.x;
+//				transferStack.yPos = p.y;
+				transferStack.setXY(p.x, p.y);
+				transferStack.repaint();
+				table.repaint();
+			}
+		}
 		
 		protected Card getPointedCard(Point p) 
 		{
@@ -611,9 +645,9 @@ public class SolitaireEngine
 			file = args[0];
 		else 
 		{
-	//		file = ".\\Game\\Tests\\BonanzaCreek.xml";
+			file = "BonanzaCreek.xml";
 //			file = ".\\Game\\Tests\\FoundationTest.xml";
-			file = "BinaryStarTest.xml";
+			//file = "BinaryStarTest.xml";
 		}
 		mainFrame.setVisible(true);
 		
@@ -637,9 +671,9 @@ public class SolitaireEngine
 		selectXML.addActionListener(new XML_Listener());
 		
 		playNewGame(file);
-
-		table.addMouseListener(new CardMovementManager());
-		table.addMouseMotionListener(new CardMovementManager());
+		mouseManager = new CardMovementManager();
+		table.addMouseListener(mouseManager);
+		table.addMouseMotionListener(mouseManager);
 
 		
 	}

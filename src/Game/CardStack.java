@@ -11,7 +11,7 @@ import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.JComponent;
 
-public class CardStack extends JComponent //implements ICardStack
+public class CardStack extends JComponent implements Cloneable
 {
 	/**
 	 * 
@@ -29,7 +29,7 @@ public class CardStack extends JComponent //implements ICardStack
 		STACK, FANDOWN
 	}
 	
-	
+	public String id;
 	public List<Card> cards;
 	public int yPos;
 	public int xPos;
@@ -43,6 +43,8 @@ public class CardStack extends JComponent //implements ICardStack
 	
 	public int firstCardRank; 
 	public Card.Suit firstCardSuit; 
+	
+	public String drawToStack;
 	
 	public int cardLimit;
 	
@@ -88,11 +90,17 @@ public class CardStack extends JComponent //implements ICardStack
 		if (this.cards.size() > 0) 
 			this.getTopCard().faceUp = true;
 		
-		
+		repaint();
 		return retCardList;
 	}
 
 	// Add the list of carsd in order and update each card's Callback member.
+	public void PlaceCards(CardStack source)
+	{
+		PlaceCards(source.TakeCard(source.cards.get(0)));
+		
+	}
+	
 	public void PlaceCards(List<Card> cardList) 
 	{
 		for (Card card: cardList)
@@ -101,7 +109,7 @@ public class CardStack extends JComponent //implements ICardStack
 			card.stackCallBack = this;
 
 		}
-		
+		this.repaint();
 	}
 	
 	
@@ -268,4 +276,30 @@ public class CardStack extends JComponent //implements ICardStack
 				return StackShape.STACK;
 		}
 	}
+	
+	public CardStack TakeSubStack(Card startCard)
+	{
+		CardStack csRet = new CardStack();
+		try {
+			csRet = (CardStack) this.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
+		
+		// Remove the card and attached cards
+		csRet.id = "transfer";
+		List<Card> templist = TakeCard(startCard);
+		csRet.PlaceCards(templist);
+		this.repaint();
+		csRet.repaint();
+		return csRet;
+	}
+	
+	
+	@Override
+	public CardStack clone() throws CloneNotSupportedException {
+        return (CardStack) super.clone();
+    }
 }
