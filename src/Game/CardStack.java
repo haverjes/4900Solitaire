@@ -29,7 +29,8 @@ public class CardStack extends JComponent implements Cloneable
 		STACK, FANDOWN
 	}
 	
-	public String id;
+ 
+
 	public List<Card> cards;
 	public int yPos;
 	public int xPos;
@@ -43,8 +44,7 @@ public class CardStack extends JComponent implements Cloneable
 	
 	public int firstCardRank; 
 	public Card.Suit firstCardSuit; 
-	
-	public String drawToStack;
+
 	
 	public int cardLimit;
 	
@@ -53,6 +53,11 @@ public class CardStack extends JComponent implements Cloneable
 	public static final int SPREAD = 22;
 	protected int _x = 0;
 	protected int _y = 0;
+	public String id;
+	
+	public String drawToStack;
+	public CardStack wasteStack;
+	public int drawCount;
 	
 	
 	public boolean getLockCards() { return lockcards; }
@@ -85,19 +90,24 @@ public class CardStack extends JComponent implements Cloneable
 		// Remove the cards from the list.
 		this.cards.removeAll(retCardList);
 		
-		
-		// Ensure topcard is face up, if stack not empty
-		if (this.cards.size() > 0) 
-			this.getTopCard().faceUp = true;
-		
-		repaint();
 		return retCardList;
+	}
+	public List<Card> TakeCard(Card card, boolean leaveTopCardFaceUp) 
+	{
+		// Ensure topcard is face up, if stack not empty
+		List<Card> ret = this.TakeCard(card);
+		if (leaveTopCardFaceUp && this.cards.size() > 0) 
+			this.getTopCard().faceUp = true;
+	
+		return ret;
+					 
 	}
 
 	// Add the list of carsd in order and update each card's Callback member.
 	public void PlaceCards(CardStack source)
 	{
-		PlaceCards(source.TakeCard(source.cards.get(0)));
+		if (source.cards.size() > 0)
+			PlaceCards(source.TakeCard(source.cards.get(0)));
 		
 	}
 	
@@ -132,6 +142,12 @@ public class CardStack extends JComponent implements Cloneable
 			return null;
 	}
 	
+	public void ShowTopCard()
+	{
+		if (cards.size() > 0)
+		getTopCard().faceUp = true;
+	}					  
+ 
 	public int getCardIndex(Card card) 
 	{
 		return this.cards.indexOf(card);
@@ -141,7 +157,7 @@ public class CardStack extends JComponent implements Cloneable
 	
 	public void dealCard(Card card) 
 	{
-		if (getCardCount() < initFaceDown) 
+		if (getCardCount() < initFaceDown || Type == StackType.DRAW) 
 			card.faceUp = false;
 		else
 			card.faceUp = true;
@@ -163,7 +179,12 @@ public class CardStack extends JComponent implements Cloneable
 	************************/
 	protected int getStackHeight() 
 	{
-		return Card.CARD_HEIGHT + (this.getCardCount() * SPREAD);
+		if (this.Shape == StackShape.FANDOWN)
+			return Card.CARD_HEIGHT + (this.getCardCount() * SPREAD);
+		if (this.Shape == StackShape.STACK)
+			return Card.CARD_HEIGHT + SPREAD;
+		else
+			return Card.CARD_HEIGHT;
 	}
 	public boolean contains(Point p)
 	{
@@ -310,5 +331,35 @@ public class CardStack extends JComponent implements Cloneable
 		
 		this.cards.clear();
 		this.repaint();
+	}
+	
+	// Draw Deck stuff
+
+	
+	public void Draw() {
+		// TODO Auto-generated method stub
+		if (cards.size() > 0) 
+		{
+			for (int i = 0; i < this.drawCount; i++)
+			{
+				if (this.cards.size() > 0) 
+				{
+					Card c = this.TakeCard(this.getTopCard()).get(0);
+					c.faceUp = true;
+					this.wasteStack.PlaceCard(c);
+				}
+			}
+		}
+		else
+		{
+			// Refill draw deck.
+//			for (int i = 0; i < this.wasteStack.cards.size(); i++)
+			while (this.wasteStack.cards.size() > 0)
+			{
+				Card c = this.wasteStack.TakeCard(this.wasteStack.getTopCard()).get(0);
+				c.faceUp = false;
+				this.PlaceCard(c);
+			}
+		}
 	}
 }

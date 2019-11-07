@@ -100,6 +100,24 @@ public class GameBoard implements Serializable
 		
 		for (CardStack stack: Stacks)
 		{
+			if (stack.Type == CardStack.StackType.DRAW)
+			{
+				//List<CardStack> stacks = Stacks.stream().filter(s -> s.id == stack.drawToStack).collect(Collectors.toList());
+				//stack.wasteStack = stacks.get(0);
+				String wasteID = stack.drawToStack;
+				for (CardStack wstack: Stacks)
+				{
+					//if (wasteID == wstack.id) 
+					if (wasteID.compareTo(wstack.id) == 0)
+					{
+						stack.wasteStack = wstack;
+						break;
+					}
+				}
+				
+				
+			}
+			
 			if (stack.initialCard != null && stack.initialCard != "")
 			{
 				// Get the rank and Suit from the initCard string.

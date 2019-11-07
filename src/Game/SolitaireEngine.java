@@ -335,7 +335,10 @@ public class SolitaireEngine
 					{
 						
 						validMoveMade = mainGameBoard.DragDropMove(card, dest);
-						
+						if (validMoveMade)
+						{
+							source.ShowTopCard();
+						}
 						if((source.Type == CardStack.StackType.TAB) && (dest.Type == CardStack.StackType.FOUNDATION)) {
 							setScore(1);
 						}
@@ -360,9 +363,8 @@ public class SolitaireEngine
 
 			if (transferStack != null)
 			{
-				source.PlaceCards(transferStack);
 				
-
+				source.PlaceCards(transferStack);
 				transferStack.erase();
 				table.remove(transferStack);
 				transferStack = null;
@@ -395,24 +397,34 @@ public class SolitaireEngine
 		
 		@Override
 	    public void mouseClicked(MouseEvent e){
-	        if(e.getClickCount()==2){
-	        	Card card = getPointedCard(e.getPoint());
-	        	// your code here
-	        	
+			CardStack pointedStack = getPointedStack(e.getPoint()) ;
+			if (pointedStack == null)
+				return;
+			
+			
+			if (pointedStack.Type == CardStack.StackType.DRAW)
+			{
+				pointedStack.Draw();
+			}
+			else if(e.getClickCount()==2)
+			{
+				Card card = getPointedCard(e.getPoint());
+				CardStack stack = card.stackCallBack;
 	        	if (card != null && card.isTopCard())
 	        	{
 	        		if (mainGameBoard.ClickMove(card))
 	        		{
-	        			
+	        			stack.ShowTopCard();
 	        		}
 	        		else
 	        		{
 	        			statusBox.setText("No valid moves for this card.");
 	        		}
 	        		card.stackCallBack.repaint();
-					table.repaint();
+					
 	        	}
 	        }
+			table.repaint();
 	    }
 		
 		@Override
