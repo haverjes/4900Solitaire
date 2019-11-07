@@ -290,6 +290,7 @@ public class CardStack extends JComponent implements Cloneable
 		
 		// Remove the card and attached cards
 		csRet.id = "transfer";
+		csRet.cards = new ArrayList<Card>();
 		List<Card> templist = TakeCard(startCard);
 		csRet.PlaceCards(templist);
 		this.repaint();
@@ -302,4 +303,12 @@ public class CardStack extends JComponent implements Cloneable
 	public CardStack clone() throws CloneNotSupportedException {
         return (CardStack) super.clone();
     }
+	
+	public void erase() 
+	{ 
+		this.removeAll(); 
+		
+		this.cards.clear();
+		this.repaint();
+	}
 }

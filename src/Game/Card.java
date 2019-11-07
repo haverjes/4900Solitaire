@@ -74,7 +74,7 @@ class Card extends JPanel
 
 	public String toString() 
 	{
-		String sRet = convertRankStr(this.rank) + convertSuitStr(this.suit);
+		String sRet = convertRankStr(this.rank) + convertSuitASCII(this.suit);
 		if (!this.faceUp)
 			sRet = sRet.toLowerCase();
 		return sRet;
@@ -147,6 +147,28 @@ class Card extends JPanel
 				return null;
 		}
 	}
+	
+	static public String convertSuitASCII(Suit s) 
+	{
+		switch (s)
+		{
+			case SPADES:
+					return "S";
+				// break;
+			case CLUBS:
+					return "C";
+				// break;
+			case DIAMONDS:
+					return "D";
+				// break;
+			case HEARTS:
+					return "H";
+				// break;
+			default:
+				return null;
+		}
+		
+	}	
 	
 	static public String convertSuitStr(Suit s) 
 	{
@@ -260,21 +282,7 @@ class Card extends JPanel
 		// DRAW THE CARD SUIT AND VALUE IF FACEUP
 		if (this.faceUp)
 		{
-//			switch (suit)
-//			{
-//			case HEARTS:
-//				drawSuit(g2d, "Hearts", Color.RED);
-//				break;
-//			case DIAMONDS:
-//				drawSuit(g2d, "Diamonds", Color.RED);
-//				break;
-//			case SPADES:
-//				drawSuit(g2d, "Spades", Color.BLACK);
-//				break;
-//			case CLUBS:
-//				drawSuit(g2d, "Clubs", Color.BLACK);
-//				break;
-//			}
+
 			Color cColor;
 			if (suit == Suit.DIAMONDS ||suit == Suit.HEARTS)
 				cColor =  Color.RED;

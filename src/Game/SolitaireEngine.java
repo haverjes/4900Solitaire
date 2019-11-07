@@ -264,8 +264,9 @@ public class SolitaireEngine
 		private CardStack source = null;
 		private CardStack dest = null;
 		private CardStack transferStack;
-
-
+		private int cursorOffsetX;
+		private int cursorOffsetY;
+		
 		@Override
 		public void mousePressed(MouseEvent e)
 		{
@@ -292,9 +293,10 @@ public class SolitaireEngine
 						if (c.contains(start)  && c.faceUp)
 						{
 							card = c;
+							System.out.println("Grabbed card: " + card.toString());
 							getTransferStack(card);
 							stopSearch = true;
-							System.out.println("Grabbed card: " + card.toString());
+							
 							break;
 						}
 					}
@@ -304,6 +306,9 @@ public class SolitaireEngine
 		
 		protected void getTransferStack(Card c)
 		{
+			cursorOffsetX = start.x - c.getWhereAmI().x ;
+			cursorOffsetY = start.y - c.getWhereAmI().y ;
+			
 			transferStack = c.stackCallBack.TakeSubStack(card);
 			table.add(transferStack);
 			transferStack.repaint();
@@ -353,15 +358,15 @@ public class SolitaireEngine
 
 			}
 
-			if (!validMoveMade)
+			if (transferStack != null)
 			{
 				source.PlaceCards(transferStack);
-				source.repaint();
-			}
-			if (transferStack.cards.size() == 0)
-			{
+				
+
+				transferStack.erase();
 				table.remove(transferStack);
 				transferStack = null;
+				table.repaint();
 			}
 			
 			// CHECKING FOR WIN				
@@ -419,7 +424,7 @@ public class SolitaireEngine
 				System.out.println("Dragging " + p.toString());
 //				transferStack.xPos = p.x;
 //				transferStack.yPos = p.y;
-				transferStack.setXY(p.x, p.y);
+				transferStack.setXY(p.x - cursorOffsetX, p.y - cursorOffsetY);
 				transferStack.repaint();
 				table.repaint();
 			}
