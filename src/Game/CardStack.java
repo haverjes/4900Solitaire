@@ -54,11 +54,11 @@ public class CardStack extends JComponent implements Cloneable
 	protected int _x = 0;
 	protected int _y = 0;
 	public String id;
+
 	
 	public String drawToStack;
 	public CardStack wasteStack;
 	public int drawCount;
-	
 	
 	public boolean getLockCards() { return lockcards; }
 	public void setLockCards(boolean v) { lockcards = v; }
@@ -100,7 +100,7 @@ public class CardStack extends JComponent implements Cloneable
 			this.getTopCard().faceUp = true;
 	
 		return ret;
-					 
+
 	}
 
 	// Add the list of carsd in order and update each card's Callback member.
@@ -121,8 +121,6 @@ public class CardStack extends JComponent implements Cloneable
 		}
 		this.repaint();
 	}
-	
-	
 	
 	public void PlaceCard(Card card) 
 	{	
@@ -146,8 +144,9 @@ public class CardStack extends JComponent implements Cloneable
 	{
 		if (cards.size() > 0)
 		getTopCard().faceUp = true;
+
 	}					  
- 
+
 	public int getCardIndex(Card card) 
 	{
 		return this.cards.indexOf(card);
@@ -188,7 +187,7 @@ public class CardStack extends JComponent implements Cloneable
 	}
 	public boolean contains(Point p)
 	{
-		int bottom = _y - getStackHeight();
+		
 		Rectangle rect = new Rectangle(xPos, yPos, Card.CARD_WIDTH + 10, getStackHeight());
 		return (rect.contains(p));
 	}
@@ -298,6 +297,7 @@ public class CardStack extends JComponent implements Cloneable
 		}
 	}
 	
+
 	public CardStack TakeSubStack(Card startCard)
 	{
 		CardStack csRet = new CardStack();
@@ -333,6 +333,7 @@ public class CardStack extends JComponent implements Cloneable
 		this.repaint();
 	}
 	
+
 	// Draw Deck stuff
 
 	
@@ -361,5 +362,6 @@ public class CardStack extends JComponent implements Cloneable
 				this.PlaceCard(c);
 			}
 		}
+
 	}
 }
