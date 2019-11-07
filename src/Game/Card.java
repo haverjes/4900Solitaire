@@ -172,23 +172,7 @@ class Card extends JPanel
 	
 	static public String convertSuitStr(Suit s) 
 	{
-//		switch (s)
-//		{
-//			case SPADES:
-//					return "S";
-//				// break;
-//			case CLUBS:
-//					return "C";
-//				// break;
-//			case DIAMONDS:
-//					return "D";
-//				// break;
-//			case HEARTS:
-//					return "H";
-//				// break;
-//			default:
-//				return null;
-//		}
+
 		switch (s)
 		{
 			case SPADES:

@@ -50,9 +50,9 @@ public class SolitaireEngine
 	public static String[] XML_Options = {"Binary Star", "Bonanza Creek"};
 	
 	// MISC TRACKING VARIABLES
-		private static boolean timeRunning = false;// timer running?
-		private static int score = 0;// keep track of the score
-		private static int time = 0;// keep track of seconds elapsed
+	private static boolean timeRunning = false;// timer running?
+	private static int score = 0;// keep track of the score
+	private static int time = 0;// keep track of seconds elapsed
 	
 	// GUI COMPONENTS (top level)
 	protected static JFrame mainFrame = new JFrame();
@@ -294,7 +294,7 @@ public class SolitaireEngine
 						{
 							card = c;
 							System.out.println("Grabbed card: " + card.toString());
-							getTransferStack(card);
+							
 							stopSearch = true;
 							
 							break;
@@ -310,7 +310,7 @@ public class SolitaireEngine
 			cursorOffsetY = start.y - c.getWhereAmI().y ;
 			
 			transferStack = c.stackCallBack.TakeSubStack(card);
-			table.add(transferStack);
+			table.add(transferStack, 0);
 			transferStack.repaint();
 		}
 		
@@ -430,6 +430,9 @@ public class SolitaireEngine
 		@Override
 		public void mouseDragged(MouseEvent e)
 		{
+			
+			if (transferStack == null && card != null)
+				getTransferStack(card);
 			if (transferStack != null) 
 			{
 				Point p = e.getPoint();
@@ -437,8 +440,9 @@ public class SolitaireEngine
 //				transferStack.xPos = p.x;
 //				transferStack.yPos = p.y;
 				transferStack.setXY(p.x - cursorOffsetX, p.y - cursorOffsetY);
-				transferStack.repaint();
+				
 				table.repaint();
+				transferStack.repaint();
 			}
 		}
 		
