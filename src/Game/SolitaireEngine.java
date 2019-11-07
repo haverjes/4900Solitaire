@@ -41,7 +41,7 @@ import gamePlatform.menus.MenuManager;
 public class SolitaireEngine 
 {
 	protected static GameBoard mainGameBoard;
-	
+	protected static CardMovementManager mouseManager;
 	// CONSTANTS
 	public static int TABLE_HEIGHT = Card.CARD_HEIGHT * 4;
 	public static int TABLE_WIDTH = (Card.CARD_WIDTH * 7) + 100;
@@ -50,9 +50,9 @@ public class SolitaireEngine
 	public static String[] XML_Options = {"Binary Star", "Bonanza Creek"};
 	
 	// MISC TRACKING VARIABLES
-		private static boolean timeRunning = false;// timer running?
-		private static int score = 0;// keep track of the score
-		private static int time = 0;// keep track of seconds elapsed
+	private static boolean timeRunning = false;// timer running?
+	private static int score = 0;// keep track of the score
+	private static int time = 0;// keep track of seconds elapsed
 	
 	// GUI COMPONENTS (top level)
 	protected static JFrame mainFrame = new JFrame();
@@ -263,9 +263,10 @@ public class SolitaireEngine
 		
 		private CardStack source = null;
 		private CardStack dest = null;
-
-
-
+		private CardStack transferStack;
+		private int cursorOffsetX;
+		private int cursorOffsetY;
+		
 		@Override
 		public void mousePressed(MouseEvent e)
 		{
@@ -292,15 +293,27 @@ public class SolitaireEngine
 						if (c.contains(start)  && c.faceUp)
 						{
 							card = c;
-							stopSearch = true;
 							System.out.println("Grabbed card: " + card.toString());
+							
+							stopSearch = true;
+							
 							break;
 						}
 					}
 				}
 			}
 		}
-
+		
+		protected void getTransferStack(Card c)
+		{
+			cursorOffsetX = start.x - c.getWhereAmI().x ;
+			cursorOffsetY = start.y - c.getWhereAmI().y ;
+			
+			transferStack = c.stackCallBack.TakeSubStack(card);
+			table.add(transferStack, 0);
+			transferStack.repaint();
+		}
+		
 		@Override
 		public void mouseReleased(MouseEvent e)
 		{
@@ -330,7 +343,7 @@ public class SolitaireEngine
 							setScore(1);
 						}
 						
-						//dest.repaint();
+						dest.repaint();
 						table.repaint();
 						
 						//TODO: Implement scoring in GameBoard?
@@ -345,8 +358,19 @@ public class SolitaireEngine
 			if (!validMoveMade && dest != null && card != null)
 			{
 				statusBox.setText("That Is Not A Valid Move");
+
 			}
 
+			if (transferStack != null)
+			{
+				
+				source.PlaceCards(transferStack);
+				transferStack.erase();
+				table.remove(transferStack);
+				transferStack = null;
+				table.repaint();
+			}
+			
 			// CHECKING FOR WIN				
 			if (mainGameBoard.checkVictory())
 			{
@@ -403,6 +427,24 @@ public class SolitaireEngine
 			table.repaint();
 	    }
 		
+		@Override
+		public void mouseDragged(MouseEvent e)
+		{
+			
+			if (transferStack == null && card != null)
+				getTransferStack(card);
+			if (transferStack != null) 
+			{
+				Point p = e.getPoint();
+				System.out.println("Dragging " + p.toString());
+//				transferStack.xPos = p.x;
+//				transferStack.yPos = p.y;
+				transferStack.setXY(p.x - cursorOffsetX, p.y - cursorOffsetY);
+				
+				table.repaint();
+				transferStack.repaint();
+			}
+		}
 		
 		protected Card getPointedCard(Point p) 
 		{
@@ -624,9 +666,9 @@ public class SolitaireEngine
 			file = args[0];
 		else 
 		{
-	//		file = ".\\Game\\Tests\\BonanzaCreek.xml";
+			file = "BonanzaCreek.xml";
 //			file = ".\\Game\\Tests\\FoundationTest.xml";
-			file = "BinaryStarTest.xml";
+			//file = "BinaryStarTest.xml";
 		}
 		mainFrame.setVisible(true);
 		
@@ -650,9 +692,9 @@ public class SolitaireEngine
 		selectXML.addActionListener(new XML_Listener());
 		
 		playNewGame(file);
-
-		table.addMouseListener(new CardMovementManager());
-		table.addMouseMotionListener(new CardMovementManager());
+		mouseManager = new CardMovementManager();
+		table.addMouseListener(mouseManager);
+		table.addMouseMotionListener(mouseManager);
 
 		
 	}

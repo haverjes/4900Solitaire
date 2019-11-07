@@ -43,7 +43,9 @@ public class XML_Loader
 				if (newStack.id == "") 
 					newStack.id = String.valueOf(retGB.Stacks.size());
 				
-				retGB.Stacks.add(MakeCardStack((Element)xStack));
+
+				retGB.Stacks.add(newStack);
+
 			}
 			
 			// Get the game rules (CDATA, so requires extra functions because Java handle XML ssssooooo well.
@@ -103,7 +105,9 @@ public class XML_Loader
 		
 		newStack.id = xStack.hasAttribute("id") ? xStack.getAttribute("id") : "" ;
 		newStack.drawToStack = xStack.hasAttribute("drawToID") ? xStack.getAttribute("drawToID") : "" ;
+
 		newStack.drawCount = xStack.hasAttribute("drawCount") ? Integer.parseInt(xStack.getAttribute("drawCount")) : 1 ;
+
 		if (xStack.hasAttribute("initialCard")) 
 			newStack.initialCard = xStack.getAttribute("initialCard");
 		

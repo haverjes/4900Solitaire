@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 //TODO: Copy all the drawing related code from MySolitaire\Card.java and adapt to match new class structure.
 
 
-class Card extends JPanel
+class Card extends JPanel 
 {
 
 	/**
@@ -74,7 +74,7 @@ class Card extends JPanel
 
 	public String toString() 
 	{
-		String sRet = convertRankStr(this.rank) + convertSuitStr(this.suit);
+		String sRet = convertRankStr(this.rank) + convertSuitASCII(this.suit);
 		if (!this.faceUp)
 			sRet = sRet.toLowerCase();
 		return sRet;
@@ -148,25 +148,31 @@ class Card extends JPanel
 		}
 	}
 	
+	static public String convertSuitASCII(Suit s) 
+	{
+		switch (s)
+		{
+			case SPADES:
+					return "S";
+				// break;
+			case CLUBS:
+					return "C";
+				// break;
+			case DIAMONDS:
+					return "D";
+				// break;
+			case HEARTS:
+					return "H";
+				// break;
+			default:
+				return null;
+		}
+		
+	}	
+	
 	static public String convertSuitStr(Suit s) 
 	{
-//		switch (s)
-//		{
-//			case SPADES:
-//					return "S";
-//				// break;
-//			case CLUBS:
-//					return "C";
-//				// break;
-//			case DIAMONDS:
-//					return "D";
-//				// break;
-//			case HEARTS:
-//					return "H";
-//				// break;
-//			default:
-//				return null;
-//		}
+
 		switch (s)
 		{
 			case SPADES:

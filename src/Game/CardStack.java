@@ -11,7 +11,7 @@ import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.JComponent;
 
-public class CardStack extends JComponent //implements ICardStack
+public class CardStack extends JComponent implements Cloneable
 {
 	/**
 	 * 
@@ -29,7 +29,8 @@ public class CardStack extends JComponent //implements ICardStack
 		STACK, FANDOWN
 	}
 	
-	
+ 
+
 	public List<Card> cards;
 	public int yPos;
 	public int xPos;
@@ -43,6 +44,7 @@ public class CardStack extends JComponent //implements ICardStack
 	
 	public int firstCardRank; 
 	public Card.Suit firstCardSuit; 
+
 	
 	public int cardLimit;
 	
@@ -52,6 +54,7 @@ public class CardStack extends JComponent //implements ICardStack
 	protected int _x = 0;
 	protected int _y = 0;
 	public String id;
+
 	
 	public String drawToStack;
 	public CardStack wasteStack;
@@ -97,9 +100,17 @@ public class CardStack extends JComponent //implements ICardStack
 			this.getTopCard().faceUp = true;
 	
 		return ret;
+
 	}
 
 	// Add the list of carsd in order and update each card's Callback member.
+	public void PlaceCards(CardStack source)
+	{
+		if (source.cards.size() > 0)
+			PlaceCards(source.TakeCard(source.cards.get(0)));
+		
+	}
+	
 	public void PlaceCards(List<Card> cardList) 
 	{
 		for (Card card: cardList)
@@ -108,7 +119,7 @@ public class CardStack extends JComponent //implements ICardStack
 			card.stackCallBack = this;
 
 		}
-		
+		this.repaint();
 	}
 	
 	public void PlaceCard(Card card) 
@@ -133,8 +144,9 @@ public class CardStack extends JComponent //implements ICardStack
 	{
 		if (cards.size() > 0)
 		getTopCard().faceUp = true;
-	}
-	
+
+	}					  
+
 	public int getCardIndex(Card card) 
 	{
 		return this.cards.indexOf(card);
@@ -285,6 +297,43 @@ public class CardStack extends JComponent //implements ICardStack
 		}
 	}
 	
+
+	public CardStack TakeSubStack(Card startCard)
+	{
+		CardStack csRet = new CardStack();
+		try {
+			csRet = (CardStack) this.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
+		
+		// Remove the card and attached cards
+		csRet.id = "transfer";
+		csRet.cards = new ArrayList<Card>();
+		List<Card> templist = TakeCard(startCard);
+		csRet.PlaceCards(templist);
+		this.repaint();
+		csRet.repaint();
+		return csRet;
+	}
+	
+	
+	@Override
+	public CardStack clone() throws CloneNotSupportedException {
+        return (CardStack) super.clone();
+    }
+	
+	public void erase() 
+	{ 
+		this.removeAll(); 
+		
+		this.cards.clear();
+		this.repaint();
+	}
+	
+
 	// Draw Deck stuff
 
 	
@@ -313,6 +362,6 @@ public class CardStack extends JComponent //implements ICardStack
 				this.PlaceCard(c);
 			}
 		}
-		
+
 	}
 }
