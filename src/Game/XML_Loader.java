@@ -39,6 +39,10 @@ public class XML_Loader
 			for (int i = 0; i < xStackDefs.getLength(); i++ )
 			{
 				Node xStack = xStackDefs.item(i);
+				CardStack newStack = MakeCardStack((Element)xStack);
+				if (newStack.id == "") 
+					newStack.id = String.valueOf(retGB.Stacks.size());
+				
 				retGB.Stacks.add(MakeCardStack((Element)xStack));
 			}
 			
@@ -97,7 +101,9 @@ public class XML_Loader
 		newStack.xPos = Integer.parseInt(xStack.getAttribute("xpos"));
 		newStack.yPos = Integer.parseInt(xStack.getAttribute("ypos"));
 		
-		
+		newStack.id = xStack.hasAttribute("id") ? xStack.getAttribute("id") : "" ;
+		newStack.drawToStack = xStack.hasAttribute("drawToID") ? xStack.getAttribute("drawToID") : "" ;
+		newStack.drawCount = xStack.hasAttribute("drawCount") ? Integer.parseInt(xStack.getAttribute("drawCount")) : 1 ;
 		if (xStack.hasAttribute("initialCard")) 
 			newStack.initialCard = xStack.getAttribute("initialCard");
 		

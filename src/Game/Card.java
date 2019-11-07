@@ -260,21 +260,7 @@ class Card extends JPanel
 		// DRAW THE CARD SUIT AND VALUE IF FACEUP
 		if (this.faceUp)
 		{
-//			switch (suit)
-//			{
-//			case HEARTS:
-//				drawSuit(g2d, "Hearts", Color.RED);
-//				break;
-//			case DIAMONDS:
-//				drawSuit(g2d, "Diamonds", Color.RED);
-//				break;
-//			case SPADES:
-//				drawSuit(g2d, "Spades", Color.BLACK);
-//				break;
-//			case CLUBS:
-//				drawSuit(g2d, "Clubs", Color.BLACK);
-//				break;
-//			}
+
 			Color cColor;
 			if (suit == Suit.DIAMONDS ||suit == Suit.HEARTS)
 				cColor =  Color.RED;

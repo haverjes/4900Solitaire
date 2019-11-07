@@ -51,7 +51,11 @@ public class CardStack extends JComponent //implements ICardStack
 	public static final int SPREAD = 22;
 	protected int _x = 0;
 	protected int _y = 0;
+	public String id;
 	
+	public String drawToStack;
+	public CardStack wasteStack;
+	public int drawCount;
 	
 	public boolean getLockCards() { return lockcards; }
 	public void setLockCards(boolean v) { lockcards = v; }
@@ -83,13 +87,16 @@ public class CardStack extends JComponent //implements ICardStack
 		// Remove the cards from the list.
 		this.cards.removeAll(retCardList);
 		
-		
-		// Ensure topcard is face up, if stack not empty
-		if (this.cards.size() > 0) 
-			this.getTopCard().faceUp = true;
-		
-		
 		return retCardList;
+	}
+	public List<Card> TakeCard(Card card, boolean leaveTopCardFaceUp) 
+	{
+		// Ensure topcard is face up, if stack not empty
+		List<Card> ret = this.TakeCard(card);
+		if (leaveTopCardFaceUp && this.cards.size() > 0) 
+			this.getTopCard().faceUp = true;
+	
+		return ret;
 	}
 
 	// Add the list of carsd in order and update each card's Callback member.
@@ -103,8 +110,6 @@ public class CardStack extends JComponent //implements ICardStack
 		}
 		
 	}
-	
-	
 	
 	public void PlaceCard(Card card) 
 	{	
@@ -124,6 +129,12 @@ public class CardStack extends JComponent //implements ICardStack
 			return null;
 	}
 	
+	public void ShowTopCard()
+	{
+		if (cards.size() > 0)
+		getTopCard().faceUp = true;
+	}
+	
 	public int getCardIndex(Card card) 
 	{
 		return this.cards.indexOf(card);
@@ -133,7 +144,7 @@ public class CardStack extends JComponent //implements ICardStack
 	
 	public void dealCard(Card card) 
 	{
-		if (getCardCount() < initFaceDown) 
+		if (getCardCount() < initFaceDown || Type == StackType.DRAW) 
 			card.faceUp = false;
 		else
 			card.faceUp = true;
@@ -155,11 +166,16 @@ public class CardStack extends JComponent //implements ICardStack
 	************************/
 	protected int getStackHeight() 
 	{
-		return Card.CARD_HEIGHT + (this.getCardCount() * SPREAD);
+		if (this.Shape == StackShape.FANDOWN)
+			return Card.CARD_HEIGHT + (this.getCardCount() * SPREAD);
+		if (this.Shape == StackShape.STACK)
+			return Card.CARD_HEIGHT + SPREAD;
+		else
+			return Card.CARD_HEIGHT;
 	}
 	public boolean contains(Point p)
 	{
-		int bottom = _y - getStackHeight();
+		
 		Rectangle rect = new Rectangle(xPos, yPos, Card.CARD_WIDTH + 10, getStackHeight());
 		return (rect.contains(p));
 	}
@@ -267,5 +283,36 @@ public class CardStack extends JComponent //implements ICardStack
 			default:
 				return StackShape.STACK;
 		}
+	}
+	
+	// Draw Deck stuff
+
+	
+	public void Draw() {
+		// TODO Auto-generated method stub
+		if (cards.size() > 0) 
+		{
+			for (int i = 0; i < this.drawCount; i++)
+			{
+				if (this.cards.size() > 0) 
+				{
+					Card c = this.TakeCard(this.getTopCard()).get(0);
+					c.faceUp = true;
+					this.wasteStack.PlaceCard(c);
+				}
+			}
+		}
+		else
+		{
+			// Refill draw deck.
+//			for (int i = 0; i < this.wasteStack.cards.size(); i++)
+			while (this.wasteStack.cards.size() > 0)
+			{
+				Card c = this.wasteStack.TakeCard(this.wasteStack.getTopCard()).get(0);
+				c.faceUp = false;
+				this.PlaceCard(c);
+			}
+		}
+		
 	}
 }
