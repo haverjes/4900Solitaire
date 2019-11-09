@@ -10,9 +10,9 @@ public class UserLogin implements java.io.Serializable
 	private boolean showOnlyFavorites;
 	private List<String> userFavorites;
 	
-	public final String userSaveFolders = Paths.get(".","UserSaveFolders").toString();
-	public final String userSettingsFolder = Paths.get(".","UserSettings").toString();
-	public final String userStatsFolders = Paths.get(".","UserStatistics").toString();
+	public static final String userSaveFolders = Paths.get(".","UserSaveFolders").toString();
+	public static final String userSettingsFolder = Paths.get(".","UserSettings").toString();
+	public static final String userStatsFolders = Paths.get(".","UserStatistics").toString();
 		
 	UserLogin()
 	{

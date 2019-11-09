@@ -31,6 +31,8 @@ public class SelectGameMenu extends Menu{
 	protected void initComponents() {
 		super.initComponents();
 		
+		
+		// TODO: Remove hard coded Engines path.
 		File gamesDirectory = new File(Paths.get(".","src","groupSolitaireEngines").toString());
 		games = gamesDirectory.listFiles();
 		
@@ -71,6 +73,7 @@ public class SelectGameMenu extends Menu{
 					gameName = gameName.substring(0, gameName.lastIndexOf('.'));
 					
 					MenuManager.currentUser.setSelectedGame(gameName);
+					// TODO: MenuManager Switch back to main menu.
 				}
 			});
 		}

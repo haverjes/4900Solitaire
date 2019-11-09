@@ -66,9 +66,9 @@ public class LoginMenu extends Menu {
 					String userName = usernameEntry.getText();
 					
 					// Nullify current user in case there was one.
-					MenuManager.currentUser = new UserLogin();
+					MenuManager.currentUser = null;
 					
-					File userSaveFile = new File(Paths.get(".",MenuManager.currentUser.userSettingsFolder,userName+".bin").toString());
+					File userSaveFile = new File(Paths.get(".",UserLogin.userSettingsFolder,userName+".bin").toString());
 					if (userSaveFile.exists())
 					{
 						try {
