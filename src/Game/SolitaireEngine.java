@@ -311,7 +311,7 @@ public class SolitaireEngine
 			
 			transferStack = c.stackCallBack.TakeSubStack(card);
 			table.add(transferStack, 0);
-			transferStack.repaint();
+			//transferStack.repaint();
 		}
 		
 		@Override
@@ -436,7 +436,7 @@ public class SolitaireEngine
 			if (transferStack != null) 
 			{
 				Point p = e.getPoint();
-				System.out.println("Dragging " + p.toString());
+//				System.out.println("Dragging " + p.toString());
 //				transferStack.xPos = p.x;
 //				transferStack.yPos = p.y;
 				transferStack.setXY(p.x - cursorOffsetX, p.y - cursorOffsetY);
