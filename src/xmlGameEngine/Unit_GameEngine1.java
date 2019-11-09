@@ -1,4 +1,4 @@
-package Game;
+package xmlGameEngine;
 
 import static org.junit.jupiter.api.Assertions.*;
 
