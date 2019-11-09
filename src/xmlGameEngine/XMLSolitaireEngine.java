@@ -1,4 +1,4 @@
-package Game;
+package xmlGameEngine;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -26,6 +26,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import gameInterface.*;
 import gamePlatform.main.Launcher;
 import gamePlatform.menus.MenuManager;
 
@@ -38,7 +39,7 @@ import gamePlatform.menus.MenuManager;
  * 	 - Some will be moved to the GameBoard, like Timer and Score related stuff.
  */
 
-public class SolitaireEngine 
+public class XMLSolitaireEngine
 {
 	protected static GameBoard mainGameBoard;
 	protected static CardMovementManager mouseManager;

@@ -2,6 +2,8 @@ package gamePlatform.menus;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.nio.file.Paths;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -56,7 +58,17 @@ public class PlatformMenu extends Menu{
 		resumeGame.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//create menu for the a list of saved games
+				if (MenuManager.currentUser.isHasSave())
+				{
+					File currentUserSaveFile = MenuManager.currentUser.getSaveFile();
+					String currentGameType = MenuManager.currentUser.getSaveGameType();
+					
+					// Add logic to load class associated with current save and run engine. Classloader.
+				}
+				else
+				{
+					
+				}
 			}
 		});
 		
@@ -70,6 +82,7 @@ public class PlatformMenu extends Menu{
 		logout.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				MenuManager.currentUser = null;
 				MenuManager.switchMenu(MenuManager.START_MENU);
 			}
 		});

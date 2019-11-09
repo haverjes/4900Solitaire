@@ -4,9 +4,9 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
-import Game.SolitaireEngine;
 import gamePlatform.menus.MenuManager;
 import gamePlatform.menus.StartMenu;
+import xmlGameEngine.XMLSolitaireEngine;
 
 public class Launcher {
 	
@@ -19,7 +19,7 @@ public class Launcher {
 				try {
 					mainScreen = new JFrame();
 					mainScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-					mainScreen.setSize(SolitaireEngine.TABLE_WIDTH + 100 , SolitaireEngine.TABLE_HEIGHT + 100);
+					mainScreen.setSize(XMLSolitaireEngine.TABLE_WIDTH + 100 , XMLSolitaireEngine.TABLE_HEIGHT + 100);
 					mainScreen.setTitle("Solitaire");
 					mainScreen.setVisible(true);
 					MenuManager.switchMenu(MenuManager.START_MENU);

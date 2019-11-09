@@ -1,3 +1,0 @@
-# username (string); save presence (boolean); save game type (string)(null if none); save file name (string); show only favorites flag (string); favorites (comma sep, "none" if none)
-MasonYost;False;null;null;none
-Mason;True;BinaryStar;MasonYost_BinaryStar_Save.xml;none
