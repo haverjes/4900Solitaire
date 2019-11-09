@@ -6,18 +6,18 @@ import java.util.*;
 public class UserLogin implements java.io.Serializable
 {
 	private String userName;
-	private boolean hasSave;
-	private String saveGameType;
-	private File saveFile;
+	private String selectedGame;
 	private boolean showOnlyFavorites;
 	private List<String> userFavorites;
+	
+	public final String userSaveFolders = Paths.get(".","UserSaveFolders").toString();
+	public final String userSettingsFolder = Paths.get(".","UserSettings").toString();
+	public final String userStatsFolders = Paths.get(".","UserStatistics").toString();
 		
 	UserLogin()
 	{
 		this.userName = null;
-		this.hasSave = false;
-		this.saveGameType = null;
-		this.saveFile = null;
+		this.selectedGame = null;
 		this.showOnlyFavorites = false;
 		this.userFavorites = new LinkedList<>();		
 	}
@@ -25,9 +25,7 @@ public class UserLogin implements java.io.Serializable
 	UserLogin(String username)
 	{
 		this.userName = username;
-		this.hasSave = false;
-		this.saveGameType = null;
-		this.saveFile = null;
+		this.selectedGame = null;
 		this.showOnlyFavorites = false;
 		this.userFavorites = new LinkedList<>();
 	}
@@ -39,31 +37,15 @@ public class UserLogin implements java.io.Serializable
 	public void setUserName(String currentUser) {
 		this.userName = currentUser;
 	}
-
-	public boolean isHasSave() {
-		return hasSave;
-	}
-
-	public void setHasSave(boolean hasSave) {
-		this.hasSave = hasSave;
+	
+	public String getSelectedGame() {
+		return selectedGame;
 	}
 	
-	public String getSaveGameType() {
-		return saveGameType;
+	public void setSelectedGame(String selectedGame) {
+		this.selectedGame = selectedGame;
 	}
 	
-	public void setSaveGameType(String saveGameType) {
-		this.saveGameType = saveGameType;
-	}
-	
-	public File getSaveFile() {
-		return saveFile;
-	}
-
-	public void setSaveFile(File saveFile) {
-		this.saveFile = saveFile;
-	}
-
 	public boolean isShowOnlyFavorites() {
 		return showOnlyFavorites;
 	}

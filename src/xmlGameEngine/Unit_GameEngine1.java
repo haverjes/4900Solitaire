@@ -9,9 +9,9 @@ class Unit_GameEngine1 {
 	@Test
 	final void test() {
 		
-		SolitaireEngine.XMLFile = ".\\Game\\Tests\\GameUnitTest_Move1.xml";
+		XMLSolitaireEngine.XMLFile = ".\\Game\\Tests\\GameUnitTest_Move1.xml";
 		
-		SolitaireEngine.main(null);
+		XMLSolitaireEngine.main(null);
 		
 	}
 
