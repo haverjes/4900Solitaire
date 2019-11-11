@@ -51,8 +51,7 @@ public class XMLSolitaireEngine
 	public static String[] XML_Options = {"Binary Star", "Bonanza Creek"};
 	
 	// MISC TRACKING VARIABLES
-	private static boolean timeRunning = false;// timer running?
-	private static int score = 0;// keep track of the score
+	private static boolean timeRunning = false;// timer running?	private static int score = 0;// keep track of the score
 	private static int time = 0;// keep track of seconds elapsed
 	
 	// GUI COMPONENTS (top level)
@@ -73,8 +72,10 @@ public class XMLSolitaireEngine
 	private static JButton saveGameButton = new JButton("Save Game");
 	private static JButton loadGameButton = new JButton("Load Game");
 	
+	private static GameStatus solitaireStatus;
 	// TIMER UTILITIES
 	private static Timer timer = new Timer();
+	private static boolean initTimer = false;
 	private static ScoreClock scoreClock = new ScoreClock();
 	
 	// Store last XML File loaded.
@@ -90,8 +91,8 @@ public class XMLSolitaireEngine
 	
 	protected static void setScore(int deltaScore)
 	{
-		score += deltaScore;
-		String newScore = "Score: " + score;
+		solitaireStatus.setGameScore(solitaireStatus.getGameScore() + deltaScore);
+		String newScore = "Score: " + solitaireStatus.getGameScore();
 		scoreBox.setText(newScore);
 		scoreBox.repaint();
 	}
@@ -118,14 +119,9 @@ public class XMLSolitaireEngine
 	// GAME TIMER UTILITIES
 	protected static void updateTimer()
 	{
-		time += 1;
-		/*
-		if (time % 10 == 0)
-		{
-			setScore(-2);
-		}
-		*/
-		String stringtime = "Seconds: " + time;
+		solitaireStatus.setGameTime(solitaireStatus.getGameTime() + 1);
+
+		String stringtime = "Seconds: " + solitaireStatus.getGameTime();
 		timeBox.setText(stringtime);
 		timeBox.repaint();
 	}
@@ -134,7 +130,12 @@ public class XMLSolitaireEngine
 	{
 		scoreClock = new ScoreClock();
 		// set the timer to update every second
-		timer.scheduleAtFixedRate(scoreClock, 1000, 1000);
+		
+		if (!initTimer)
+		{
+			timer.scheduleAtFixedRate(scoreClock, 1000, 1000);
+			initTimer = true;
+		}
 		timeRunning = true;
 	}
 
@@ -145,8 +146,10 @@ public class XMLSolitaireEngine
 		{
 			scoreClock.cancel();
 			timeRunning = false;
+			
 		} else
 		{
+
 			startTimer();
 		}
 	}
@@ -233,13 +236,7 @@ public class XMLSolitaireEngine
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			String fileSelected = (String)selectXML.getSelectedItem();
-//			switch(fileSelected) { 
-//				case "Bonanza Creek":
-//					XMLFile = ".\\Game\\Tests\\BonanzaCreek.xml";
-//					break;
-//				case "Binary Star":
-//					XMLFile = ".\\Game\\Tests\\BinaryStarTest.xml";
-//			}
+
 			XMLFile = fileSelected;
 		}
 	}
@@ -256,7 +253,6 @@ public class XMLSolitaireEngine
 	{
 		// Some of these are culture specific to MySolitaire
 
-		private boolean checkForWin = false;// should we check if game is over?
 		private boolean gameOver = false;// easier to negate this than affirm it
 		private Point start = null;// where mouse was clicked
 		private Point stop = null;// where mouse was released
@@ -391,8 +387,7 @@ public class XMLSolitaireEngine
 			dest = null;
 			card = null;
 			toggleTimer();
-			//sourceIsFinalDeck = false;
-			checkForWin = false;
+			
 			gameOver = false;
 		}// end mousePressed()
 		
@@ -534,7 +529,7 @@ public class XMLSolitaireEngine
   
             // Method for deserialization of object 
             mainGameBoard = (GameBoard)in.readObject(); 
-  
+            solitaireStatus = mainGameBoard.status;
             in.close(); 
             file.close(); 
             playNewGame();
@@ -580,9 +575,9 @@ public class XMLSolitaireEngine
 		}
 		
 
-		time = 0;
+		solitaireStatus.setGameTime(0);
 		timer = new Timer();
-
+		
 
 		scoreBox.setText("Score: ");
 		scoreBox.setEditable(false);
@@ -656,7 +651,7 @@ public class XMLSolitaireEngine
 		Container contentPane;
 //		
 		mainFrame.setSize(TABLE_WIDTH, TABLE_HEIGHT);
-		
+		solitaireStatus = new GameStatus();
 		contentPane = mainFrame.getContentPane();
 		contentPane.add(table);
 //		contentPane.add(getScrollTable());
@@ -674,7 +669,7 @@ public class XMLSolitaireEngine
 		mainFrame.setVisible(true);
 		
 		initGame(file);
-		
+		mainGameBoard.status = solitaireStatus;
 	}
 	
 	public static void initGame(String file)
@@ -700,6 +695,17 @@ public class XMLSolitaireEngine
 		
 	}
 
+	public GameStatus play(File inFile)
+	{
+		solitaireStatus = new GameStatus();
+		
+		solitaireStatus.setGameSaveFile(inFile);
+		initGame("BinaryStar.xml");
+		mainGameBoard.status = solitaireStatus;
+		LoadGame(inFile.getAbsolutePath());
+		
+		return solitaireStatus;
+	}
 	public static JPanel getTable() {
 
 		return table;

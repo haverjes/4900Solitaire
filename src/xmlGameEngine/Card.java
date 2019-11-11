@@ -253,7 +253,7 @@ class Card extends JPanel
 	public void paintComponent(Graphics g)
 	{
 		Font currentFont = new Font (g.getFont().getFontName(), Font.PLAIN, 20);
-//		cardFont = currentFont.deriveFont(currentFont.getSize() * 20);
+
 		g.setFont(currentFont);
 		
 		Graphics2D g2d = (Graphics2D) g;
@@ -274,10 +274,7 @@ class Card extends JPanel
 				cColor =  Color.BLACK;
 			
 			drawSuit(g2d, convertSuitStr(suit), cColor);
-			//int new_x_offset = x_offset + (CARD_WIDTH - 30);
-			
 			drawValue(g2d, convertRankStr(rank));
-			
 			
 		} else
 		{

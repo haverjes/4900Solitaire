@@ -2,19 +2,26 @@ package xmlGameEngine;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collector;
-import java.util.stream.Collectors;  
+import java.util.stream.Collectors;
+
+import gameInterface.GameStatus;  
 
 public class GameBoard implements Serializable
 {
 	/**
 	 * 
 	 */
+	// TODO:  Move Score and Time variables into this class.
 	private static final long serialVersionUID = 1L;
 	public List<CardStack> Stacks;
 	public List<MoveRule> Rules;
 	public List<Card> Cards;
 	public String rulesText;
 	public String GameTitle;
+	
+	public GameStatus status;
+	
+	
 	public GameBoard() 
 	{
 		Stacks = new ArrayList<CardStack>();

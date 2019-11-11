@@ -70,7 +70,7 @@ public class PlatformMenu extends Menu{
 				String userSaveDirectory = Paths.get(".","UserSaveFolders",userName).toString();
 				
 				
-				if ()
+				if (true)
 				{
 					MenuManager.currentUser.setSaveGameType(gameName);
 					
@@ -170,9 +170,7 @@ public class PlatformMenu extends Menu{
 						outObjectStream.close();
 						outFileStream.close();
 					}
-				}catch(IOException e1) {
-					System.out.println("Error Loading Class File.");
-				}
+
 
 				}
 				else
