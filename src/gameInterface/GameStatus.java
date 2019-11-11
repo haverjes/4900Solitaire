@@ -1,5 +1,6 @@
 package gameInterface;
 import java.io.File;
+import java.io.Serializable;
 
 /**
 * Class containing necessary output information for CPSC 4900 Solitaire Program
@@ -8,8 +9,12 @@ import java.io.File;
 * @version 1.0
 * @since 10/12/19
 **/
-public class GameStatus
+public class GameStatus implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// Instance Variables
 	private int gameStatusFlag;
 	private int gameScore;
