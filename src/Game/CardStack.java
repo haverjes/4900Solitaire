@@ -179,7 +179,10 @@ public class CardStack extends JComponent implements Cloneable
 	protected int getStackHeight() 
 	{
 		if (this.Shape == StackShape.FANDOWN)
-			return Card.CARD_HEIGHT + (this.getCardCount() * SPREAD);
+		{
+			int spreadCount = this.getCardCount() > 0 ? this.getCardCount() : 1;
+			return Card.CARD_HEIGHT + (spreadCount * SPREAD);
+		}
 		if (this.Shape == StackShape.STACK)
 			return Card.CARD_HEIGHT + SPREAD;
 		else
