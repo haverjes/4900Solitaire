@@ -676,7 +676,9 @@ public class SolitaireEngine
 	
 	public static void BuildMenu()
 	{
-		mainFrame.setJMenuBar(gameMenu);
+		JFrame frame = (JFrame)SwingUtilities.getRoot(getTable());
+		frame.setJMenuBar(gameMenu);
+		gameMenu.removeAll();
 		JMenu menuFile = new JMenu("File"); 
 		JMenu menuHelp = new JMenu("Help"); 
 		JMenu menuNewGame = new JMenu("New Game"); 
