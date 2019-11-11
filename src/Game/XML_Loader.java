@@ -68,6 +68,8 @@ public class XML_Loader
 		return retGB;
 	}
 	
+	
+	
 	public static String getCharacterDataFromElement(Element e) {
 		if (e == null)
 			return "";
@@ -166,6 +168,48 @@ public class XML_Loader
 			
 			sRet.add(file.getName());
 		}
+		
+		return sRet;
+	}
+	
+
+	
+	public static List<GameOption> GetGameOptions() 
+	{
+		List<GameOption> oRet = new ArrayList<GameOption>();
+		
+		for(String sXMLFile: getXMLFiles())
+		{
+			GameOption newOption = new GameOption(getGameName(sXMLFile), sXMLFile);
+			oRet.add(newOption);
+		}
+		
+		return oRet;
+	}
+	
+	
+	public static String getGameName(String file) 
+	{
+		
+		String newfile = Paths.get(XML_FOLDER, file).toString();
+		String sRet = "";
+		try {
+			File xmlFile = new File(newfile);
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document xDoc = builder.parse(xmlFile);
+	
+			xDoc.getDocumentElement().normalize();
+			Element root = xDoc.getDocumentElement();
+			
+
+			sRet = root.hasAttribute("name") ? root.getAttribute("name") : "";
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		
 		return sRet;
 	}

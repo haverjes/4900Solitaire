@@ -11,20 +11,22 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.*;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JEditorPane;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
+//import javax.swing.JButton;
+//import javax.swing.JComboBox;
+//import javax.swing.JDialog;
+//import javax.swing.JEditorPane;
+//import javax.swing.JFileChooser;
+//import javax.swing.JFrame;
+import javax.swing.*;
+//import javax.swing.JOptionPane;
+//import javax.swing.JPanel;
+//import javax.swing.JScrollPane;
+//import javax.swing.JTextField;
+//import javax.swing.SwingUtilities;
 
 import gamePlatform.main.Launcher;
 import gamePlatform.menus.MenuManager;
@@ -72,6 +74,9 @@ public class SolitaireEngine
 	private static JButton saveGameButton = new JButton("Save Game");
 	private static JButton loadGameButton = new JButton("Load Game");
 	
+	
+	private static JMenuBar gameMenu = new JMenuBar();
+	private static List<GameOption> gameOptions;
 	// TIMER UTILITIES
 	private static Timer timer = new Timer();
 	private static ScoreClock scoreClock = new ScoreClock();
@@ -103,27 +108,13 @@ public class SolitaireEngine
 			updateTimer();
 		}
 	}
-	private static class NewGameListener implements ActionListener
-	{
-		@Override
-		public void actionPerformed(ActionEvent e)
-		{
-			//TODO: Create window to select XML file.
-			playNewGame(XMLFile);
-		}
-
-	}
+	
 
 	// GAME TIMER UTILITIES
 	protected static void updateTimer()
 	{
 		time += 1;
-		/*
-		if (time % 10 == 0)
-		{
-			setScore(-2);
-		}
-		*/
+
 		String stringtime = "Seconds: " + time;
 		timeBox.setText(stringtime);
 		timeBox.repaint();
@@ -228,20 +219,7 @@ public class SolitaireEngine
 		}
 	}
 	
-	private static final class XML_Listener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			String fileSelected = (String)selectXML.getSelectedItem();
-//			switch(fileSelected) { 
-//				case "Bonanza Creek":
-//					XMLFile = ".\\Game\\Tests\\BonanzaCreek.xml";
-//					break;
-//				case "Binary Star":
-//					XMLFile = ".\\Game\\Tests\\BinaryStarTest.xml";
-//			}
-			XMLFile = fileSelected;
-		}
-	}
+	
 	
 	/*
 	 * This class handles all of the logic of moving the Card components
@@ -605,13 +583,8 @@ public class SolitaireEngine
 		table.add(toggleTimerButton);
 		table.add(gameTitle);
 		table.add(timeBox);
-		table.add(newGameButton);
-		table.add(showRulesButton);
 		table.add(scoreBox);
-		table.add(quitGame);
-		table.add(selectXML);
-		table.add(saveGameButton);
-		table.add(loadGameButton);
+		
 		table.repaint();
 		
 		System.out.println("Done setting up");
@@ -635,17 +608,14 @@ public class SolitaireEngine
 		
 		frame.setTitle(mainGameBoard.GameTitle);
 		frame.setSize(frameW, frameH);
-		newGameButton.setBounds(0, frameH - 70, 120, 30);
-		showRulesButton.setBounds(120, frameH - 70, 120, 30);
-		quitGame.setBounds(240, frameH-70, 120, 30);
-		scoreBox.setBounds(360, frameH - 70, 120, 30);
-		timeBox.setBounds(480, frameH - 70, 120, 30);
 		
-		toggleTimerButton.setBounds(600, frameH - 70, 120, 30);
-		selectXML.setBounds(720, frameH - 70, 120, 30);
-		statusBox.setBounds(840, frameH - 70, frameH - 840, 30);
-		saveGameButton.setBounds(840, frameH - 140, 120, 30);
-		loadGameButton.setBounds(960, frameH - 140, 120, 30);
+		//int menuHeight = frame.getJMenuBar().getHeight();
+		int menuHeight = 23;
+		scoreBox.setBounds(0, frameH - 70 - menuHeight, 120, 30);
+		timeBox.setBounds(120, frameH - 70 - menuHeight, 120, 30);
+		
+		toggleTimerButton.setBounds(240, frameH - 70 - menuHeight, 120, 30);
+		statusBox.setBounds(360, frameH - 70 - menuHeight, frameW - 360, 30);
 		
 	}
 	
@@ -666,9 +636,7 @@ public class SolitaireEngine
 			file = args[0];
 		else 
 		{
-			file = "BonanzaCreek.xml";
-//			file = ".\\Game\\Tests\\FoundationTest.xml";
-			//file = "BinaryStarTest.xml";
+			file = "BinaryStarTest.xml";
 		}
 		mainFrame.setVisible(true);
 		
@@ -681,21 +649,16 @@ public class SolitaireEngine
 
 		table.setLayout(null);
 		table.setBackground(new Color(0, 180, 0));
+		
+		BuildMenu();
 
-		
-		loadGameButton.addActionListener(new LoadListener());
-		saveGameButton.addActionListener(new SaveListener());
 		toggleTimerButton.addActionListener(new ToggleTimerListener());
-		newGameButton.addActionListener(new NewGameListener());
-		showRulesButton.addActionListener(new ShowRulesListener());
-		quitGame.addActionListener(new QuitListener());
-		selectXML.addActionListener(new XML_Listener());
-		
+		XMLFile = file;
 		playNewGame(file);
 		mouseManager = new CardMovementManager();
 		table.addMouseListener(mouseManager);
 		table.addMouseMotionListener(mouseManager);
-
+		
 		
 	}
 
@@ -709,5 +672,61 @@ public class SolitaireEngine
 		pane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		pane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		return pane;
+	}
+	
+	public static void BuildMenu()
+	{
+		mainFrame.setJMenuBar(gameMenu);
+		JMenu menuFile = new JMenu("File"); 
+		JMenu menuHelp = new JMenu("Help"); 
+		JMenu menuNewGame = new JMenu("New Game"); 
+  
+        // create menuitems 
+		JMenuItem miSave = new JMenuItem("Save Game"); 
+		JMenuItem miLoad = new JMenuItem("Load Game"); 
+		JMenuItem miQuit = new JMenuItem("Quit"); 
+		JMenuItem miShowRules = new JMenuItem("Show Rules"); 
+        
+		menuFile.add(menuNewGame);
+		menuFile.add(miSave);
+		menuFile.add(miLoad);
+		menuFile.add(miQuit);
+		menuHelp.add(miShowRules);
+		
+		miSave.addActionListener(new SaveListener());
+		miLoad.addActionListener(new LoadListener());
+		miQuit.addActionListener(new QuitListener());
+		miShowRules.addActionListener(new ShowRulesListener());
+		
+		gameOptions = XML_Loader.GetGameOptions();
+		for (GameOption gOption: gameOptions) 
+		{
+			JMenuItem newMenuItem = new JMenuItem(gOption.name); 
+			newMenuItem.addActionListener(new MenuGameListener());
+			newMenuItem.putClientProperty("option", gOption);
+			menuNewGame.add(newMenuItem);
+		}
+		
+		gameMenu.add(menuFile);
+		gameMenu.add(menuHelp);
+		
+		
+		
+		
+		
+	}
+	
+	private static class MenuGameListener implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			//TODO: Create window to select XML file.
+			JMenuItem item = (JMenuItem)e.getSource();
+			GameOption option = (GameOption) item.getClientProperty("option");
+			XMLFile = option.file;
+			playNewGame(XMLFile);
+		}
+
 	}
 }
