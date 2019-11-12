@@ -29,7 +29,6 @@ import javax.swing.*;
 //import javax.swing.JTextField;
 //import javax.swing.SwingUtilities;
 
-import gamePlatform.main.Launcher;
 import gamePlatform.menus.MenuManager;
 
 
@@ -62,24 +61,18 @@ public class SolitaireEngine
 	protected static final JPanel table = new JPanel();
 	// other components
 	private static JEditorPane gameTitle = new JEditorPane("text/html", "");
-	private static JButton showRulesButton = new JButton("Show Rules");
-	private static JButton newGameButton = new JButton("New Game");
 	
 	private static JButton toggleTimerButton = new JButton("Pause Timer");
-	private static JButton quitGame = new JButton("Quit");
-	private static JComboBox selectXML = new JComboBox(XML_Loader.getXMLFiles().toArray());
 	private static JTextField scoreBox = new JTextField();// displays the score
 	private static JTextField timeBox = new JTextField();// displays the time
 	private static JTextField statusBox = new JTextField();// status messages
-	
-	private static JButton saveGameButton = new JButton("Save Game");
-	private static JButton loadGameButton = new JButton("Load Game");
 	
 	
 	private static JMenuBar gameMenu = new JMenuBar();
 	private static List<GameOption> gameOptions;
 	// TIMER UTILITIES
 	private static Timer timer = new Timer();
+	private static boolean initTimer = false;
 	private static ScoreClock scoreClock = new ScoreClock();
 	
 	// Store last XML File loaded.
@@ -125,7 +118,11 @@ public class SolitaireEngine
 	{
 		scoreClock = new ScoreClock();
 		// set the timer to update every second
-		timer.scheduleAtFixedRate(scoreClock, 1000, 1000);
+		if (!initTimer)
+		{
+			timer.scheduleAtFixedRate(scoreClock, 1000, 1000);
+			initTimer = true;
+		}
 		timeRunning = true;
 	}
 
@@ -169,12 +166,11 @@ public class SolitaireEngine
 			JDialog ruleFrame = new JDialog(frame, true);
 			ruleFrame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			ruleFrame.setSize(TABLE_HEIGHT, TABLE_WIDTH);
-			JScrollPane scroll;
 			JEditorPane rulesTextPane = new JEditorPane("text/html", "");
 			rulesTextPane.setEditable(false);
 			String rulesText = mainGameBoard.rulesText;
 			rulesTextPane.setText(rulesText);
-			ruleFrame.add(scroll = new JScrollPane(rulesTextPane));
+			ruleFrame.add(rulesTextPane);
 
 			ruleFrame.setVisible(true);
 		}
@@ -234,7 +230,6 @@ public class SolitaireEngine
 	{
 		// Some of these are culture specific to MySolitaire
 
-		private boolean checkForWin = false;// should we check if game is over?
 		private boolean gameOver = false;// easier to negate this than affirm it
 		private Point start = null;// where mouse was clicked
 		private Point stop = null;// where mouse was released
@@ -347,7 +342,6 @@ public class SolitaireEngine
 			card = null;
 			toggleTimer();
 			//sourceIsFinalDeck = false;
-			checkForWin = false;
 			gameOver = false;
 		}// end mousePressed()
 		
@@ -510,8 +504,7 @@ public class SolitaireEngine
 	}
 	
 	
-	//TODO: Separate code for creating a new game from adding everything in the gameboard to the JFrame
-	//		- Will be nice to have separate when we implement Save/Load features.
+
 	private static void playNewGame(String sXMLFile)
 	{
 		mainGameBoard = XML_Loader.LoadXML(sXMLFile);
@@ -550,7 +543,6 @@ public class SolitaireEngine
 		startTimer();
 
 		
-		selectXML.setEditable(false);
 		
 		statusBox.setEditable(false);
 		statusBox.setOpaque(false);
