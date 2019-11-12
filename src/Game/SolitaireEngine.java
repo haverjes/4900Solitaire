@@ -621,12 +621,10 @@ public class SolitaireEngine
 	{
 
 		Container contentPane;
-//		
 		mainFrame.setSize(TABLE_WIDTH, TABLE_HEIGHT);
 		
 		contentPane = mainFrame.getContentPane();
 		contentPane.add(table);
-//		contentPane.add(getScrollTable());
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		String file;
