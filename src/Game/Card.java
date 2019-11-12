@@ -31,8 +31,10 @@ class Card extends JPanel
 	private final int x_offset = 10;
 	private final int y_offset = 20;
 	private final int new_x_offset = x_offset + (CARD_WIDTH - 20);
-	final static public int CARD_HEIGHT = 150;
-	final static public int CARD_WIDTH = 100;
+	static public int CARD_HEIGHT = 150;
+	static public int CARD_WIDTH = 100;
+	static final public int DEF_CARD_HEIGHT = 150;
+	static final public int DEF_CARD_WIDTH = 100;
 	final static public int CORNER_ANGLE = 25;
 	
 	public int rank;
@@ -290,6 +292,12 @@ class Card extends JPanel
 			g2d.draw(rect);
 		}
 
+	}
+	
+	public static void ResetCardSize()
+	{
+		CARD_WIDTH = DEF_CARD_WIDTH;
+		CARD_HEIGHT = DEF_CARD_HEIGHT;
 	}
 
 }

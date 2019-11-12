@@ -6,6 +6,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -249,37 +250,14 @@ public class SolitaireEngine
 		public void mousePressed(MouseEvent e)
 		{
 			start = e.getPoint();
-			boolean stopSearch = false;
 			statusBox.setText("");
 			System.out.println("Grabbing mouse");
 			
 			//TODO: ClickCard
-			for (int x = 0; x < mainGameBoard.Stacks.size() && !stopSearch ; x++)
-			{
-				
-				source = mainGameBoard.Stacks.get(x);
-				// pinpointing exact card pressed
-				
-				if (source.contains(start) ) 
-				{
-					System.out.println("In stack: " + source.toString());
-					
-					for (Component ca : source.getComponents())
-					{
-						Card c = (Card) ca;
-	
-						if (c.contains(start)  && c.faceUp)
-						{
-							card = c;
-							System.out.println("Grabbed card: " + card.toString());
-							
-							stopSearch = true;
-							
-							break;
-						}
-					}
-				}
-			}
+//			
+			card = this.getPointedCard(start);
+			if (card != null)
+				System.out.println("Grabbed card: " + card.toString());
 		}
 		
 		protected void getTransferStack(Card c)
@@ -387,9 +365,10 @@ public class SolitaireEngine
 			else if(e.getClickCount()==2)
 			{
 				Card card = getPointedCard(e.getPoint());
-				CardStack stack = card.stackCallBack;
+				
 	        	if (card != null && card.isTopCard())
 	        	{
+	        		CardStack stack = card.stackCallBack;
 	        		if (mainGameBoard.ClickMove(card))
 	        		{
 	        			stack.ShowTopCard();
@@ -490,10 +469,9 @@ public class SolitaireEngine
             out.close(); 
             file.close(); 
   
-            System.out.println("Object has been serialized\n"
-                              + "Data before Deserialization."); 
+//            System.out.println("Object has been serialized\n" + "Data before Deserialization."); 
 
-
+            
         } 
   
         catch (IOException ex) { 
@@ -595,17 +573,19 @@ public class SolitaireEngine
 	{
 		// get max x value of all stacks, set WIDTH to MaxX + CARDWIDTH
 		// repeat for y using.
+		Card.ResetCardSize();
 		JFrame frame = (JFrame)SwingUtilities.getRoot(getTable());
 		
 		int frameW = mainGameBoard.Stacks.stream().mapToInt(v -> v.xPos).max().orElse(0) + Card.CARD_WIDTH + Card.CORNER_ANGLE;
-		int frameH = mainGameBoard.Stacks.stream().mapToInt(v -> v.yPos).max().orElse(0) + (3 * Card.CARD_HEIGHT + 40);
+//		int frameH = mainGameBoard.Stacks.stream().mapToInt(v -> v.yPos).max().orElse(0) + (3 * Card.CARD_HEIGHT + 40);
+		int frameH = getMinFrameHeight();
 
-		if (frameH < TABLE_HEIGHT)
-			frameH = TABLE_HEIGHT;
-		
-		if (frameW < TABLE_WIDTH)
-			frameW = TABLE_WIDTH;
-		
+//		if (frameH < TABLE_HEIGHT)
+//			frameH = TABLE_HEIGHT;
+//		
+//		if (frameW < TABLE_WIDTH)
+//			frameW = TABLE_WIDTH;
+//		
 		frame.setTitle(mainGameBoard.GameTitle);
 		frame.setSize(frameW, frameH);
 		
@@ -617,6 +597,24 @@ public class SolitaireEngine
 		toggleTimerButton.setBounds(240, frameH - 70 - menuHeight, 120, 30);
 		statusBox.setBounds(360, frameH - 70 - menuHeight, frameW - 360, 30);
 		
+	}
+	
+	public static int getMinFrameHeight() {
+		
+		
+		
+		int frameH = mainGameBoard.Stacks.stream().mapToInt(v -> v.yPos).max().orElse(0) + (3 * Card.CARD_HEIGHT + 40);
+		int tempH = mainGameBoard.Stacks.stream().mapToInt(v -> v.yPos).max().orElse(0) ;
+		int nScreenHeight = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+		
+		
+		while (frameH > nScreenHeight)
+		{
+			Card.CARD_HEIGHT = Card.CARD_HEIGHT - 25;
+			frameH = tempH + (3 * Card.CARD_HEIGHT + 40);
+			
+		}
+		return frameH;
 	}
 	
 	public static void main(String[] args)
