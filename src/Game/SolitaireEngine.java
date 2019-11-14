@@ -289,11 +289,11 @@ public class SolitaireEngine
 						if (validMoveMade)
 						{
 							source.ShowTopCard();
-						}
-						if((source.Type == CardStack.StackType.TAB) && (dest.Type == CardStack.StackType.FOUNDATION)) {
-							setScore(1);
-						}
 						
+							if((source.Type == CardStack.StackType.TAB) && (dest.Type == CardStack.StackType.FOUNDATION)) {
+								setScore(1);
+							}
+						}
 						dest.repaint();
 						table.repaint();
 						
@@ -306,7 +306,7 @@ public class SolitaireEngine
 			}// end cycle through play decks
 
 			// SHOWING STATUS MESSAGE IF MOVE INVALID
-			if (!validMoveMade && dest != null && card != null)
+			if (!validMoveMade && dest != null && card != null && dest != source && card.stackCallBack != source)
 			{
 				statusBox.setText("That Is Not A Valid Move");
 
@@ -323,17 +323,8 @@ public class SolitaireEngine
 			}
 			
 			// CHECKING FOR WIN				
-			if (mainGameBoard.checkVictory())
-			{
-				gameOver = true;
-			}
-
-
-			if (gameOver)
-			{
-				JOptionPane.showMessageDialog(table, "Congratulations! You've Won!");
-				statusBox.setText("Game Over!");
-			}
+			CheckForVictory();
+			
 			// RESET VARIABLES FOR NEXT EVENT
 			start = null;
 			stop = null;
@@ -366,17 +357,21 @@ public class SolitaireEngine
 	        		if (mainGameBoard.ClickMove(card))
 	        		{
 	        			stack.ShowTopCard();
+	        			if((stack.Type == CardStack.StackType.TAB) && (card.stackCallBack.Type == CardStack.StackType.FOUNDATION)) {
+							setScore(1);
+						}
 	        		}
 	        		else
 	        		{
 	        			statusBox.setText("No valid moves for this card.");
 	        		}
 	        		card.stackCallBack.repaint();
-					
+	        		CheckForVictory();
 	        	}
 	        }
 			table.repaint();
 	    }
+		
 		
 		@Override
 		public void mouseDragged(MouseEvent e)
@@ -387,13 +382,19 @@ public class SolitaireEngine
 			if (transferStack != null) 
 			{
 				Point p = e.getPoint();
-//				System.out.println("Dragging " + p.toString());
-//				transferStack.xPos = p.x;
-//				transferStack.yPos = p.y;
 				transferStack.setXY(p.x - cursorOffsetX, p.y - cursorOffsetY);
 				
 				table.repaint();
 				transferStack.repaint();
+			}
+		}
+		
+		protected void CheckForVictory()
+		{
+			if (mainGameBoard.checkVictory())
+			{
+				JOptionPane.showMessageDialog(table, "Congratulations! You've Won!");
+				statusBox.setText("Game Over!");
 			}
 		}
 		
@@ -463,8 +464,6 @@ public class SolitaireEngine
             out.close(); 
             file.close(); 
   
-//            System.out.println("Object has been serialized\n" + "Data before Deserialization."); 
-
             
         } 
   
@@ -502,7 +501,6 @@ public class SolitaireEngine
         } 
 		
 	}
-	
 	
 
 	private static void playNewGame(String sXMLFile)
@@ -569,15 +567,8 @@ public class SolitaireEngine
 		JFrame frame = (JFrame)SwingUtilities.getRoot(getTable());
 		
 		int frameW = mainGameBoard.Stacks.stream().mapToInt(v -> v.xPos).max().orElse(0) + Card.CARD_WIDTH + Card.CORNER_ANGLE;
-//		int frameH = mainGameBoard.Stacks.stream().mapToInt(v -> v.yPos).max().orElse(0) + (3 * Card.CARD_HEIGHT + 40);
 		int frameH = getMinFrameHeight();
 
-//		if (frameH < TABLE_HEIGHT)
-//			frameH = TABLE_HEIGHT;
-//		
-//		if (frameW < TABLE_WIDTH)
-//			frameW = TABLE_WIDTH;
-//		
 		frame.setTitle(mainGameBoard.GameTitle);
 		frame.setSize(frameW, frameH);
 		
@@ -603,8 +594,7 @@ public class SolitaireEngine
 		while (frameH > nScreenHeight)
 		{
 			Card.CARD_HEIGHT = Card.CARD_HEIGHT - 25;
-			frameH = tempH + (3 * Card.CARD_HEIGHT + 40);
-			
+			frameH = tempH + (3 * Card.CARD_HEIGHT + 40);	
 		}
 		return frameH;
 	}
