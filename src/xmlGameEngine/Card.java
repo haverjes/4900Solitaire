@@ -31,8 +31,10 @@ class Card extends JPanel
 	private final int x_offset = 10;
 	private final int y_offset = 20;
 	private final int new_x_offset = x_offset + (CARD_WIDTH - 20);
-	final static public int CARD_HEIGHT = 150;
-	final static public int CARD_WIDTH = 100;
+	static public int CARD_HEIGHT = 150;
+	static public int CARD_WIDTH = 100;
+	static final public int DEF_CARD_HEIGHT = 150;
+	static final public int DEF_CARD_WIDTH = 100;
 	final static public int CORNER_ANGLE = 25;
 	
 	public int rank;
@@ -253,7 +255,7 @@ class Card extends JPanel
 	public void paintComponent(Graphics g)
 	{
 		Font currentFont = new Font (g.getFont().getFontName(), Font.PLAIN, 20);
-
+//		cardFont = currentFont.deriveFont(currentFont.getSize() * 20);
 		g.setFont(currentFont);
 		
 		Graphics2D g2d = (Graphics2D) g;
@@ -274,7 +276,10 @@ class Card extends JPanel
 				cColor =  Color.BLACK;
 			
 			drawSuit(g2d, convertSuitStr(suit), cColor);
+			//int new_x_offset = x_offset + (CARD_WIDTH - 30);
+			
 			drawValue(g2d, convertRankStr(rank));
+			
 			
 		} else
 		{
@@ -287,6 +292,12 @@ class Card extends JPanel
 			g2d.draw(rect);
 		}
 
+	}
+	
+	public static void ResetCardSize()
+	{
+		CARD_WIDTH = DEF_CARD_WIDTH;
+		CARD_HEIGHT = DEF_CARD_HEIGHT;
 	}
 
 }
