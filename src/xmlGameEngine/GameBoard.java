@@ -1,7 +1,9 @@
 package xmlGameEngine;
 import java.io.Serializable;
 import java.util.*;
-import java.util.stream.Collectors;  
+import java.util.stream.Collectors;
+
+import gameInterface.GameStatus;  
 
 public class GameBoard implements Serializable
 {
