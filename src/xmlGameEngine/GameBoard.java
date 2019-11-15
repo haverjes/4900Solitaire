@@ -1,4 +1,4 @@
-package Game;
+package xmlGameEngine;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;  

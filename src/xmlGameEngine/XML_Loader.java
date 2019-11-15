@@ -1,4 +1,4 @@
-package Game;
+package xmlGameEngine;
 //XML_Loader.java
 import org.w3c.dom.*;
 import javax.xml.parsers.*;

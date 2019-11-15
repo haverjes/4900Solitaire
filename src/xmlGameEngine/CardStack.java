@@ -1,4 +1,4 @@
-package Game;
+package xmlGameEngine;
 
 import java.util.*;
 import java.awt.Color;

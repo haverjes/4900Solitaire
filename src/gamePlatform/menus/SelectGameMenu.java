@@ -7,8 +7,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
-import Game.SolitaireEngine;
 import gamePlatform.main.Launcher;
+import xmlGameEngine.SolitaireEngine;
 
 public class SelectGameMenu extends Menu{
 	

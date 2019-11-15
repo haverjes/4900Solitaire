@@ -4,9 +4,9 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
-import Game.SolitaireEngine;
 import gamePlatform.menus.MenuManager;
 import gamePlatform.menus.StartMenu;
+import xmlGameEngine.SolitaireEngine;
 
 public class Launcher {
 	
