@@ -40,7 +40,7 @@ import gamePlatform.menus.MenuManager;
  * 	 - Some will be moved to the GameBoard, like Timer and Score related stuff.
  */
 
-public class SolitaireEngine 
+public class XMLSolitaireEngine 
 {
 	protected static GameBoard mainGameBoard;
 	protected static CardMovementManager mouseManager;

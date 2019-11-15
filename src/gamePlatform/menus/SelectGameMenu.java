@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 
 import gamePlatform.main.Launcher;
-import xmlGameEngine.SolitaireEngine;
+import xmlGameEngine.XMLSolitaireEngine;
 
 public class SelectGameMenu extends Menu{
 	
@@ -39,10 +39,10 @@ public class SelectGameMenu extends Menu{
 		playBinStar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Launcher.mainScreen.setContentPane(SolitaireEngine.getTable());
+				Launcher.mainScreen.setContentPane(XMLSolitaireEngine.getTable());
 				//Launcher.mainScreen.setTitle("Binary Star");
 				String file = "BinaryStarTest.xml";
-				SolitaireEngine.initGame(file);
+				XMLSolitaireEngine.initGame(file);
 			}
 		});
 	}
