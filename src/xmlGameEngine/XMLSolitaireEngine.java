@@ -6,25 +6,28 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.*;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JEditorPane;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
+//import javax.swing.JButton;
+//import javax.swing.JComboBox;
+//import javax.swing.JDialog;
+//import javax.swing.JEditorPane;
+//import javax.swing.JFileChooser;
+//import javax.swing.JFrame;
+import javax.swing.*;
+//import javax.swing.JOptionPane;
+//import javax.swing.JPanel;
+//import javax.swing.JScrollPane;
+//import javax.swing.JTextField;
+//import javax.swing.SwingUtilities;
 
 import gameInterface.*;
 import gamePlatform.main.Launcher;
@@ -59,20 +62,16 @@ public class XMLSolitaireEngine
 	protected static final JPanel table = new JPanel();
 	// other components
 	private static JEditorPane gameTitle = new JEditorPane("text/html", "");
-	private static JButton showRulesButton = new JButton("Show Rules");
-	private static JButton newGameButton = new JButton("New Game");
 	
 	private static JButton toggleTimerButton = new JButton("Pause Timer");
-	private static JButton quitGame = new JButton("Quit");
-	private static JComboBox selectXML = new JComboBox(XML_Loader.getXMLFiles().toArray());
 	private static JTextField scoreBox = new JTextField();// displays the score
 	private static JTextField timeBox = new JTextField();// displays the time
 	private static JTextField statusBox = new JTextField();// status messages
 	
-	private static JButton saveGameButton = new JButton("Save Game");
-	private static JButton loadGameButton = new JButton("Load Game");
 	
 	private static GameStatus solitaireStatus;
+	private static JMenuBar gameMenu = new JMenuBar();
+	private static List<GameOption> gameOptions;
 	// TIMER UTILITIES
 	private static Timer timer = new Timer();
 	private static boolean initTimer = false;
@@ -181,12 +180,11 @@ public class XMLSolitaireEngine
 			JDialog ruleFrame = new JDialog(frame, true);
 			ruleFrame.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			ruleFrame.setSize(TABLE_HEIGHT, TABLE_WIDTH);
-			JScrollPane scroll;
 			JEditorPane rulesTextPane = new JEditorPane("text/html", "");
 			rulesTextPane.setEditable(false);
 			String rulesText = mainGameBoard.rulesText;
 			rulesTextPane.setText(rulesText);
-			ruleFrame.add(scroll = new JScrollPane(rulesTextPane));
+			ruleFrame.add(rulesTextPane);
 
 			ruleFrame.setVisible(true);
 		}
@@ -232,14 +230,7 @@ public class XMLSolitaireEngine
 		}
 	}
 	
-	private static final class XML_Listener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			String fileSelected = (String)selectXML.getSelectedItem();
-
-			XMLFile = fileSelected;
-		}
-	}
+	
 	
 	/*
 	 * This class handles all of the logic of moving the Card components
@@ -268,37 +259,14 @@ public class XMLSolitaireEngine
 		public void mousePressed(MouseEvent e)
 		{
 			start = e.getPoint();
-			boolean stopSearch = false;
 			statusBox.setText("");
 			System.out.println("Grabbing mouse");
 			
 			//TODO: ClickCard
-			for (int x = 0; x < mainGameBoard.Stacks.size() && !stopSearch ; x++)
-			{
-				
-				source = mainGameBoard.Stacks.get(x);
-				// pinpointing exact card pressed
-				
-				if (source.contains(start) ) 
-				{
-					System.out.println("In stack: " + source.toString());
-					
-					for (Component ca : source.getComponents())
-					{
-						Card c = (Card) ca;
-	
-						if (c.contains(start)  && c.faceUp)
-						{
-							card = c;
-							System.out.println("Grabbed card: " + card.toString());
-							
-							stopSearch = true;
-							
-							break;
-						}
-					}
-				}
-			}
+//			
+			card = this.getPointedCard(start);
+			if (card != null)
+				System.out.println("Grabbed card: " + card.toString());
 		}
 		
 		protected void getTransferStack(Card c)
@@ -308,7 +276,7 @@ public class XMLSolitaireEngine
 			
 			transferStack = c.stackCallBack.TakeSubStack(card);
 			table.add(transferStack, 0);
-			transferStack.repaint();
+			//transferStack.repaint();
 		}
 		
 		@Override
@@ -335,11 +303,11 @@ public class XMLSolitaireEngine
 						if (validMoveMade)
 						{
 							source.ShowTopCard();
-						}
-						if((source.Type == CardStack.StackType.TAB) && (dest.Type == CardStack.StackType.FOUNDATION)) {
-							setScore(1);
-						}
 						
+							if((source.Type == CardStack.StackType.TAB) && (dest.Type == CardStack.StackType.FOUNDATION)) {
+								setScore(1);
+							}
+						}
 						dest.repaint();
 						table.repaint();
 						
@@ -352,7 +320,7 @@ public class XMLSolitaireEngine
 			}// end cycle through play decks
 
 			// SHOWING STATUS MESSAGE IF MOVE INVALID
-			if (!validMoveMade && dest != null && card != null)
+			if (!validMoveMade && dest != null && card != null && dest != source && card.stackCallBack != source)
 			{
 				statusBox.setText("That Is Not A Valid Move");
 
@@ -369,17 +337,8 @@ public class XMLSolitaireEngine
 			}
 			
 			// CHECKING FOR WIN				
-			if (mainGameBoard.checkVictory())
-			{
-				gameOver = true;
-			}
-
-
-			if (gameOver)
-			{
-				JOptionPane.showMessageDialog(table, "Congratulations! You've Won!");
-				statusBox.setText("Game Over!");
-			}
+			CheckForVictory();
+			
 			// RESET VARIABLES FOR NEXT EVENT
 			start = null;
 			stop = null;
@@ -405,23 +364,28 @@ public class XMLSolitaireEngine
 			else if(e.getClickCount()==2)
 			{
 				Card card = getPointedCard(e.getPoint());
-				CardStack stack = card.stackCallBack;
+				
 	        	if (card != null && card.isTopCard())
 	        	{
+	        		CardStack stack = card.stackCallBack;
 	        		if (mainGameBoard.ClickMove(card))
 	        		{
 	        			stack.ShowTopCard();
+	        			if((stack.Type == CardStack.StackType.TAB) && (card.stackCallBack.Type == CardStack.StackType.FOUNDATION)) {
+							setScore(1);
+						}
 	        		}
 	        		else
 	        		{
 	        			statusBox.setText("No valid moves for this card.");
 	        		}
 	        		card.stackCallBack.repaint();
-					
+	        		CheckForVictory();
 	        	}
 	        }
 			table.repaint();
 	    }
+		
 		
 		@Override
 		public void mouseDragged(MouseEvent e)
@@ -432,13 +396,19 @@ public class XMLSolitaireEngine
 			if (transferStack != null) 
 			{
 				Point p = e.getPoint();
-				System.out.println("Dragging " + p.toString());
-//				transferStack.xPos = p.x;
-//				transferStack.yPos = p.y;
 				transferStack.setXY(p.x - cursorOffsetX, p.y - cursorOffsetY);
 				
 				table.repaint();
 				transferStack.repaint();
+			}
+		}
+		
+		protected void CheckForVictory()
+		{
+			if (mainGameBoard.checkVictory())
+			{
+				JOptionPane.showMessageDialog(table, "Congratulations! You've Won!");
+				statusBox.setText("Game Over!");
 			}
 		}
 		
@@ -508,10 +478,7 @@ public class XMLSolitaireEngine
             out.close(); 
             file.close(); 
   
-            System.out.println("Object has been serialized\n"
-                              + "Data before Deserialization."); 
-
-
+            
         } 
   
         catch (IOException ex) { 
@@ -549,9 +516,7 @@ public class XMLSolitaireEngine
 		
 	}
 	
-	
-	//TODO: Separate code for creating a new game from adding everything in the gameboard to the JFrame
-	//		- Will be nice to have separate when we implement Save/Load features.
+
 	private static void playNewGame(String sXMLFile)
 	{
 		mainGameBoard = XML_Loader.LoadXML(sXMLFile);
@@ -577,7 +542,7 @@ public class XMLSolitaireEngine
 
 		solitaireStatus.setGameTime(0);
 		timer = new Timer();
-		
+
 
 		scoreBox.setText("Score: ");
 		scoreBox.setEditable(false);
@@ -590,7 +555,6 @@ public class XMLSolitaireEngine
 		startTimer();
 
 		
-		selectXML.setEditable(false);
 		
 		statusBox.setEditable(false);
 		statusBox.setOpaque(false);
@@ -601,13 +565,8 @@ public class XMLSolitaireEngine
 		table.add(toggleTimerButton);
 		table.add(gameTitle);
 		table.add(timeBox);
-		table.add(newGameButton);
-		table.add(showRulesButton);
 		table.add(scoreBox);
-		table.add(quitGame);
-		table.add(selectXML);
-		table.add(saveGameButton);
-		table.add(loadGameButton);
+		
 		table.repaint();
 		
 		System.out.println("Done setting up");
@@ -618,43 +577,50 @@ public class XMLSolitaireEngine
 	{
 		// get max x value of all stacks, set WIDTH to MaxX + CARDWIDTH
 		// repeat for y using.
+		Card.ResetCardSize();
 		JFrame frame = (JFrame)SwingUtilities.getRoot(getTable());
 		
 		int frameW = mainGameBoard.Stacks.stream().mapToInt(v -> v.xPos).max().orElse(0) + Card.CARD_WIDTH + Card.CORNER_ANGLE;
-		int frameH = mainGameBoard.Stacks.stream().mapToInt(v -> v.yPos).max().orElse(0) + (3 * Card.CARD_HEIGHT + 40);
+		int frameH = getMinFrameHeight();
 
-		if (frameH < TABLE_HEIGHT)
-			frameH = TABLE_HEIGHT;
-		
-		if (frameW < TABLE_WIDTH)
-			frameW = TABLE_WIDTH;
-		
 		frame.setTitle(mainGameBoard.GameTitle);
 		frame.setSize(frameW, frameH);
-		newGameButton.setBounds(0, frameH - 70, 120, 30);
-		showRulesButton.setBounds(120, frameH - 70, 120, 30);
-		quitGame.setBounds(240, frameH-70, 120, 30);
-		scoreBox.setBounds(360, frameH - 70, 120, 30);
-		timeBox.setBounds(480, frameH - 70, 120, 30);
 		
-		toggleTimerButton.setBounds(600, frameH - 70, 120, 30);
-		selectXML.setBounds(720, frameH - 70, 120, 30);
-		statusBox.setBounds(840, frameH - 70, frameH - 840, 30);
-		saveGameButton.setBounds(840, frameH - 140, 120, 30);
-		loadGameButton.setBounds(960, frameH - 140, 120, 30);
+		//int menuHeight = frame.getJMenuBar().getHeight();
+		int menuHeight = 23;
+		scoreBox.setBounds(0, frameH - 70 - menuHeight, 120, 30);
+		timeBox.setBounds(120, frameH - 70 - menuHeight, 120, 30);
 		
+		toggleTimerButton.setBounds(240, frameH - 70 - menuHeight, 120, 30);
+		statusBox.setBounds(360, frameH - 70 - menuHeight, frameW - 360, 30);
+		
+	}
+	
+	public static int getMinFrameHeight() {
+		
+		
+		
+		int frameH = mainGameBoard.Stacks.stream().mapToInt(v -> v.yPos).max().orElse(0) + (3 * Card.CARD_HEIGHT + 40);
+		int tempH = mainGameBoard.Stacks.stream().mapToInt(v -> v.yPos).max().orElse(0) ;
+		int nScreenHeight = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+		
+		
+		while (frameH > nScreenHeight)
+		{
+			Card.CARD_HEIGHT = Card.CARD_HEIGHT - 25;
+			frameH = tempH + (3 * Card.CARD_HEIGHT + 40);	
+		}
+		return frameH;
 	}
 	
 	public static void main(String[] args)
 	{
 
 		Container contentPane;
-//		
 		mainFrame.setSize(TABLE_WIDTH, TABLE_HEIGHT);
 		solitaireStatus = new GameStatus();
 		contentPane = mainFrame.getContentPane();
 		contentPane.add(table);
-//		contentPane.add(getScrollTable());
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		String file;
@@ -662,9 +628,7 @@ public class XMLSolitaireEngine
 			file = args[0];
 		else 
 		{
-			file = "BonanzaCreek.xml";
-//			file = ".\\Game\\Tests\\FoundationTest.xml";
-			//file = "BinaryStarTest.xml";
+			file = "BinaryStarTest.xml";
 		}
 		mainFrame.setVisible(true);
 		
@@ -677,21 +641,15 @@ public class XMLSolitaireEngine
 
 		table.setLayout(null);
 		table.setBackground(new Color(0, 180, 0));
+		
+		BuildMenu();
 
-		
-		loadGameButton.addActionListener(new LoadListener());
-		saveGameButton.addActionListener(new SaveListener());
 		toggleTimerButton.addActionListener(new ToggleTimerListener());
-		newGameButton.addActionListener(new NewGameListener());
-		showRulesButton.addActionListener(new ShowRulesListener());
-		quitGame.addActionListener(new QuitListener());
-		selectXML.addActionListener(new XML_Listener());
-		
+		XMLFile = file;
 		playNewGame(file);
 		mouseManager = new CardMovementManager();
 		table.addMouseListener(mouseManager);
 		table.addMouseMotionListener(mouseManager);
-
 		
 	}
 

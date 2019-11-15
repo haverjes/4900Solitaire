@@ -14,7 +14,12 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
+<<<<<<< HEAD
 import gameInterface.GameStatus;
+=======
+import gamePlatform.main.Launcher;
+import xmlGameEngine.XMLSolitaireEngine;
+>>>>>>> refs/heads/New
 
 public class SelectGameMenu extends Menu{
 	
@@ -62,6 +67,7 @@ public class SelectGameMenu extends Menu{
 	protected void setActions() {
 		super.setActions();
 		
+<<<<<<< HEAD
 		System.out.println(buttons.isEmpty());
 		for(int i = 0; i < buttons.size(); i++)
 		{
@@ -79,5 +85,16 @@ public class SelectGameMenu extends Menu{
 				}
 			});
 		}
+=======
+		playBinStar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Launcher.mainScreen.setContentPane(XMLSolitaireEngine.getTable());
+				//Launcher.mainScreen.setTitle("Binary Star");
+				String file = "BinaryStarTest.xml";
+				XMLSolitaireEngine.initGame(file);
+			}
+		});
+>>>>>>> refs/heads/New
 	}
 }
