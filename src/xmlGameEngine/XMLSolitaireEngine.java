@@ -669,10 +669,61 @@ public class XMLSolitaireEngine
 		return table;
 	}
 	
-	public static JScrollPane getScrollTable() {
-		JScrollPane pane = new JScrollPane(table);
-		pane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		pane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		return pane;
+	public static void BuildMenu()
+	{
+		JFrame frame = (JFrame)SwingUtilities.getRoot(getTable());
+		frame.setJMenuBar(gameMenu);
+		gameMenu.removeAll();
+		JMenu menuFile = new JMenu("File"); 
+		JMenu menuHelp = new JMenu("Help"); 
+		JMenu menuNewGame = new JMenu("New Game"); 
+  
+        // create menuitems 
+		JMenuItem miSave = new JMenuItem("Save Game"); 
+		JMenuItem miLoad = new JMenuItem("Load Game"); 
+		JMenuItem miQuit = new JMenuItem("Quit"); 
+		JMenuItem miShowRules = new JMenuItem("Show Rules"); 
+        
+		menuFile.add(menuNewGame);
+		menuFile.add(miSave);
+		menuFile.add(miLoad);
+		menuFile.add(miQuit);
+		menuHelp.add(miShowRules);
+		
+		miSave.addActionListener(new SaveListener());
+		miLoad.addActionListener(new LoadListener());
+		miQuit.addActionListener(new QuitListener());
+		miShowRules.addActionListener(new ShowRulesListener());
+		
+		gameOptions = XML_Loader.GetGameOptions();
+		for (GameOption gOption: gameOptions) 
+		{
+			JMenuItem newMenuItem = new JMenuItem(gOption.name); 
+			newMenuItem.addActionListener(new MenuGameListener());
+			newMenuItem.putClientProperty("option", gOption);
+			menuNewGame.add(newMenuItem);
+		}
+		
+		gameMenu.add(menuFile);
+		gameMenu.add(menuHelp);
+		
+		
+		
+		
+		
+	}
+	
+	private static class MenuGameListener implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			//TODO: Create window to select XML file.
+			JMenuItem item = (JMenuItem)e.getSource();
+			GameOption option = (GameOption) item.getClientProperty("option");
+			XMLFile = option.file;
+			playNewGame(XMLFile);
+		}
+
 	}
 }
