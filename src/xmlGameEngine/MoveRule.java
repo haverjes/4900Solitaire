@@ -68,7 +68,7 @@ public class MoveRule implements Serializable
 		}
 		else 
 		{
-			if (destStack.cardLimit >= destStack.cards.size() + 1)
+			if (destStack.cardLimit > 0 && destStack.cardLimit <= destStack.cards.size())
 				return false;
 			
 			Card lastCard = destStack.getTopCard();

@@ -598,17 +598,23 @@ public class XMLSolitaireEngine
 	
 	public static int getMinFrameHeight() {
 		
-		
-		
-		int frameH = mainGameBoard.Stacks.stream().mapToInt(v -> v.yPos).max().orElse(0) + (3 * Card.CARD_HEIGHT + 40);
-		int tempH = mainGameBoard.Stacks.stream().mapToInt(v -> v.yPos).max().orElse(0) ;
+		CardStack csBottomStack = mainGameBoard.getLowestStack();
+		int nCardMultiplier = 1;
+		int nMargin = 100;
+		if (csBottomStack.Shape == CardStack.StackShape.FANDOWN)
+		{
+			nCardMultiplier = 3;
+			nMargin = 40;
+		}
+		//int frameH = mainGameBoard.Stacks.stream().mapToInt(v -> v.yPos).max().orElse(0) + (3 * Card.CARD_HEIGHT + 40);
+		int frameH = csBottomStack.yPos + (nCardMultiplier * Card.CARD_HEIGHT + nMargin);
+		int tempH = csBottomStack.yPos;
 		int nScreenHeight = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-		
 		
 		while (frameH > nScreenHeight)
 		{
 			Card.CARD_HEIGHT = Card.CARD_HEIGHT - 25;
-			frameH = tempH + (3 * Card.CARD_HEIGHT + 40);	
+			frameH = tempH + (nCardMultiplier * Card.CARD_HEIGHT + nMargin);	
 		}
 		return frameH;
 	}

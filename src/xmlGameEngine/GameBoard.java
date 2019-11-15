@@ -208,4 +208,15 @@ public class GameBoard implements Serializable
 			stack.repaint(); 
 		}
 	}
+	
+	public CardStack getLowestStack()
+	{
+		CardStack retStack = Stacks.get(0);
+		for(CardStack curStack: this.Stacks)
+		{
+			if (curStack.yPos > retStack.yPos)
+				retStack = curStack;
+		}
+		return retStack;
+	}
 }
