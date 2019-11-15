@@ -39,10 +39,10 @@
 		<!--  Foundations are defined for each suit.  Each one is defined as starting out empty, and specifies the first card that can be played on it.
 				The firstCard examples here represent "Ace of any suit".  This attribute would only be needed if initialCard is not empty.
 		-->
-		<Stack type="Foundation" xpos="355" ypos="5" initialCard="" firstCard="A*" lockCards="0" shape="Stack" />
-		<Stack type="Foundation" xpos="470" ypos="5" initialCard="" firstCard="A*" lockCards="0" shape="Stack" />
-		<Stack type="Foundation" xpos="585" ypos="5" initialCard="" firstCard="A*" lockCards="0" shape="Stack" />
-		<Stack type="Foundation" xpos="700" ypos="5" initialCard="" firstCard="A*" lockCards="0" shape="Stack" />
+		<Stack type="Foundation" xpos="355" ypos="5" initialCard="" firstCard="A*" lockCards="1" shape="Stack" />
+		<Stack type="Foundation" xpos="470" ypos="5" initialCard="" firstCard="A*" lockCards="1" shape="Stack" />
+		<Stack type="Foundation" xpos="585" ypos="5" initialCard="" firstCard="A*" lockCards="1" shape="Stack" />
+		<Stack type="Foundation" xpos="700" ypos="5" initialCard="" firstCard="A*" lockCards="1" shape="Stack" />
 		
 		<!--  Tab, or tableau,  Can have varying card counts.  
 			Orientation:  Whether cards placed face up or down.  'DownTopUp' means all are face down, except the top card.
