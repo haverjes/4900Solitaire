@@ -109,7 +109,6 @@ public class XMLSolitaireEngine
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			//TODO: Create window to select XML file.
 			playNewGame(XMLFile);
 		}
 
@@ -263,8 +262,8 @@ public class XMLSolitaireEngine
 			statusBox.setText("");
 			System.out.println("Grabbing mouse");
 			
-			//TODO: ClickCard
-//			
+			
+
 			card = this.getPointedCard(start);
 			if (card != null)
 				System.out.println("Grabbed card: " + card.toString());
@@ -409,7 +408,12 @@ public class XMLSolitaireEngine
 			if (mainGameBoard.checkVictory())
 			{
 				JOptionPane.showMessageDialog(table, "Congratulations! You've Won!");
+				
 				statusBox.setText("Game Over!");
+				solitaireStatus.setGameStatusFlag(2);
+				
+				//TODO: Any other interaction with the platform required?  Or even possible?
+				
 			}
 		}
 		
@@ -669,7 +673,11 @@ public class XMLSolitaireEngine
 		solitaireStatus.setGameSaveFile(inFile);
 		initGame("BinaryStar.xml");
 		mainGameBoard.status = solitaireStatus;
-		LoadGame(inFile.getAbsolutePath());
+		if (inFile.exists())
+			LoadGame(inFile.getAbsolutePath());
+		
+		
+		
 		
 		return solitaireStatus;
 	}
@@ -717,10 +725,6 @@ public class XMLSolitaireEngine
 		
 		gameMenu.add(menuFile);
 		gameMenu.add(menuHelp);
-		
-		
-		
-		
 		
 	}
 	
