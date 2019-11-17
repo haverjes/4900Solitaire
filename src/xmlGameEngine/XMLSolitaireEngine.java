@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.*;
 import java.util.List;
 import java.util.Timer;
@@ -79,6 +81,7 @@ public class XMLSolitaireEngine
 	
 	// Store last XML File loaded.
 	public static String XMLFile;
+	protected static String autoSaveFile;
 	
 	// moves a card to abs location within a component
 	protected static Card moveCard(Card c, int x, int y)
@@ -192,8 +195,9 @@ public class XMLSolitaireEngine
 	private static final class QuitListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			MenuManager.switchMenu(MenuManager.START_MENU);
-			
+			//MenuManager.switchMenu(MenuManager.START_MENU);
+			solitaireStatus.setGameStatusFlag(3);
+			mainFrame.dispose();
 		}
 	}
 	
@@ -328,6 +332,7 @@ public class XMLSolitaireEngine
 
 			if (transferStack != null)
 			{
+				
 				source.PlaceCards(transferStack);
 				transferStack.erase();
 				table.remove(transferStack);
@@ -404,6 +409,7 @@ public class XMLSolitaireEngine
 		
 		protected void CheckForVictory()
 		{
+			AutoSaveGame();
 			if (mainGameBoard.checkVictory())
 			{
 				JOptionPane.showMessageDialog(table, "Congratulations! You've Won!");
@@ -412,6 +418,7 @@ public class XMLSolitaireEngine
 				solitaireStatus.setGameStatusFlag(2);
 				
 				//TODO: Any other interaction with the platform required?  Or even possible?
+				
 				
 			}
 		}
@@ -468,6 +475,11 @@ public class XMLSolitaireEngine
 		
 	}
 
+	public static void AutoSaveGame()
+	{
+		SaveGame(autoSaveFile);
+	}
+	
 	public static void SaveGame(String filename)
 	{
 		try { 
@@ -483,6 +495,7 @@ public class XMLSolitaireEngine
             file.close(); 
             
             mainGameBoard.status.setGameSaveFile(new File(filename));
+            autoSaveFile = filename;
         } 
   
         catch (IOException ex) { 
@@ -504,6 +517,7 @@ public class XMLSolitaireEngine
             solitaireStatus = mainGameBoard.status;
             in.close(); 
             file.close(); 
+            autoSaveFile = filename;
             playNewGame();
             
         } 
@@ -631,6 +645,7 @@ public class XMLSolitaireEngine
 	{
 
 		String file;
+		autoSaveFile = "autosave.save";
 		if (args.length > 0)
 			file = args[0];
 		else 
@@ -643,7 +658,13 @@ public class XMLSolitaireEngine
 	
 	public static void initGame(String file)
 	{
-
+		mainFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+            	solitaireStatus.setGameStatusFlag(3);
+    			mainFrame.dispose();
+            }
+        });
 		Container contentPane;
 		mainFrame.setSize(TABLE_WIDTH, TABLE_HEIGHT);
 		
@@ -672,9 +693,11 @@ public class XMLSolitaireEngine
 		solitaireStatus.setGameSaveFile(inFile);
 		initGame("BinaryStar.xml");
 		mainGameBoard.status = solitaireStatus;
-		if (inFile.exists())
-			LoadGame(inFile.getAbsolutePath());
+		autoSaveFile = inFile.getPath();
 		
+		if (inFile.exists())
+			LoadGame(inFile.getAbsolutePath());	
+			
 		
 		
 		
