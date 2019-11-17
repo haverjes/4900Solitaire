@@ -329,7 +329,6 @@ public class XMLSolitaireEngine
 
 			if (transferStack != null)
 			{
-				
 				source.PlaceCards(transferStack);
 				transferStack.erase();
 				table.remove(transferStack);
@@ -662,7 +661,7 @@ public class XMLSolitaireEngine
 		
 	}
 
-	public GameStatus play(File inFile)
+	public static GameStatus play(File inFile)
 	{
 		solitaireStatus = new GameStatus();
 		

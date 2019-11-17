@@ -17,6 +17,7 @@ import javax.swing.SwingUtilities;
 
 import gameInterface.GameStatus;
 import gamePlatform.main.Launcher;
+import xmlGameEngine.XMLSolitaireEngine;
 
 public class PlatformMenu extends Menu{
 	
@@ -74,16 +75,32 @@ public class PlatformMenu extends Menu{
 								userName + "_" + selectedGame + ".save").toString());
 					
 				// Load Classes and start the game here
-				File engineLocation = new File(SolitairePlatformConstants.enginePckgDir);
+				// File engineLocation = new File(SolitairePlatformConstants.enginePckgDir);
 				Launcher.mainScreen.setVisible(false);
 				
 				// Start running the game engine
 				// Magic happens, God knows (maybe) what it looks like.
-				MenuManager.lastGameStatus = engine.play(inFile);
 				
+				// MenuManager.lastGameStatus = engine.play(inFile);
+				// XMLSolitaireEngine engine = new XMLSolitaireEngine();
+				
+				MenuManager.lastGameStatus = XMLSolitaireEngine.play(inFile);
 				
 				// Needs to wait for game to finish running.
 				// ? spinlock on MenuManager.lastGameStatus.getStatusFlag() = -1
+				int i = 0;
+				while(MenuManager.lastGameStatus.getGameStatusFlag() < 0 && i < 100)
+				{
+					System.out.println(MenuManager.lastGameStatus.getGameScore());
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					i++;
+				}
+				
 				
 				
 				Launcher.mainScreen.setVisible(true);
@@ -120,7 +137,7 @@ public class PlatformMenu extends Menu{
 								System.out.println("User stats load successful for " + MenuManager.currentUser.getUserName());
 							}
 							catch(ClassNotFoundException | IOException e1) {
-								
+								userStats = new Stats();
 								System.out.println("Error: Problem occured while casting user data to object.");
 							}
 						}

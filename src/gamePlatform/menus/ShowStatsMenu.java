@@ -26,7 +26,7 @@ public class ShowStatsMenu extends Menu{
 		
 		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 		
-		List<Stats> userStats = MenuManager.currentUser.getUserStats();
+		//List<Stats> userStats = MenuManager.currentUser.getUserStats();
 		
 		//TODO: Build table of user stats.
 		
