@@ -68,7 +68,7 @@ public class LoginMenu extends Menu {
 					// Nullify current user in case there was one.
 					MenuManager.currentUser = null;
 					
-					File userSaveFile = new File(Paths.get(".",UserLogin.userSettingsFolder,userName+".bin").toString());
+					File userSaveFile = new File(Paths.get(UserLogin.userSettingsFolder,userName+".bin").toString());
 					if (userSaveFile.exists())
 					{
 						try {
@@ -85,7 +85,7 @@ public class LoginMenu extends Menu {
 							System.out.println("Error: Problem occured while reading saved user data.");
 						}
 						catch(ClassNotFoundException e) {
-							System.out.println("Error: Problem occured while casting user data to object.");
+							System.out.println("Error: Problem occured while casting user data to object, CNF Exception.");
 						}
 					}
 					else
