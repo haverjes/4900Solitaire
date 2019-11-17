@@ -635,7 +635,7 @@ public class XMLSolitaireEngine
 			file = args[0];
 		else 
 		{
-			file = "BinaryStarTest.xml";
+			file = "BinaryStar.xml";
 		}
 		initGame(file);
 		

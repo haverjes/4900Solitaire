@@ -89,17 +89,17 @@ public class PlatformMenu extends Menu{
 				// Needs to wait for game to finish running.
 				// ? spinlock on MenuManager.lastGameStatus.getStatusFlag() = -1
 				int i = 0;
-				while(MenuManager.lastGameStatus.getGameStatusFlag() < 0 && i < 100)
-				{
-					System.out.println(MenuManager.lastGameStatus.getGameScore());
-					try {
-						Thread.sleep(2000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					i++;
-				}
+//				while(MenuManager.lastGameStatus.getGameStatusFlag() < 0 && i < 100)
+//				{
+//					System.out.println(MenuManager.lastGameStatus.getGameScore());
+//					try {
+//						Thread.sleep(2000);
+//					} catch (InterruptedException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//					i++;
+//				}
 				
 				
 				
