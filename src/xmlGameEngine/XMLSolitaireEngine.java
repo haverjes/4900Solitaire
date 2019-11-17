@@ -194,6 +194,7 @@ public class XMLSolitaireEngine
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			MenuManager.switchMenu(MenuManager.START_MENU);
+			
 		}
 	}
 	
@@ -221,7 +222,7 @@ public class XMLSolitaireEngine
 			  
 			// Open the save dialog 
 		
-			int r = j.showSaveDialog(null); 
+			int r = j.showOpenDialog(null); 
 			  
             if (r == JFileChooser.APPROVE_OPTION) { 
                 // set the label to the path of the selected directory 
@@ -477,8 +478,8 @@ public class XMLSolitaireEngine
   
             out.close(); 
             file.close(); 
-  
             
+            mainGameBoard.status.setGameSaveFile(new File(filename));
         } 
   
         catch (IOException ex) { 
@@ -496,6 +497,7 @@ public class XMLSolitaireEngine
   
             // Method for deserialization of object 
             mainGameBoard = (GameBoard)in.readObject(); 
+            mainGameBoard.status.setGameSaveFile(new File(filename));
             solitaireStatus = mainGameBoard.status;
             in.close(); 
             file.close(); 
@@ -520,6 +522,8 @@ public class XMLSolitaireEngine
 	private static void playNewGame(String sXMLFile)
 	{
 		mainGameBoard = XML_Loader.LoadXML(sXMLFile);
+		solitaireStatus = new GameStatus();
+		mainGameBoard.status = solitaireStatus;
 		playNewGame();
 	}
 	
@@ -527,8 +531,9 @@ public class XMLSolitaireEngine
 	{
 		// reset stacks if user starts a new game in the middle of one
 		
+		
 		table.removeAll();
-
+		
 
 		// Load the gameboard using XML_Loader
 		
@@ -622,13 +627,6 @@ public class XMLSolitaireEngine
 	public static void main(String[] args)
 	{
 
-		Container contentPane;
-		mainFrame.setSize(TABLE_WIDTH, TABLE_HEIGHT);
-		solitaireStatus = new GameStatus();
-		contentPane = mainFrame.getContentPane();
-		contentPane.add(table);
-		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		String file;
 		if (args.length > 0)
 			file = args[0];
@@ -636,15 +634,20 @@ public class XMLSolitaireEngine
 		{
 			file = "BinaryStarTest.xml";
 		}
-		mainFrame.setVisible(true);
-		
 		initGame(file);
-		mainGameBoard.status = solitaireStatus;
+		
 	}
 	
 	public static void initGame(String file)
 	{
 
+		Container contentPane;
+		mainFrame.setSize(TABLE_WIDTH, TABLE_HEIGHT);
+		
+		contentPane = mainFrame.getContentPane();
+		contentPane.add(table);
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainFrame.setVisible(true);
 		table.setLayout(null);
 		table.setBackground(new Color(0, 180, 0));
 		
@@ -670,6 +673,8 @@ public class XMLSolitaireEngine
 		
 		return solitaireStatus;
 	}
+	
+	
 	public static JPanel getTable() {
 
 		return table;

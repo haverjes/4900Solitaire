@@ -58,7 +58,7 @@ public class LoginMenu extends Menu {
 	protected void setActions() {
 		super.setActions();
 		
-		//For now, it just checks if the textfield is empty
+		//For now, it just checks if the text field is empty
 		login.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -78,6 +78,7 @@ public class LoginMenu extends Menu {
 							MenuManager.currentUser = (UserLogin)  inObjectStream.readObject();
 							inObjectStream.close();
 							inFileStream.close();
+														
 							System.out.println("User data load successful for " + MenuManager.currentUser.getUserName());
 						}
 						catch(IOException e) {
@@ -99,6 +100,21 @@ public class LoginMenu extends Menu {
 							
 							outObjectStream.close();
 							outFileStream.close();
+							
+							File userSaveDir = new File(Paths.get(UserLogin.userSaveFolders,userName).toString());
+							
+							if(!userSaveDir.exists())
+							{
+								userSaveDir.mkdir();
+							}
+							
+							File userStatsDir = new File(Paths.get(UserLogin.userStatsFolders,userName).toString());
+
+							if(!userStatsDir.exists())
+							{
+								userStatsDir.mkdir();
+							}
+							
 							System.out.println("Successfully wrote user data for user " 
 									+ MenuManager.currentUser.getUserName());
 						}

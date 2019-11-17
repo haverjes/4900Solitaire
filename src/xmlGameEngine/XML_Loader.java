@@ -163,7 +163,6 @@ public class XML_Loader
 
 		for (File file: listOfFiles)
 		{
-			
 			sRet.add(file.getName());
 		}
 		

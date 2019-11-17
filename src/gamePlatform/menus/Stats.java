@@ -1,6 +1,14 @@
 package gamePlatform.menus;
 
-public class Stats {
+import java.io.Serializable;
+
+public class Stats implements Serializable
+{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private String gameType;
 	private int wins;
 	private int losses;
@@ -77,4 +85,21 @@ public class Stats {
 	{
 		return ((double) wins)/((double) losses);
 	}
+	
+	
+	// Table strings
+	public String[] toStringArray()
+	{
+		return new String[] {this.gameType, String.valueOf(this.avgScore), 
+				String.valueOf(this.fastestTime), String.valueOf(this.highScore), 
+				String.valueOf(this.wins), String.valueOf(this.losses)};
+	}
+	
+	public static String[] headerStringArray()
+	{
+		return new String[] {"Game Type", "Avg Score", 
+				"Fastest Time", "High Score", 
+				"Wins", "Losses"};
+	}
+	
 }

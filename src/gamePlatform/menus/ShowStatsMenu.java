@@ -2,6 +2,7 @@ package gamePlatform.menus;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -24,7 +25,12 @@ public class ShowStatsMenu extends Menu{
 		super.initComponents();
 		
 		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-	
+		
+		List<Stats> userStats = MenuManager.currentUser.getUserStats();
+		
+		//TODO: Build table of user stats.
+		
+		
 		statsTable = new JTable(4,6);
 		statsTable.setAlignmentX(CENTER_ALIGNMENT);
 		statsTable.setAlignmentY(CENTER_ALIGNMENT);

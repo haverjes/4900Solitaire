@@ -67,55 +67,37 @@ public class PlatformMenu extends Menu{
 				
 				String userName = MenuManager.currentUser.getUserName();
 				String selectedGame = MenuManager.currentUser.getSelectedGame();
-				String userSaveDirectory = Paths.get(".","UserSaveFolders",userName).toString();
+				String userSaveDirectory = Paths.get(UserLogin.userSaveFolders,userName).toString();
+				
+				File inFile = new File(
+						Paths.get(userSaveDirectory.toString(),
+								userName + "_" + selectedGame + ".save").toString());
+					
+				// Load Classes and start the game here
+				File engineLocation = new File(SolitairePlatformConstants.enginePckgDir);
+				Launcher.mainScreen.setVisible(false);
+				
+				// Start running the game engine
+				// Magic happens, God knows (maybe) what it looks like.
+				MenuManager.lastGameStatus = engine.play(inFile);
 				
 				
-				if (true)
-				{
-					MenuManager.currentUser.setSaveGameType(gameName);
-					
-					String userSaveDirectoryPath = Paths.get(".","UserSaveFolders",MenuManager.currentUser.getUserName()).toString();
-					File userSaveDirectory = new File(userSaveDirectoryPath);
-					
-					if(!userSaveDirectory.exists())
-					{
-						if(!userSaveDirectory.isDirectory())
-						{
-							userSaveDirectory.delete();
-						}
-					
-						userSaveDirectory.mkdir();
-					}
-					
-					File inFile = new File(
-							Paths.get(userSaveDirectory.toString(),
-									MenuManager.currentUser.getUserName() + ".save").toString());
-					
-					// Load Classes and start the game here
-					// MenuManager.lastGameStatus = engine.play(inFile);
-					MenuManager.lastGameStatus = new GameStatus();
-					
-					cl.close();
-					
-					int statusFlag = MenuManager.lastGameStatus.getGameStatusFlag();
+				// Needs to wait for game to finish running.
+				// ? spinlock on MenuManager.lastGameStatus.getStatusFlag() = -1
+				
+				
+				Launcher.mainScreen.setVisible(true);
+				int statusFlag = MenuManager.lastGameStatus.getGameStatusFlag();
 							
-					if (statusFlag >= 0 && statusFlag <= 2)
-					{
-						String userStatsDirectoryPath = Paths.get(".","UserStatistics",MenuManager.currentUser.getUserName()).toString();
-						File userStatsDirectory = new File(userStatsDirectoryPath);
-						if(!userSaveDirectory.exists())
-						{
-							if(!userSaveDirectory.isDirectory())
-							{
-								userSaveDirectory.delete();
-							}
-							userSaveDirectory.mkdir();
-						}
+				if (statusFlag >= 0 && statusFlag <= 2)
+				{
+					String userStatsDirectoryPath = Paths.get(".","UserStatistics",MenuManager.currentUser.getUserName()).toString();
+					File userStatsDirectory = new File(userStatsDirectoryPath);
 					
-						File statsFile = new File(
+					File statsFile = new File(
 							Paths.get(userStatsDirectory.toString(),
 									MenuManager.currentUser.getUserName()+ "_"
-									+ MenuManager.currentUser.getSaveGameType() + ".stats").toString());
+									+ MenuManager.currentUser.getSelectedGame() + ".stats").toString());
 					
 						if(statsFile.exists() && !statsFile.isFile())
 						{
@@ -137,8 +119,8 @@ public class PlatformMenu extends Menu{
 								
 								System.out.println("User stats load successful for " + MenuManager.currentUser.getUserName());
 							}
-							catch(ClassNotFoundException e1) {
-								userStats = new Stats();
+							catch(ClassNotFoundException | IOException e1) {
+								
 								System.out.println("Error: Problem occured while casting user data to object.");
 							}
 						}
@@ -161,19 +143,25 @@ public class PlatformMenu extends Menu{
 						userStats.updateStats(win,
 										MenuManager.lastGameStatus.getGameScore(),
 										MenuManager.lastGameStatus.getGameTime());
-					
-						FileOutputStream outFileStream = new FileOutputStream(statsFile);
-						ObjectOutputStream outObjectStream = new ObjectOutputStream(outFileStream);
-					
-						outObjectStream.writeObject(MenuManager.currentUser);
-					
-						outObjectStream.close();
-						outFileStream.close();
-					}
-
-
+						try {
+							FileOutputStream outFileStream = new FileOutputStream(statsFile);
+							ObjectOutputStream outObjectStream = new ObjectOutputStream(outFileStream);
+							
+							outObjectStream.writeObject(MenuManager.currentUser);
+							
+							outObjectStream.close();
+							outFileStream.close();
+						}
+						catch(Exception e1)
+						{
+							System.out.println("Error writing stats file.");
+						}
 				}
-				else
+				else if (statusFlag > 2)
+				{
+					
+				}
+				else // statusFlag < 0
 				{
 					
 				}
