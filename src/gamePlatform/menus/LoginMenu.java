@@ -1,9 +1,5 @@
 package gamePlatform.menus;
 
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -13,20 +9,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Paths;
-
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
-
-import gamePlatform.main.Launcher;
 
 public class LoginMenu extends Menu {
 	
-	private JPanel entryFields;
 	private JButton login;
-	private String input;
 	private JLabel username, invalidInputPrompt;
 	private JTextField usernameEntry;
 		

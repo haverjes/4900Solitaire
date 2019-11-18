@@ -1,16 +1,8 @@
 package gamePlatform.menus;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
-
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
-
-import gamePlatform.main.Launcher;
 
 public class ShowStatsMenu extends Menu{
 

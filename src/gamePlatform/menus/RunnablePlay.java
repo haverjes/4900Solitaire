@@ -3,9 +3,8 @@ package gamePlatform.menus;
 
 import java.io.File;
 import java.util.concurrent.Callable;
-
+import binaryStar.BinaryStar;
 import gameInterface.GameStatus;
-import xmlGameEngine.XMLSolitaireEngine;
 
 public class RunnablePlay implements  Callable<GameStatus>  
 {
@@ -21,7 +20,8 @@ public class RunnablePlay implements  Callable<GameStatus>
 	public GameStatus call() throws Exception {
 		// TODO Auto-generated method stub
 		
-		Status = XMLSolitaireEngine.play(file);
+		BinaryStar engine = new BinaryStar();
+		Status = engine.play(file);
 		return Status;
 		
 	}

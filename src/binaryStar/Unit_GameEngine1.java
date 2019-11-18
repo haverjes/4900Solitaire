@@ -1,4 +1,4 @@
-package xmlGameEngine;
+package binaryStar;
 
 import org.junit.jupiter.api.Test;
 
@@ -9,10 +9,10 @@ class Unit_GameEngine1 {
 		
 
 
-		XMLSolitaireEngine.XMLFile = "GameUnitTest_Move1.xml";
+		BinaryStar.XMLFile = "GameUnitTest_Move1.xml";
 
 		
-		XMLSolitaireEngine.main(null);
+		BinaryStar.main(null);
 
 	}
 

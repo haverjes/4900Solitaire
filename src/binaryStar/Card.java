@@ -1,6 +1,6 @@
 // Card Class
 //import java.util.*;  
-package xmlGameEngine;
+package binaryStar;
 
 import java.awt.Color;
 import java.awt.Dimension;
