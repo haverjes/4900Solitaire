@@ -41,7 +41,7 @@ import gameInterface.*;
  * 	 - Some will be moved to the GameBoard, like Timer and Score related stuff.
  */
 
-public class BinaryStar
+public class BinaryStar implements SolitaireEngine
 {
 	protected static GameBoard mainGameBoard;
 	protected static CardMovementManager mouseManager;
