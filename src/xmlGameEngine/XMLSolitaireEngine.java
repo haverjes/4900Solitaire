@@ -266,13 +266,13 @@ public class XMLSolitaireEngine
 		{
 			start = e.getPoint();
 			statusBox.setText("");
-			System.out.println("Grabbing mouse");
+//			System.out.println("Grabbing mouse");
 			
 			
 
 			card = this.getPointedCard(start);
-			if (card != null)
-				System.out.println("Grabbed card: " + card.toString());
+//			if (card != null)
+//				System.out.println("Grabbed card: " + card.toString());
 		}
 		
 		protected void getTransferStack(Card c)
@@ -292,7 +292,7 @@ public class XMLSolitaireEngine
 			// used for status bar updates
 			boolean validMoveMade = false;
 
-			System.out.println("Releasing mouse");
+//			System.out.println("Releasing mouse");
 			// PLAY STACK OPERATIONS
 			if (card != null && source != null)
 			{ // Moving from PLAY TO PLAY
@@ -420,7 +420,7 @@ public class XMLSolitaireEngine
 				solitaireStatus.setGameStatusFlag(2);
 				
 				//TODO: Any other interaction with the platform required?  Or even possible?
-				
+				mainFrame.dispose();
 				
 			}
 		}
@@ -436,7 +436,7 @@ public class XMLSolitaireEngine
 				
 				if (source.contains(p) ) 
 				{
-					System.out.println("In stack: " + source.toString());
+//					System.out.println("In stack: " + source.toString());
 					
 					for (Component ca : source.getComponents())
 					{
@@ -446,7 +446,7 @@ public class XMLSolitaireEngine
 						{
 							card = c;
 							
-							System.out.println("Grabbed card: " + card.toString());
+//							System.out.println("Grabbed card: " + card.toString());
 							return c;
 							
 						}
