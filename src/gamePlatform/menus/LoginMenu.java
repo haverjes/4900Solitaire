@@ -63,12 +63,47 @@ public class LoginMenu extends Menu {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(!usernameEntry.getText().isEmpty()) {
+					
+					File saveDir = new File(UserLogin.userSaveFolders);
+					
+					if(saveDir.exists() && !saveDir.isDirectory())
+					{
+						saveDir.delete();
+					}
+					if(!saveDir.exists())
+					{
+						saveDir.mkdir();
+					}
+					
+					File settingsDir = new File(UserLogin.userSettingsFolder);
+					
+					if(settingsDir.exists() && !settingsDir.isDirectory())
+					{
+						settingsDir.delete();
+					}
+					if(!settingsDir.exists())
+					{
+						settingsDir.mkdir();
+					}
+
+					File statsDir = new File(UserLogin.userStatsFolders);
+					
+					if(statsDir.exists() && !statsDir.isDirectory())
+					{
+						statsDir.delete();
+					}
+					if(!statsDir.exists())
+					{
+						statsDir.mkdir();
+					}
+
+					
 					String userName = usernameEntry.getText();
 					
 					// Nullify current user in case there was one.
 					MenuManager.currentUser = null;
 					
-					File userSaveFile = new File(Paths.get(".",UserLogin.userSettingsFolder,userName+".bin").toString());
+					File userSaveFile = new File(Paths.get(UserLogin.userSettingsFolder,userName+".bin").toString());
 					if (userSaveFile.exists())
 					{
 						try {
@@ -85,7 +120,7 @@ public class LoginMenu extends Menu {
 							System.out.println("Error: Problem occured while reading saved user data.");
 						}
 						catch(ClassNotFoundException e) {
-							System.out.println("Error: Problem occured while casting user data to object.");
+							System.out.println("Error: Problem occured while casting user data to object, CNF Exception.");
 						}
 					}
 					else

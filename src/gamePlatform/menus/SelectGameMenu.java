@@ -80,9 +80,10 @@ public class SelectGameMenu extends Menu{
 					String gameName = Paths.get(classFile.toString()).getFileName().toString();
 					gameName = gameName.substring(0, gameName.lastIndexOf('.'));
 					
+					System.out.println(gameName);
 					MenuManager.currentUser.setSelectedGame(gameName);
-					// TODO: MenuManager Switch back to main menu.
-				}
+					System.out.println("success");
+					MenuManager.switchMenu(MenuManager.PLAT_MENU);				}
 			});
 		}
 

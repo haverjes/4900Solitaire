@@ -1,4 +1,9 @@
 /bin/
 /test
 /test2
+<<<<<<< HEAD
 /autosave.save
+=======
+UserStatistics/.DS_Store
+.DS_Store
+>>>>>>> branch 'Platform-Dev' of https://github.com/haverjes/4900Solitaire.git
