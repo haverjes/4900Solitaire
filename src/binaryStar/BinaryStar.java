@@ -17,20 +17,7 @@ import java.io.*;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
-//import javax.swing.JButton;
-//import javax.swing.JComboBox;
-//import javax.swing.JDialog;
-//import javax.swing.JEditorPane;
-//import javax.swing.JFileChooser;
-//import javax.swing.JFrame;
 import javax.swing.*;
-//import javax.swing.JOptionPane;
-//import javax.swing.JPanel;
-//import javax.swing.JScrollPane;
-//import javax.swing.JTextField;
-//import javax.swing.SwingUtilities;
-
 import gameInterface.*;
 
 /* General plan

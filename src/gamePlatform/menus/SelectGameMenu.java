@@ -35,7 +35,7 @@ public class SelectGameMenu extends Menu{
 		if (games != null) {
 		    for (File game : games) {
 		      String gameName = Paths.get(game.toString()).getFileName().toString();
-		      System.out.println(gameName);
+		      // System.out.println(gameName);
 		      JButton button = new JButton(gameName.substring(0, gameName.lastIndexOf('.')));
 		      buttons.add(button);
 		      contentPanel.add(button);
@@ -55,7 +55,6 @@ public class SelectGameMenu extends Menu{
 		super.setActions();
 		
 
-		System.out.println(buttons.isEmpty());
 		for(int i = 0; i < buttons.size(); i++)
 		{
 			JButton button = buttons.get(i);
@@ -67,9 +66,7 @@ public class SelectGameMenu extends Menu{
 					String gameName = Paths.get(classFile.toString()).getFileName().toString();
 					gameName = gameName.substring(0, gameName.lastIndexOf('.'));
 					
-					System.out.println(gameName);
 					MenuManager.currentUser.setSelectedGame(gameName);
-					System.out.println("success");
 					MenuManager.switchMenu(MenuManager.PLAT_MENU);				}
 			});
 		}

@@ -148,7 +148,7 @@ public class PlatformMenu extends Menu{
 						inObjectStream.close();
 						inFileStream.close();
 						
-						System.out.println("User stats load successful for " + MenuManager.currentUser.getUserName());
+						// System.out.println("User stats load successful for " + MenuManager.currentUser.getUserName());
 					}
 					catch(ClassNotFoundException | IOException e1) {
 						userStats = new Stats();

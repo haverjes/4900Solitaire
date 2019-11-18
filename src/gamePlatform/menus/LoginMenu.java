@@ -103,7 +103,7 @@ public class LoginMenu extends Menu {
 							inObjectStream.close();
 							inFileStream.close();
 														
-							System.out.println("User data load successful for " + MenuManager.currentUser.getUserName());
+							// System.out.println("User data load successful for " + MenuManager.currentUser.getUserName());
 						}
 						catch(IOException e) {
 							System.out.println("Error: Problem occured while reading saved user data.");
@@ -139,8 +139,8 @@ public class LoginMenu extends Menu {
 								userStatsDir.mkdir();
 							}
 							
-							System.out.println("Successfully wrote user data for user " 
-									+ MenuManager.currentUser.getUserName());
+							// System.out.println("Successfully wrote user data for user " 
+							//		+ MenuManager.currentUser.getUserName());
 						}
 						catch(IOException e) {
 							System.out.println("Error: Problem occured writing user data to object.");
@@ -151,7 +151,7 @@ public class LoginMenu extends Menu {
 					MenuManager.switchMenu(MenuManager.PLAT_MENU);
 				}
 				else {
-					System.out.println("Enter a username");
+					// System.out.println("Enter a username");
 					usernameEntry.setText("");
 				}
 			}
