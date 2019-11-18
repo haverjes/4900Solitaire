@@ -1,4 +1,4 @@
-package xmlGameEngine;
+package binaryStar;
 
 import java.util.*;
 import java.awt.Color;
@@ -235,7 +235,7 @@ public class CardStack extends JComponent implements Cloneable
 					Card curCard = cards.get(nIndex);
 					prev = new Point(0, (nIndex * SPREAD));
 					curCard.setXY(prev);
-					add(XMLSolitaireEngine.moveCard(curCard, prev.x, prev.y));
+					add(BinaryStar.moveCard(curCard, prev.x, prev.y));
 					curCard.setWhereAmI(new Point(stackLocation.x, stackLocation.y + (nIndex * SPREAD)));
 				}
 			}
@@ -249,7 +249,7 @@ public class CardStack extends JComponent implements Cloneable
 			{
 				Card topCard = this.getTopCard();
 				Point prev = new Point(); // positioning relative to the container
-				add(XMLSolitaireEngine.moveCard(this.getTopCard(), prev.x, prev.y));
+				add(BinaryStar.moveCard(this.getTopCard(), prev.x, prev.y));
 				this.getTopCard().setWhereAmI(new Point(prevWhereAmI.x, prevWhereAmI.y));
 			}
 			else

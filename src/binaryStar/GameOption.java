@@ -1,4 +1,4 @@
-package xmlGameEngine;
+package binaryStar;
 
 public class GameOption 
 {

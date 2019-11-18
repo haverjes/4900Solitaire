@@ -3,23 +3,10 @@ package gamePlatform.menus;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
-
 import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JList;
-
-
-import gameInterface.GameStatus;
-
-import gamePlatform.main.Launcher;
-import xmlGameEngine.XMLSolitaireEngine;
-
 
 public class SelectGameMenu extends Menu{
 	

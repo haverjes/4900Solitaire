@@ -1,4 +1,4 @@
-package xmlGameEngine;
+package binaryStar;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;

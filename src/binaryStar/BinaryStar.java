@@ -1,4 +1,4 @@
-package xmlGameEngine;
+package binaryStar;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -32,9 +32,6 @@ import javax.swing.*;
 //import javax.swing.SwingUtilities;
 
 import gameInterface.*;
-import gamePlatform.main.Launcher;
-import gamePlatform.menus.MenuManager;
-
 
 /* General plan
  * - The engine loads in the GameBoard and displays everythin
@@ -44,46 +41,49 @@ import gamePlatform.menus.MenuManager;
  * 	 - Some will be moved to the GameBoard, like Timer and Score related stuff.
  */
 
-public class XMLSolitaireEngine
+public class BinaryStar
 {
 	protected static GameBoard mainGameBoard;
 	protected static CardMovementManager mouseManager;
+	
 	// CONSTANTS
 	public static int TABLE_HEIGHT = Card.CARD_HEIGHT * 4;
 	public static int TABLE_WIDTH = (Card.CARD_WIDTH * 7) + 100;
 	
-	//Games that can be played.  Hardcoded in for now, but later should be set to what the current user has enabled
+	//Games that can be played. Hardcoded in for now, but later should be set to what the current user has enabled
 	public static String[] XML_Options = {"Binary Star", "Bonanza Creek"};
 	
 	// MISC TRACKING VARIABLES
 	private static boolean timeRunning = false;// timer running?	private static int score = 0;// keep track of the score
-	private static int time = 0;// keep track of seconds elapsed
 	
 	// GUI COMPONENTS (top level)
 	protected static JFrame mainFrame = new JFrame();
 	protected static final JPanel table = new JPanel();
+	
 	// other components
 	private static JEditorPane gameTitle = new JEditorPane("text/html", "");
-	
 	private static JButton toggleTimerButton = new JButton("Pause Timer");
 	private static JTextField scoreBox = new JTextField();// displays the score
 	private static JTextField timeBox = new JTextField();// displays the time
 	private static JTextField statusBox = new JTextField();// status messages
-	
-	
 	private static GameStatus solitaireStatus;
 	private static JMenuBar gameMenu = new JMenuBar();
 	private static List<GameOption> gameOptions;
+	
 	// TIMER UTILITIES
 	private static Timer timer = new Timer();
 	private static boolean initTimer = false;
 	private static ScoreClock scoreClock = new ScoreClock();
-	
 	public static boolean isAlive;
 	
 	// Store last XML File loaded.
 	public static String XMLFile;
 	protected static String autoSaveFile;
+	
+	public BinaryStar()
+	{
+		// Does nothing really, but other groups requested play to not be static.
+	}
 	
 	// moves a card to abs location within a component
 	protected static Card moveCard(Card c, int x, int y)
@@ -197,7 +197,6 @@ public class XMLSolitaireEngine
 	private static final class QuitListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			//MenuManager.switchMenu(MenuManager.START_MENU);
 			solitaireStatus.setGameStatusFlag(3);
 			mainFrame.dispose();
 		}
@@ -250,7 +249,7 @@ public class XMLSolitaireEngine
 	{
 		// Some of these are culture specific to MySolitaire
 
-		private boolean gameOver = false;// easier to negate this than affirm it
+		//private boolean gameOver = false;// easier to negate this than affirm it
 		private Point start = null;// where mouse was clicked
 		private Point stop = null;// where mouse was released
 		private Card card = null; // card to be moved
@@ -267,9 +266,6 @@ public class XMLSolitaireEngine
 			start = e.getPoint();
 			statusBox.setText("");
 //			System.out.println("Grabbing mouse");
-			
-			
-
 			card = this.getPointedCard(start);
 //			if (card != null)
 //				System.out.println("Grabbed card: " + card.toString());
@@ -282,7 +278,6 @@ public class XMLSolitaireEngine
 			
 			transferStack = c.stackCallBack.TakeSubStack(card);
 			table.add(transferStack, 0);
-			//transferStack.repaint();
 		}
 		
 		@Override
@@ -351,9 +346,6 @@ public class XMLSolitaireEngine
 			source = null;
 			dest = null;
 			card = null;
-			toggleTimer();
-			
-			gameOver = false;
 		}// end mousePressed()
 		
 		@Override
@@ -692,7 +684,7 @@ public class XMLSolitaireEngine
 		
 	}
 
-	public static GameStatus play(File inFile)
+	public GameStatus play(File inFile)
 	{
 		solitaireStatus = new GameStatus();
 		mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -767,6 +759,5 @@ public class XMLSolitaireEngine
 			XMLFile = option.file;
 			playNewGame(XMLFile);
 		}
-
 	}
 }

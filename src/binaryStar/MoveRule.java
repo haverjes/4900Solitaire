@@ -1,4 +1,4 @@
-package xmlGameEngine;
+package binaryStar;
 //import java.util.*;  
 
 import java.io.Serializable;

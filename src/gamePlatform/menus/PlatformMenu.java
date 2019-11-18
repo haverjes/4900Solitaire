@@ -9,18 +9,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Paths;
-import java.util.concurrent.FutureTask;
-import java.util.List;
-
 import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.Timer;
-
-import gameInterface.GameStatus;
+import binaryStar.BinaryStar;
 import gamePlatform.main.Launcher;
-import xmlGameEngine.XMLSolitaireEngine;
 
 public class PlatformMenu extends Menu{
 	
@@ -83,8 +75,9 @@ public class PlatformMenu extends Menu{
 				
 				// Start running the game engine
 				// Magic happens, God knows (maybe) what it looks like.
+				BinaryStar engine = new BinaryStar();
 			
-				MenuManager.lastGameStatus = XMLSolitaireEngine.play(inFile);
+				MenuManager.lastGameStatus = engine.play(inFile);
 				
 				Timer t = new Timer(500, new ActionListener() {
 				    public void actionPerformed(ActionEvent e) {

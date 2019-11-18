@@ -2,16 +2,16 @@ package groupSolitaireEngines;
 
 import java.io.File;
 
+import binaryStar.*;
 import gameInterface.GameStatus;
 import gameInterface.SolitaireEngine;
-import xmlGameEngine.*;
 
 public class BonanzaCreek implements SolitaireEngine
 {
 	public GameStatus play(File inFile)
 	{
 		String file = "BonanzaCreek.xml";
-		XMLSolitaireEngine.initGame(file);
+		BinaryStar.initGame(file);
 		return new GameStatus();
 	}
 
