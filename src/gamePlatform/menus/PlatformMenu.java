@@ -9,11 +9,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Paths;
+import java.util.concurrent.FutureTask;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 import gameInterface.GameStatus;
 import gamePlatform.main.Launcher;
@@ -80,108 +82,19 @@ public class PlatformMenu extends Menu{
 				
 				// Start running the game engine
 				// Magic happens, God knows (maybe) what it looks like.
-				
-				// MenuManager.lastGameStatus = engine.play(inFile);
-				// XMLSolitaireEngine engine = new XMLSolitaireEngine();
-				
+			
 				MenuManager.lastGameStatus = XMLSolitaireEngine.play(inFile);
 				
-				// Needs to wait for game to finish running.
-				// ? spinlock on MenuManager.lastGameStatus.getStatusFlag() = -1
-				int i = 0;
-//				while(MenuManager.lastGameStatus.getGameStatusFlag() < 0 && i < 100)
-//				{
-//					System.out.println(MenuManager.lastGameStatus.getGameScore());
-//					try {
-//						Thread.sleep(2000);
-//					} catch (InterruptedException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//					i++;
-//				}
+				Timer t = new Timer(500, new ActionListener() {
+				    public void actionPerformed(ActionEvent e) {
+				    	if (MenuManager.lastGameStatus != null && MenuManager.lastGameStatus.getGameStatusFlag() >= 0)
+						{
+				    		onGameEnd();
+						}
+				    }
+				});
+				t.start();
 				
-				
-				
-				Launcher.mainScreen.setVisible(true);
-				int statusFlag = MenuManager.lastGameStatus.getGameStatusFlag();
-							
-				if (statusFlag >= 0 && statusFlag <= 2)
-				{
-					String userStatsDirectoryPath = Paths.get(".","UserStatistics",MenuManager.currentUser.getUserName()).toString();
-					File userStatsDirectory = new File(userStatsDirectoryPath);
-					
-					File statsFile = new File(
-							Paths.get(userStatsDirectory.toString(),
-									MenuManager.currentUser.getUserName()+ "_"
-									+ MenuManager.currentUser.getSelectedGame() + ".stats").toString());
-					
-						if(statsFile.exists() && !statsFile.isFile())
-						{
-							statsFile.delete();
-						}
-					
-						Stats userStats;
-					
-						if(statsFile.exists())
-						{
-							try {
-								FileInputStream inFileStream = new FileInputStream(statsFile);
-								ObjectInputStream inObjectStream = new ObjectInputStream(inFileStream);
-							
-								userStats = (Stats) inObjectStream.readObject();
-							
-								inObjectStream.close();
-								inFileStream.close();
-								
-								System.out.println("User stats load successful for " + MenuManager.currentUser.getUserName());
-							}
-							catch(ClassNotFoundException | IOException e1) {
-								userStats = new Stats();
-								System.out.println("Error: Problem occured while casting user data to object.");
-							}
-						}
-						else 
-						{
-							userStats = new Stats();
-						}
-						
-						boolean win;
-					
-						if (statusFlag == 0 || statusFlag == 1)
-						{
-							win = false;
-						}
-						else
-						{
-							win = true;
-						}
-
-						userStats.updateStats(win,
-										MenuManager.lastGameStatus.getGameScore(),
-										MenuManager.lastGameStatus.getGameTime());
-						try {
-							FileOutputStream outFileStream = new FileOutputStream(statsFile);
-							ObjectOutputStream outObjectStream = new ObjectOutputStream(outFileStream);
-							
-							outObjectStream.writeObject(MenuManager.currentUser);
-							
-							outObjectStream.close();
-							outFileStream.close();
-						}
-						catch(Exception e1)
-						{
-							System.out.println("Error writing stats file.");
-						}
-				}
-				else if (statusFlag > 2)
-				{
-					
-				}
-				else // statusFlag < 0
-				{
-					
-				}
 			}
 		});
 		
@@ -206,6 +119,89 @@ public class PlatformMenu extends Menu{
 				System.exit(0);
 			}
 		});
+	}
+	
+	public void onGameEnd()
+	{
+		Launcher.mainScreen.setVisible(true);
+		int statusFlag = MenuManager.lastGameStatus.getGameStatusFlag();
+					
+		if (statusFlag >= 0 && statusFlag <= 2)
+		{
+			String userStatsDirectoryPath = Paths.get(".","UserStatistics",MenuManager.currentUser.getUserName()).toString();
+			File userStatsDirectory = new File(userStatsDirectoryPath);
+			
+			File statsFile = new File(
+					Paths.get(userStatsDirectory.toString(),
+							MenuManager.currentUser.getUserName()+ "_"
+							+ MenuManager.currentUser.getSelectedGame() + ".stats").toString());
+			
+				if(statsFile.exists() && !statsFile.isFile())
+				{
+					statsFile.delete();
+				}
+			
+				Stats userStats;
+			
+				if(statsFile.exists())
+				{
+					try {
+						FileInputStream inFileStream = new FileInputStream(statsFile);
+						ObjectInputStream inObjectStream = new ObjectInputStream(inFileStream);
+					
+						userStats = (Stats) inObjectStream.readObject();
+					
+						inObjectStream.close();
+						inFileStream.close();
+						
+						System.out.println("User stats load successful for " + MenuManager.currentUser.getUserName());
+					}
+					catch(ClassNotFoundException | IOException e1) {
+						userStats = new Stats();
+						System.out.println("Error: Problem occured while casting user data to object.");
+					}
+				}
+				else 
+				{
+					userStats = new Stats();
+				}
+				
+				boolean win;
+			
+				if (statusFlag == 0 || statusFlag == 1)
+				{
+					win = false;
+				}
+				else
+				{
+					win = true;
+				}
+
+				userStats.updateStats(win,
+								MenuManager.lastGameStatus.getGameScore(),
+								MenuManager.lastGameStatus.getGameTime());
+				try {
+					FileOutputStream outFileStream = new FileOutputStream(statsFile);
+					ObjectOutputStream outObjectStream = new ObjectOutputStream(outFileStream);
+					
+					outObjectStream.writeObject(MenuManager.currentUser);
+					
+					outObjectStream.close();
+					outFileStream.close();
+				}
+				catch(Exception e1)
+				{
+					System.out.println("Error writing stats file.");
+				}
+		}
+		else if (statusFlag > 2)
+		{
+			
+		}
+		else // statusFlag < 0
+		{
+			
+		}
 	}
 	
 	

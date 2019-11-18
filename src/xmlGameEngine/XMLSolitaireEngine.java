@@ -79,6 +79,8 @@ public class XMLSolitaireEngine
 	private static boolean initTimer = false;
 	private static ScoreClock scoreClock = new ScoreClock();
 	
+	public static boolean isAlive;
+	
 	// Store last XML File loaded.
 	public static String XMLFile;
 	protected static String autoSaveFile;
@@ -652,17 +654,21 @@ public class XMLSolitaireEngine
 		{
 			file = "BinaryStar.xml";
 		}
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		initGame(file);
 		
 	}
 	
 	public static void initGame(String file)
 	{
+		isAlive = true;
 		mainFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
             	solitaireStatus.setGameStatusFlag(3);
+            	isAlive = false;
     			mainFrame.dispose();
+    			//System.exit(0);
             }
         });
 		Container contentPane;
@@ -670,7 +676,7 @@ public class XMLSolitaireEngine
 		
 		contentPane = mainFrame.getContentPane();
 		contentPane.add(table);
-		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		mainFrame.setVisible(true);
 		table.setLayout(null);
 		table.setBackground(new Color(0, 180, 0));
@@ -689,7 +695,7 @@ public class XMLSolitaireEngine
 	public static GameStatus play(File inFile)
 	{
 		solitaireStatus = new GameStatus();
-		
+		mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		solitaireStatus.setGameSaveFile(inFile);
 		initGame("BinaryStar.xml");
 		mainGameBoard.status = solitaireStatus;
