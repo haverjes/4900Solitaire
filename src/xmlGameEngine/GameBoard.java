@@ -1,7 +1,9 @@
-package Game;
+package xmlGameEngine;
 import java.io.Serializable;
 import java.util.*;
-import java.util.stream.Collectors;  
+import java.util.stream.Collectors;
+
+import gameInterface.GameStatus;  
 
 public class GameBoard implements Serializable
 {
@@ -14,6 +16,10 @@ public class GameBoard implements Serializable
 	public List<Card> Cards;
 	public String rulesText;
 	public String GameTitle;
+	
+	public GameStatus status;
+	
+	
 	public GameBoard() 
 	{
 		Stacks = new ArrayList<CardStack>();
@@ -201,5 +207,16 @@ public class GameBoard implements Serializable
 		{
 			stack.repaint(); 
 		}
+	}
+	
+	public CardStack getLowestStack()
+	{
+		CardStack retStack = Stacks.get(0);
+		for(CardStack curStack: this.Stacks)
+		{
+			if (curStack.yPos > retStack.yPos)
+				retStack = curStack;
+		}
+		return retStack;
 	}
 }

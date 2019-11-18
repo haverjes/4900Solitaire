@@ -30,6 +30,6 @@ To move all the cards to the foundations.></p>
 	<MoveRules>
 		<!--  Here, group moves and moving a card onto a tableau are not valid.  -->
 		<MoveRule destType="Foundation" cardSequence="Up" suitRequirement="Same" allowGroup="0"/>
-		<MoveRule destType="Tab" cardSequence="Down" suitRequirement="Same" allowGroup="1"/>
+		<MoveRule destType="Tab" cardSequence="Down" suitRequirement="Same" allowGroup="1" rankRollover="1"/>
 	</MoveRules>
 </GameFile>

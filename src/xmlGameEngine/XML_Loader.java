@@ -1,4 +1,4 @@
-package Game;
+package xmlGameEngine;
 //XML_Loader.java
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
@@ -67,8 +67,6 @@ public class XML_Loader
 		
 		return retGB;
 	}
-	
-	
 	
 	public static String getCharacterDataFromElement(Element e) {
 		if (e == null)
@@ -165,7 +163,6 @@ public class XML_Loader
 
 		for (File file: listOfFiles)
 		{
-			
 			sRet.add(file.getName());
 		}
 		

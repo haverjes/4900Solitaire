@@ -1,0 +1,48 @@
+<GameFile name="Bald Eagle Lite">
+	<Board>
+		<Deck numDecks="1" />
+		<Rules>
+		<![CDATA[<b>Object</b>
+<p>
+To move all the cards to the foundations.
+<p></p>
+<b>Layout</b>
+<P>
+•	4 foundation piles (top) - build up in suit from Ace to King, until each pile contains 13 cards.
+<P>
+•	8 tableau piles (the wings) - build down in suit, limit of 3 cards per pile, wrapping from Ace to King as necessary.  Groups of cards may be moved as a unit if they are in sequence down in suit. At the start of the game 1 card is dealt face up to each pile.
+ <p>
+•	reserve (middle) - top card is available for play on the foundations or tableau.  At the start of the game 17 cards are dealt to this pile.
+ <p>
+•	stock (face down, bottom left) - turn over 3 cards at a time to the waste.
+ <p>
+•	waste (next to stock) - top card is available for play on the foundations or tableau.]]>
+		</Rules>
+		<Stack type="Draw" xpos="5" ypos="500" drawToStackID="1" shape="Stack" drawCount="3" drawToID="waste1"/>
+		<Stack type="Waste" id="waste1" xpos="125" ypos="500" shape="Stack" />
+
+		<Stack type="Waste" xpos="412" ypos="200" cardCount="17" initFaceDown="0" shape="Stack"/>
+
+		<Stack type="Foundation" xpos="240" ypos="5" initialCard="" firstCard="A*" lockCards="1" shape="Stack" />
+		<Stack type="Foundation" xpos="355" ypos="5" initialCard="" firstCard="A*" lockCards="1" shape="Stack" />
+		<Stack type="Foundation" xpos="470" ypos="5" initialCard="" firstCard="A*" lockCards="1" shape="Stack" />
+		<Stack type="Foundation" xpos="585" ypos="5" initialCard="" firstCard="A*" lockCards="1" shape="Stack" />
+		
+		
+		<Stack type="Tab" xpos="10" ypos="175" cardCount="1" initFaceDown="0" shape="FanDown" cardLimit="3"/>
+		<Stack type="Tab" xpos="125" ypos="250" cardCount="1" initFaceDown="0" shape="FanDown" cardLimit="3"/>
+		<Stack type="Tab" xpos="240" ypos="325" cardCount="1" initFaceDown="0" shape="FanDown" cardLimit="3"/>
+		<Stack type="Tab" xpos="355" ypos="400" cardCount="1" initFaceDown="0" shape="FanDown" cardLimit="3"/>
+		<Stack type="Tab" xpos="470" ypos="400" cardCount="1" initFaceDown="0" shape="FanDown" cardLimit="3"/>
+		<Stack type="Tab" xpos="585" ypos="325" cardCount="1" initFaceDown="0" shape="FanDown" cardLimit="3"/>
+		<Stack type="Tab" xpos="700" ypos="250" cardCount="1" initFaceDown="0" shape="FanDown" cardLimit="3"/>
+		<Stack type="Tab" xpos="815" ypos="175" cardCount="1" initFaceDown="0" shape="FanDown" cardLimit="3"/>
+		
+		
+	</Board> 
+	<MoveRules>
+		<!--  Here, group moves and moving a card onto a tableau are not valid.  -->
+		<MoveRule destType="Foundation" cardSequence="Up" suitRequirement="Same" allowGroup="0"/>
+		<MoveRule destType="Tab" cardSequence="Down" suitRequirement="Same" allowGroup="0" rankRollover="1"/>
+	</MoveRules>
+</GameFile>

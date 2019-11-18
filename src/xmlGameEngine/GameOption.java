@@ -1,4 +1,4 @@
-package Game;
+package xmlGameEngine;
 
 public class GameOption 
 {

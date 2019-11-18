@@ -1,4 +1,4 @@
-package Game;
+package xmlGameEngine;
 
 import java.util.*;
 import java.awt.Color;
@@ -235,7 +235,7 @@ public class CardStack extends JComponent implements Cloneable
 					Card curCard = cards.get(nIndex);
 					prev = new Point(0, (nIndex * SPREAD));
 					curCard.setXY(prev);
-					add(SolitaireEngine.moveCard(curCard, prev.x, prev.y));
+					add(XMLSolitaireEngine.moveCard(curCard, prev.x, prev.y));
 					curCard.setWhereAmI(new Point(stackLocation.x, stackLocation.y + (nIndex * SPREAD)));
 				}
 			}
@@ -249,7 +249,7 @@ public class CardStack extends JComponent implements Cloneable
 			{
 				Card topCard = this.getTopCard();
 				Point prev = new Point(); // positioning relative to the container
-				add(SolitaireEngine.moveCard(this.getTopCard(), prev.x, prev.y));
+				add(XMLSolitaireEngine.moveCard(this.getTopCard(), prev.x, prev.y));
 				this.getTopCard().setWhereAmI(new Point(prevWhereAmI.x, prevWhereAmI.y));
 			}
 			else

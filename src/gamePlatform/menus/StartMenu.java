@@ -39,7 +39,7 @@ public class StartMenu extends Menu {
 		
 		contentPanel.add(Box.createRigidArea(new Dimension(0,15))); //adds empty space between the buttons
 		
-		playOffline = new JButton("Play Offline");
+		playOffline = new JButton("Play Anonymously (Disables Some Features)");
 		//playOffline.setMinimumSize(new Dimension(100,50));
 		//playOffline.setMaximumSize(new Dimension(100,50));
 		playOffline.setAlignmentX(CENTER_ALIGNMENT);

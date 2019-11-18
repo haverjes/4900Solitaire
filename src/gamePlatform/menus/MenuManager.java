@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import gameInterface.GameStatus;
 import gamePlatform.main.Launcher;
 
 public class MenuManager {
@@ -22,6 +23,8 @@ public class MenuManager {
 	
 	public static int currMenu;
 	public static int prevMenu;
+	public static UserLogin currentUser = null;
+	public static GameStatus lastGameStatus = null;
 	
 	public static Menu getCurrentMenu() {
 		return MENUS[currMenu];
