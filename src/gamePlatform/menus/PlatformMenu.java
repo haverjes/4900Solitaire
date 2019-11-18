@@ -189,6 +189,7 @@ public class PlatformMenu extends Menu{
 		showStatistics.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				((ShowStatsMenu) MenuManager.MENUS[MenuManager.SHOW_STATS]).buildStatsTable();
 				MenuManager.switchMenu(MenuManager.SHOW_STATS);
 			}
 		});
