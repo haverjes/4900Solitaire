@@ -646,6 +646,7 @@ public class BinaryStar implements SolitaireEngine
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		initGame(file);
 		solitaireStatus = new GameStatus();
+		solitaireStatus.setGameScore(0);
 	}
 	
 	public static void initGame(String file)
@@ -684,6 +685,8 @@ public class BinaryStar implements SolitaireEngine
 	public GameStatus play(File inFile)
 	{
 		solitaireStatus = new GameStatus();
+		solitaireStatus.setGameScore(0);
+		System.out.println(solitaireStatus.getGameScore());
 		mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		solitaireStatus.setGameSaveFile(inFile);
 		initGame("BinaryStar.xml");

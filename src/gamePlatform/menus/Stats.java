@@ -90,8 +90,16 @@ public class Stats implements Serializable
 	// Table strings
 	public String[] toStringArray()
 	{
+		String fastestTimeString = null;
+		if (this.fastestTime == Integer.MAX_VALUE) {
+			fastestTimeString = "";
+		}
+		else
+		{
+			fastestTimeString = String.valueOf(this.fastestTime);
+		}
 		return new String[] {this.gameType, String.valueOf(this.avgScore), 
-				String.valueOf(this.fastestTime), String.valueOf(this.highScore), 
+				fastestTimeString, String.valueOf(this.highScore), 
 				String.valueOf(this.wins), String.valueOf(this.losses)};
 	}
 	
