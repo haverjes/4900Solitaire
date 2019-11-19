@@ -2,7 +2,9 @@ package gamePlatform.menus;
 
 import java.util.List;
 import javax.swing.BoxLayout;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class ShowStatsMenu extends Menu{
 
@@ -21,7 +23,8 @@ public class ShowStatsMenu extends Menu{
 		statsTable = new JTable();
 		statsTable.setAlignmentX(CENTER_ALIGNMENT);
 		statsTable.setAlignmentY(CENTER_ALIGNMENT);
-		contentPanel.add(statsTable);
+		JScrollPane scrollPane = new JScrollPane(statsTable);
+		contentPanel.add(scrollPane);
 		
 		back.setAlignmentX(CENTER_ALIGNMENT);
 		contentPanel.add(back);
@@ -40,11 +43,10 @@ public class ShowStatsMenu extends Menu{
 		//TODO: Build table of user stats.
 		for (Stats statsObj : userStats) {
 			tableStrings[i] = statsObj.toStringArray();
-			System.out.println(statsObj.toStringArray());
 		}
 		
-		System.out.println(tableStrings);
-		statsTable = new JTable(tableStrings, Stats.headerStringArray());
+		DefaultTableModel data = new DefaultTableModel(tableStrings, Stats.headerStringArray());
+		statsTable.setModel(data);
 	}
 
 }

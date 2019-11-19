@@ -19,6 +19,7 @@ public class PlatformMenu extends Menu{
 	//private Screen screen;
 	//private JPanel main;
 	private JButton gameSelect, resumeGame, showStatistics, logout, quit;
+	private Timer t;
 	
 	public PlatformMenu() {
 		super();
@@ -79,7 +80,7 @@ public class PlatformMenu extends Menu{
 			
 				MenuManager.lastGameStatus = engine.play(inFile);
 				
-				Timer t = new Timer(500, new ActionListener() {
+				t = new Timer(500, new ActionListener() {
 				    public void actionPerformed(ActionEvent e) {
 				    	if (MenuManager.lastGameStatus != null && MenuManager.lastGameStatus.getGameStatusFlag() >= 0)
 						{
@@ -189,16 +190,19 @@ public class PlatformMenu extends Menu{
 				{
 					System.out.println("Error writing stats file.");
 				}
+				
+				// MenuManager.lastGameStatus.getGameSaveFile().delete();
+				MenuManager.lastGameStatus = null;
 			}
 			else if (statusFlag > 2)
 			{
-			
+				
 			}
 			else // statusFlag < 0
 			{
 			
 			}
-			
 			MenuManager.lastGameStatus = null;
+			t.stop();
 		}	
 }

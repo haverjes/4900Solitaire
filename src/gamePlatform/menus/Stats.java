@@ -70,12 +70,12 @@ public class Stats implements Serializable
 		if(newScore > highScore) {
 			highScore = newScore;
 		}
-		if(newTime > newTime) {
-			fastestTime = newTime;
-		}
 		
 		if (win) {
 			wins +=1;
+			if(newTime < fastestTime) {
+				fastestTime = newTime;
+			}
 		}
 		else {
 			losses +=1;
