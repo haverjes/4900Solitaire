@@ -33,7 +33,7 @@ public class PlatformMenu extends Menu{
 		//gameSelect.setBounds(100,100,100,100);
 		contentPanel.add(gameSelect);
 		
-		resumeGame = new JButton("Play/Resume");
+		resumeGame = new JButton("Play Default");
 		//resumeGame.setBounds(100,300,100,100);
 		contentPanel.add(resumeGame);
 		
@@ -161,6 +161,7 @@ public class PlatformMenu extends Menu{
 				else 
 				{
 					userStats = new Stats();
+					userStats.setGameType(MenuManager.currentUser.getSelectedGame());
 				}
 				
 				boolean win;
@@ -204,5 +205,23 @@ public class PlatformMenu extends Menu{
 			}
 			MenuManager.lastGameStatus = null;
 			t.stop();
-		}	
+		}
+	public void updatePlayResumeText()
+	{
+		String userSaveDirectory = MenuManager.currentUser.getUserSaveFolder();
+		String userName = MenuManager.currentUser.getUserName();
+		String selectedGame = MenuManager.currentUser.getSelectedGame();
+		
+		File saveFile = new File(
+				Paths.get(userSaveDirectory,
+						userName + "_" + selectedGame + ".save").toString());
+		if (saveFile.exists())
+		{
+			resumeGame.setText("Resume "+selectedGame);
+		}
+		else
+		{
+			resumeGame.setText("Play "+selectedGame);
+		}
+	}
 }

@@ -42,7 +42,9 @@ public class ShowStatsMenu extends Menu{
 		int i = 0;
 		//TODO: Build table of user stats.
 		for (Stats statsObj : userStats) {
+			System.out.println(i);
 			tableStrings[i] = statsObj.toStringArray();
+			i++;
 		}
 		
 		DefaultTableModel data = new DefaultTableModel(tableStrings, Stats.headerStringArray());

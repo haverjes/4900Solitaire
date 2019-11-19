@@ -84,8 +84,6 @@ public class UserLogin implements java.io.Serializable
 	{
 		File folder = new File(getUserStatsFolder());
 		File[] listOfFiles = folder.listFiles((dir, name) -> name.endsWith(".stats"));
-		System.out.println("Stats files:");
-		System.out.println(listOfFiles);
 		List<Stats> retStats = new ArrayList<Stats>();
 		for(File curfile: listOfFiles)
 		{
@@ -100,7 +98,9 @@ public class UserLogin implements java.io.Serializable
 				inFileStream.close();
 				
 				if (!onlyFavs || userFavorites.contains(curStats.getGameType()))
+				{
 					retStats.add(curStats);
+				}
 			}
 			catch(ClassNotFoundException | IOException e1) {
 				

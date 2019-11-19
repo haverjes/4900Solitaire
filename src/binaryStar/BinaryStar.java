@@ -684,12 +684,17 @@ public class BinaryStar implements SolitaireEngine
 
 	public GameStatus play(File inFile)
 	{
+		return play(inFile, "BinaryStar.xml");
+	}
+	
+	public GameStatus play(File inFile, String gameRuleXML)
+	{
 		solitaireStatus = new GameStatus();
 		solitaireStatus.setGameScore(0);
 		System.out.println(solitaireStatus.getGameScore());
 		mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		solitaireStatus.setGameSaveFile(inFile);
-		initGame("BinaryStar.xml");
+		initGame(gameRuleXML);
 		mainGameBoard.status = solitaireStatus;
 		autoSaveFile = inFile.getPath();
 		
@@ -706,8 +711,8 @@ public class BinaryStar implements SolitaireEngine
 	}
 	
 	
-	public static JPanel getTable() {
-
+	public static JPanel getTable()
+	{
 		return table;
 	}
 	
