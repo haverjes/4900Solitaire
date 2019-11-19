@@ -528,7 +528,9 @@ public class BinaryStar implements SolitaireEngine
 	private static void playNewGame(String sXMLFile)
 	{
 		mainGameBoard = XML_Loader.LoadXML(sXMLFile);
-		solitaireStatus = new GameStatus();
+		if (solitaireStatus == null)
+			solitaireStatus = new GameStatus();
+		reInitStatus();
 		mainGameBoard.status = solitaireStatus;
 		playNewGame();
 	}
@@ -643,7 +645,7 @@ public class BinaryStar implements SolitaireEngine
 		}
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		initGame(file);
-		
+		solitaireStatus = new GameStatus();
 	}
 	
 	public static void initGame(String file)
@@ -758,4 +760,14 @@ public class BinaryStar implements SolitaireEngine
 			playNewGame(XMLFile);
 		}
 	}
+	
+	private static void reInitStatus() 
+	{
+		GameStatus newStat = new GameStatus();
+		solitaireStatus.setGameScore(newStat.getGameScore());
+		solitaireStatus.setGameTime(0);
+		solitaireStatus.setGameStatusFlag(newStat.getGameStatusFlag());
+		
+	}
+	
 }
