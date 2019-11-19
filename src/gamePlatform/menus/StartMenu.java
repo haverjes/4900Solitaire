@@ -28,13 +28,13 @@ public class StartMenu extends Menu {
 		
 		contentPanel.add(Box.createRigidArea(new Dimension(0,15))); //adds empty space between the buttons
 		
-		playOffline = new JButton("Play Anonymously (Disables Some Features)");
+		//playOffline = new JButton("Play Anonymously (Disables Some Features)");
 		//playOffline.setMinimumSize(new Dimension(100,50));
 		//playOffline.setMaximumSize(new Dimension(100,50));
-		playOffline.setAlignmentX(CENTER_ALIGNMENT);
-		contentPanel.add(playOffline);
+		//playOffline.setAlignmentX(CENTER_ALIGNMENT);
+		//contentPanel.add(playOffline);
 		
-		contentPanel.add(Box.createRigidArea(new Dimension(0,15))); //adds empty space between the buttons
+		//contentPanel.add(Box.createRigidArea(new Dimension(0,15))); //adds empty space between the buttons
 		
 		quit = new JButton("Quit");
 		//quit.setMinimumSize(new Dimension(100,50));
@@ -52,12 +52,12 @@ public class StartMenu extends Menu {
 			}
 		});
 		
-		playOffline.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				MenuManager.switchMenu(MenuManager.SELECT_GAME);
-			}
-		});
+		//playOffline.addActionListener(new ActionListener() {
+		//	@Override
+		//	public void actionPerformed(ActionEvent arg0) {
+		//		MenuManager.switchMenu(MenuManager.SELECT_GAME);
+		//	}
+		//});
 		
 		quit.addActionListener(new ActionListener() {
 			@Override
