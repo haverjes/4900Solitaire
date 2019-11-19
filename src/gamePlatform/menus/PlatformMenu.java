@@ -217,11 +217,11 @@ public class PlatformMenu extends Menu{
 						userName + "_" + selectedGame + ".save").toString());
 		if (saveFile.exists())
 		{
-			resumeGame.setText("Resume "+selectedGame);
+			resumeGame.setText("Resume " + selectedGame);
 		}
 		else
 		{
-			resumeGame.setText("Play "+selectedGame);
+			resumeGame.setText("Play " + selectedGame);
 		}
 	}
 }

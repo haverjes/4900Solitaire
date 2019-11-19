@@ -1,6 +1,7 @@
 package gamePlatform.menus;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 
 public class Stats implements Serializable
 {
@@ -98,7 +99,9 @@ public class Stats implements Serializable
 		{
 			fastestTimeString = String.valueOf(this.fastestTime);
 		}
-		return new String[] {this.gameType, String.valueOf(this.avgScore), 
+		
+		DecimalFormat avgFormat = new DecimalFormat("0.00");
+		return new String[] {this.gameType, String.valueOf(avgFormat.format(this.avgScore)), 
 				fastestTimeString, String.valueOf(this.highScore), 
 				String.valueOf(this.wins), String.valueOf(this.losses)};
 	}
