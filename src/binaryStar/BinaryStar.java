@@ -121,7 +121,7 @@ public class BinaryStar implements SolitaireEngine
 		scoreClock = new ScoreClock();
 		// set the timer to update every second
 		
-		if (!initTimer)
+		if (!timeRunning)
 		{
 			timer.scheduleAtFixedRate(scoreClock, 1000, 1000);
 			initTimer = true;
