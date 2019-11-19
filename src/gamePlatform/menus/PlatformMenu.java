@@ -191,7 +191,7 @@ public class PlatformMenu extends Menu{
 					System.out.println("Error writing stats file.");
 				}
 				
-				// MenuManager.lastGameStatus.getGameSaveFile().delete();
+				MenuManager.lastGameStatus.getGameSaveFile().delete();
 				MenuManager.lastGameStatus = null;
 			}
 			else if (statusFlag > 2)

@@ -694,10 +694,13 @@ public class BinaryStar implements SolitaireEngine
 		autoSaveFile = inFile.getPath();
 		
 		if (inFile.exists())
-			LoadGame(inFile.getAbsolutePath());	
-			
-		
-		
+		{
+			LoadGame(inFile.getAbsolutePath());
+		}
+		else
+		{
+			SaveGame(inFile.getAbsolutePath());
+		}
 		
 		return solitaireStatus;
 	}
@@ -767,7 +770,7 @@ public class BinaryStar implements SolitaireEngine
 	private static void reInitStatus() 
 	{
 		GameStatus newStat = new GameStatus();
-		solitaireStatus.setGameScore(newStat.getGameScore());
+		solitaireStatus.setGameScore(0);
 		solitaireStatus.setGameTime(0);
 		solitaireStatus.setGameStatusFlag(newStat.getGameStatusFlag());
 		
