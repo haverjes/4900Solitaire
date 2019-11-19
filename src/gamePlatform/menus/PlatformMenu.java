@@ -77,8 +77,16 @@ public class PlatformMenu extends Menu{
 				// Start running the game engine
 				// Magic happens, God knows (maybe) what it looks like.
 				BinaryStar engine = new BinaryStar();
-			
-				MenuManager.lastGameStatus = engine.play(inFile);
+								
+				if (selectedGame == null)
+				{
+					MenuManager.currentUser.setSelectedGame("BinaryStar");
+					MenuManager.lastGameStatus = engine.play(inFile);
+				}
+				else
+				{
+					MenuManager.lastGameStatus = engine.play(inFile, (selectedGame + ".xml"));
+				}
 				
 				t = new Timer(500, new ActionListener() {
 				    public void actionPerformed(ActionEvent e) {
@@ -142,7 +150,6 @@ public class PlatformMenu extends Menu{
 				if(statsFile.exists())
 				{
 					try {
-						System.out.println(statsFile);
 						FileInputStream inFileStream = new FileInputStream(statsFile);
 						ObjectInputStream inObjectStream = new ObjectInputStream(inFileStream);
 					
@@ -161,7 +168,10 @@ public class PlatformMenu extends Menu{
 				else 
 				{
 					userStats = new Stats();
-					userStats.setGameType(MenuManager.currentUser.getSelectedGame());
+					
+					userStats.setGameType(String.join(" ", 
+							MenuManager.currentUser.getSelectedGame().split(
+									"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])")));
 				}
 				
 				boolean win;
@@ -203,29 +213,39 @@ public class PlatformMenu extends Menu{
 			{
 			
 			}
-			MenuManager.lastGameStatus = null;
+			((PlatformMenu) MenuManager.MENUS[MenuManager.PLAT_MENU]).updatePlayResumeText();
 			t.stop();
-		}
+	}
+	
 	public void updatePlayResumeText()
 	{
 		String userSaveDirectory = MenuManager.currentUser.getUserSaveFolder();
 		String userName = MenuManager.currentUser.getUserName();
 		String selectedGame = MenuManager.currentUser.getSelectedGame();
 		
-		File saveFile = new File(
-				Paths.get(userSaveDirectory,
-						userName + "_" + selectedGame + ".save").toString());
-		
-	    String gameNameForButt = String.join(" ", selectedGame.split("(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])"));
-		// hehe this name
-	    
-		if (saveFile.exists())
+		if (selectedGame == null)
 		{
-			resumeGame.setText("Resume " + gameNameForButt);
+			resumeGame.setText("Play Default");
 		}
 		else
 		{
-			resumeGame.setText("Play " + gameNameForButt);
+			File saveFile = new File(
+					Paths.get(userSaveDirectory,
+							userName + "_" + selectedGame + ".save").toString());
+		
+			System.out.println(selectedGame);
+			
+			String gameNameForButt = String.join(" ", selectedGame.split("(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])"));
+			// hehe this name
+			
+			if (saveFile.exists())
+			{
+				resumeGame.setText("Resume " + gameNameForButt);
+			}
+			else
+			{
+				resumeGame.setText("Play " + gameNameForButt);
+			}
 		}
 	}
 }

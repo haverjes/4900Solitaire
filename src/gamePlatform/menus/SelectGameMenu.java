@@ -66,8 +66,9 @@ public class SelectGameMenu extends Menu{
 					String gameName = gameXML.substring(0, gameXML.lastIndexOf('.'));
 				    
 					MenuManager.currentUser.setSelectedGame(gameName);
+					MenuManager.currentUser.saveUserSettings();
 					((PlatformMenu) MenuManager.MENUS[MenuManager.PLAT_MENU]).updatePlayResumeText();
-					MenuManager.switchMenu(MenuManager.PLAT_MENU);				
+					MenuManager.switchMenu(MenuManager.PLAT_MENU);
 				}
 			});
 		}

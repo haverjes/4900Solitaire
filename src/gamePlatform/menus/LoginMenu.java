@@ -102,7 +102,9 @@ public class LoginMenu extends Menu {
 							MenuManager.currentUser = (UserLogin)  inObjectStream.readObject();
 							inObjectStream.close();
 							inFileStream.close();
-														
+							
+							((PlatformMenu) MenuManager.MENUS[MenuManager.PLAT_MENU]).updatePlayResumeText();
+							
 							// System.out.println("User data load successful for " + MenuManager.currentUser.getUserName());
 						}
 						catch(IOException e) {
@@ -116,35 +118,23 @@ public class LoginMenu extends Menu {
 					{
 						MenuManager.currentUser = new UserLogin(userName);
 						
-						try {
-							FileOutputStream outFileStream = new FileOutputStream(userSaveFile);
-							ObjectOutputStream outObjectStream = new ObjectOutputStream(outFileStream);
-							
-							outObjectStream.writeObject(MenuManager.currentUser);
-							
-							outObjectStream.close();
-							outFileStream.close();
-							
-							File userSaveDir = new File(Paths.get(UserLogin.userSaveFolders,userName).toString());
-							
-							if(!userSaveDir.exists())
-							{
-								userSaveDir.mkdir();
-							}
-							
-							File userStatsDir = new File(Paths.get(UserLogin.userStatsFolders,userName).toString());
+						File userSaveDir = new File(Paths.get(UserLogin.userSaveFolders,userName).toString());
+						
+						if(!userSaveDir.exists())
+						{
+							userSaveDir.mkdir();
+						}
+						
+						File userStatsDir = new File(Paths.get(UserLogin.userStatsFolders,userName).toString());
 
-							if(!userStatsDir.exists())
-							{
-								userStatsDir.mkdir();
-							}
-							
-							// System.out.println("Successfully wrote user data for user " 
-							//		+ MenuManager.currentUser.getUserName());
+						if(!userStatsDir.exists())
+						{
+							userStatsDir.mkdir();
 						}
-						catch(IOException e) {
-							System.out.println("Error: Problem occured writing user data to object.");
-						}
+						
+						MenuManager.currentUser.saveUserSettings();
+						// System.out.println("Successfully wrote user data for user " 
+						//		+ MenuManager.currentUser.getUserName());
 					}
 					
 					usernameEntry.setText("");

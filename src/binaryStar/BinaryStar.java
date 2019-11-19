@@ -584,7 +584,7 @@ public class BinaryStar implements SolitaireEngine
 		
 		table.repaint();
 		
-		System.out.println("Done setting up");
+		//System.out.println("Done setting up");
 	}
 	
 	
@@ -693,7 +693,6 @@ public class BinaryStar implements SolitaireEngine
 	{
 		solitaireStatus = new GameStatus();
 		solitaireStatus.setGameScore(0);
-		System.out.println(solitaireStatus.getGameScore());
 		mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		solitaireStatus.setGameSaveFile(inFile);
 		initGame(gameRuleXML);
@@ -780,7 +779,6 @@ public class BinaryStar implements SolitaireEngine
 		solitaireStatus.setGameScore(0);
 		solitaireStatus.setGameTime(0);
 		solitaireStatus.setGameStatusFlag(newStat.getGameStatusFlag());
-		
 	}
 	
 	private static void reInitStatus(GameStatus status) 

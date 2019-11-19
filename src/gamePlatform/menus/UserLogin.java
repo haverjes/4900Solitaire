@@ -121,5 +121,22 @@ public class UserLogin implements java.io.Serializable
 		return null;
 	}
 	
-	
+	public void saveUserSettings()
+	{
+		File userSaveFile = new File(Paths.get(UserLogin.userSettingsFolder,userName+".bin").toString());
+		try {
+			FileOutputStream outFileStream = new FileOutputStream(userSaveFile);
+			ObjectOutputStream outObjectStream = new ObjectOutputStream(outFileStream);
+		
+			outObjectStream.writeObject(this);
+		
+			outObjectStream.close();
+			outFileStream.close();
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+
+	}
+		
 }
