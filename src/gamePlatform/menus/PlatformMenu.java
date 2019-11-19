@@ -215,13 +215,17 @@ public class PlatformMenu extends Menu{
 		File saveFile = new File(
 				Paths.get(userSaveDirectory,
 						userName + "_" + selectedGame + ".save").toString());
+		
+	    String gameNameForButt = String.join(" ", selectedGame.split("(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])"));
+		// hehe this name
+	    
 		if (saveFile.exists())
 		{
-			resumeGame.setText("Resume " + selectedGame);
+			resumeGame.setText("Resume " + gameNameForButt);
 		}
 		else
 		{
-			resumeGame.setText("Play " + selectedGame);
+			resumeGame.setText("Play " + gameNameForButt);
 		}
 	}
 }
