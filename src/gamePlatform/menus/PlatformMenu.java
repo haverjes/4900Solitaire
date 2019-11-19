@@ -95,6 +95,7 @@ public class PlatformMenu extends Menu{
 		showStatistics.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				((ShowStatsMenu) MenuManager.MENUS[MenuManager.SHOW_STATS]).buildStatsTable();
 				MenuManager.switchMenu(MenuManager.SHOW_STATS);
 			}
 		});
@@ -140,6 +141,7 @@ public class PlatformMenu extends Menu{
 				if(statsFile.exists())
 				{
 					try {
+						System.out.println(statsFile);
 						FileInputStream inFileStream = new FileInputStream(statsFile);
 						ObjectInputStream inObjectStream = new ObjectInputStream(inFileStream);
 					
@@ -178,7 +180,7 @@ public class PlatformMenu extends Menu{
 					FileOutputStream outFileStream = new FileOutputStream(statsFile);
 					ObjectOutputStream outObjectStream = new ObjectOutputStream(outFileStream);
 					
-					outObjectStream.writeObject(MenuManager.currentUser);
+					outObjectStream.writeObject(userStats);
 					
 					outObjectStream.close();
 					outFileStream.close();
@@ -187,16 +189,16 @@ public class PlatformMenu extends Menu{
 				{
 					System.out.println("Error writing stats file.");
 				}
-		}
-		else if (statusFlag > 2)
-		{
+			}
+			else if (statusFlag > 2)
+			{
 			
-		}
-		else // statusFlag < 0
-		{
+			}
+			else // statusFlag < 0
+			{
 			
-		}
-	}
-	
-	
+			}
+			
+			MenuManager.lastGameStatus = null;
+		}	
 }

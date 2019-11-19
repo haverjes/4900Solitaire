@@ -181,10 +181,18 @@ public class BinaryStar implements SolitaireEngine
 		}
 	}
 	
-	private static final class QuitListener implements ActionListener {
+	private static final class SaveExitListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			solitaireStatus.setGameStatusFlag(3);
+			mainFrame.dispose();
+		}
+	}
+	
+	private static final class ForfeitExitListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			solitaireStatus.setGameStatusFlag(1);
 			mainFrame.dispose();
 		}
 	}
@@ -707,18 +715,21 @@ public class BinaryStar implements SolitaireEngine
         // create menuitems 
 		JMenuItem miSave = new JMenuItem("Save Game"); 
 		JMenuItem miLoad = new JMenuItem("Load Game"); 
-		JMenuItem miQuit = new JMenuItem("Quit"); 
+		JMenuItem miSaveExit = new JMenuItem("Save and Exit");
+		JMenuItem miForfeitExit = new JMenuItem("Forfeit and Exit");
 		JMenuItem miShowRules = new JMenuItem("Show Rules"); 
         
 		menuFile.add(menuNewGame);
 		menuFile.add(miSave);
 		menuFile.add(miLoad);
-		menuFile.add(miQuit);
+		menuFile.add(miSaveExit);
+		menuFile.add(miForfeitExit);
 		menuHelp.add(miShowRules);
 		
 		miSave.addActionListener(new SaveListener());
 		miLoad.addActionListener(new LoadListener());
-		miQuit.addActionListener(new QuitListener());
+		miSaveExit.addActionListener(new SaveExitListener());
+		miForfeitExit.addActionListener(new ForfeitExitListener());
 		miShowRules.addActionListener(new ShowRulesListener());
 		
 		gameOptions = XML_Loader.GetGameOptions();

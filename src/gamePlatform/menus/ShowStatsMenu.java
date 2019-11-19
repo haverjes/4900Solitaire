@@ -34,14 +34,16 @@ public class ShowStatsMenu extends Menu{
 	
 	public void buildStatsTable() {
 		List<Stats> userStats = MenuManager.currentUser.getUserStats();
-		String[][] tableStrings = {};
+		String[][] tableStrings = new String[userStats.size()][];
 		
 		int i = 0;
 		//TODO: Build table of user stats.
 		for (Stats statsObj : userStats) {
 			tableStrings[i] = statsObj.toStringArray();
+			System.out.println(statsObj.toStringArray());
 		}
 		
+		System.out.println(tableStrings);
 		statsTable = new JTable(tableStrings, Stats.headerStringArray());
 	}
 

@@ -84,7 +84,9 @@ public class UserLogin implements java.io.Serializable
 	{
 		File folder = new File(getUserStatsFolder());
 		File[] listOfFiles = folder.listFiles((dir, name) -> name.endsWith(".stats"));
-		List<Stats> retStats = new ArrayList();
+		System.out.println("Stats files:");
+		System.out.println(listOfFiles);
+		List<Stats> retStats = new ArrayList<Stats>();
 		for(File curfile: listOfFiles)
 		{
 			
