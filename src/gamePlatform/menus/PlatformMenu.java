@@ -203,6 +203,5 @@ public class PlatformMenu extends Menu{
 			
 			}
 			MenuManager.lastGameStatus = null;
-			t.stop();
 		}	
 }
