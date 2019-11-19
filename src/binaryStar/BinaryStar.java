@@ -503,7 +503,9 @@ public class BinaryStar implements SolitaireEngine
             // Method for deserialization of object 
             mainGameBoard = (GameBoard)in.readObject(); 
             mainGameBoard.status.setGameSaveFile(new File(filename));
-            solitaireStatus = mainGameBoard.status;
+            
+//            solitaireStatus = mainGameBoard.status;
+            reInitStatus(mainGameBoard.status);
             in.close(); 
             file.close(); 
             autoSaveFile = filename;
@@ -774,6 +776,14 @@ public class BinaryStar implements SolitaireEngine
 		solitaireStatus.setGameTime(0);
 		solitaireStatus.setGameStatusFlag(newStat.getGameStatusFlag());
 		
+	}
+	
+	private static void reInitStatus(GameStatus status) 
+	{
+		solitaireStatus.setGameScore(status.getGameScore());
+		solitaireStatus.setGameTime(status.getGameTime());
+		solitaireStatus.setGameStatusFlag(status.getGameStatusFlag());
+		solitaireStatus.setGameSaveFile(status.getGameSaveFile());	
 	}
 	
 }
