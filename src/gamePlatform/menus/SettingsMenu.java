@@ -121,15 +121,11 @@ public class SettingsMenu extends Menu {
 									    
 					if (checkBox.isSelected() && !MenuManager.currentUser.isFavorite(gameName))
 					{
-						System.out.println(gameName + " " + MenuManager.currentUser.isFavorite(gameName));
 						MenuManager.currentUser.addUserFavorite(gameName);
-						System.out.println(gameName + " " + MenuManager.currentUser.isFavorite(gameName));
 					}
 					else if (!checkBox.isSelected() && MenuManager.currentUser.isFavorite(gameName))
 					{
-						System.out.println(gameName + " " + MenuManager.currentUser.isFavorite(gameName));
 						MenuManager.currentUser.removeUserFavorite(gameName);
-						System.out.println(gameName + " " + MenuManager.currentUser.isFavorite(gameName));
 					}
 					
 					MenuManager.currentUser.saveUserSettings();
