@@ -559,17 +559,15 @@ public class BinaryStar implements SolitaireEngine
 		timer = new Timer();
 
 
-		scoreBox.setText("Score: ");
+		scoreBox.setText("Score: " + solitaireStatus.getGameScore());
 		scoreBox.setEditable(false);
 		scoreBox.setOpaque(false);
 
-		timeBox.setText("Seconds: 0");
+		timeBox.setText("Seconds: " + solitaireStatus.getGameTime());
 		timeBox.setEditable(false);
 		timeBox.setOpaque(false);
 
 		startTimer();
-
-		
 		
 		statusBox.setEditable(false);
 		statusBox.setOpaque(false);
