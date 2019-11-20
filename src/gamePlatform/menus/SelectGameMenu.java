@@ -36,19 +36,17 @@ public class SelectGameMenu extends Menu{
 		// TODO: Remove hard coded Engines path.
 		games = XML_Loader.getXMLFiles();
 		
-		int numGames = games.size();
-		
 		JPanel gridPanel = new JPanel();
 		gridPanel.setBackground(new Color(0, 180, 0));
 		GridBagLayout selectGameLayout = new GridBagLayout();
 		GridBagConstraints selectGameConstraints = new GridBagConstraints();
 		gridPanel.setLayout(selectGameLayout);
 		selectGameConstraints.fill = GridBagConstraints.HORIZONTAL;
-		selectGameConstraints.anchor = GridBagConstraints.PAGE_START;
+		selectGameConstraints.anchor = GridBagConstraints.CENTER;
 		selectGameConstraints.gridx = 0;
 		selectGameConstraints.gridy = 0;
 		selectGameConstraints.weightx = 0;
-		selectGameConstraints.insets = new Insets(0,300,0,300);
+		selectGameConstraints.insets = new Insets(0,0,0,0);
 		
 		buttons = new LinkedList<JButton>();
 		
@@ -83,7 +81,7 @@ public class SelectGameMenu extends Menu{
 		}
 		
 		selectGameConstraints.fill = GridBagConstraints.NONE;
-		selectGameConstraints.insets = new Insets(50,350,10,350);
+		selectGameConstraints.insets = new Insets(20,0,0,0);
 		
 		gridPanel.add(back, selectGameConstraints);
 		
@@ -113,6 +111,17 @@ public class SelectGameMenu extends Menu{
 				}
 			});
 		}
-
+	}
+	
+	public void showHideFavorites()
+	{
+		for(int i = 0; i < buttons.size(); i++)
+		{
+			JButton button = buttons.get(i);
+			String gameXML = games.get(i);
+			String gameName = gameXML.substring(0, gameXML.lastIndexOf('.'));
+			
+			button.setVisible(!MenuManager.currentUser.isShowOnlyFavorites() || MenuManager.currentUser.isFavorite(gameName));
+		}
 	}
 }

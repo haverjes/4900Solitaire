@@ -15,7 +15,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Paths;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import binaryStar.BinaryStar;
@@ -23,7 +22,7 @@ import gamePlatform.main.Launcher;
 
 public class PlatformMenu extends Menu{
 	
-	private JButton gameSelect, resumeGame, showStatistics, logout, quit;
+	private JButton gameSelect, resumeGame, showStatistics, settings, logout, quit;
 	protected static String defaultGame = "BinaryStar";
 	private Timer t;
 	
@@ -63,15 +62,20 @@ public class PlatformMenu extends Menu{
 		platformMenuConstraints.gridy = 2;
 		gridPanel.add(showStatistics, platformMenuConstraints);
 		
-		logout = new JButton("Logout");
+		settings = new JButton("Settings");
 		platformMenuConstraints.gridx = 0;
 		platformMenuConstraints.gridy = 3;
+		gridPanel.add(settings, platformMenuConstraints);
+
+		logout = new JButton("Logout");
+		platformMenuConstraints.gridx = 0;
+		platformMenuConstraints.gridy = 4;
 		gridPanel.add(logout, platformMenuConstraints);
 		
 		quit = new JButton("Quit");
 		//quit.setBounds(100, 900, 100, 100);
 		platformMenuConstraints.gridx = 0;
-		platformMenuConstraints.gridy = 5;
+		platformMenuConstraints.gridy = 6;
 		platformMenuConstraints.fill = GridBagConstraints.NONE;
 		platformMenuConstraints.insets = new Insets(50,300,0,300);		
 		gridPanel.add(quit, platformMenuConstraints);
@@ -86,6 +90,7 @@ public class PlatformMenu extends Menu{
 		gameSelect.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				((SelectGameMenu) MenuManager.MENUS[MenuManager.SELECT_GAME]).showHideFavorites();
 				MenuManager.switchMenu(MenuManager.SELECT_GAME);
 			}
 		});
@@ -137,6 +142,14 @@ public class PlatformMenu extends Menu{
 			public void actionPerformed(ActionEvent arg0) {
 				((ShowStatsMenu) MenuManager.MENUS[MenuManager.SHOW_STATS]).buildStatsTable();
 				MenuManager.switchMenu(MenuManager.SHOW_STATS);
+			}
+		});
+		
+		settings.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				((SettingsMenu) MenuManager.MENUS[MenuManager.SETTINGS_MENU]).updateSelections();
+				MenuManager.switchMenu(MenuManager.SETTINGS_MENU);
 			}
 		});
 		
@@ -199,10 +212,7 @@ public class PlatformMenu extends Menu{
 				else 
 				{
 					userStats = new Stats();
-					
-					userStats.setGameType(String.join(" ", 
-							MenuManager.currentUser.getSelectedGame().split(
-									"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])")));
+					userStats.setGameType(MenuManager.currentUser.getSelectedGame());
 				}
 				
 				boolean win;

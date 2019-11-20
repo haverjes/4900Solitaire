@@ -63,6 +63,18 @@ public class UserLogin implements java.io.Serializable
 		this.userFavorites = newFavorites;
 	}
 	
+	public void addUserFavorite(String newFavorite) {
+		this.userFavorites.add(newFavorite);
+	}
+	
+	public void removeUserFavorite(String notFavorite) {
+		this.userFavorites.remove(notFavorite);
+	}
+	
+	public boolean isFavorite(String mightBeFavorite) {
+		return this.userFavorites.contains(mightBeFavorite);
+	}
+	
 	public String getUserSaveFolder() { return Paths.get(userSaveFolders,userName).toString(); }
 	
 	public String getUserStatsFolder() { return Paths.get(userStatsFolders,userName).toString(); }

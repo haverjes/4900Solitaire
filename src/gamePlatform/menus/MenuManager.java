@@ -10,8 +10,7 @@ public class MenuManager {
 	public static final int SELECT_GAME = 2;
 	public static final int SHOW_STATS = 3;
 	public static final int LOGIN_MENU = 4;
-	public static final int RESUME_GAME = 5;
-	public static final int SETTINGS_MENU = 6;
+	public static final int SETTINGS_MENU = 5;
 	public static final Menu[] MENUS = {new StartMenu(), new PlatformMenu(), new SelectGameMenu(), new ShowStatsMenu(), 
 			new LoginMenu(), new SettingsMenu()};
 	

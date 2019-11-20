@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -73,15 +74,21 @@ public class ShowStatsMenu extends Menu{
 		List<Stats> userStats = MenuManager.currentUser.getUserStats();
 		String[][] tableStrings = new String[userStats.size()][];
 		
-		int i = 0;
+		int keep = 0;
+		
 		//TODO: Build table of user stats.
 		for (Stats statsObj : userStats) {
-			System.out.println(i);
-			tableStrings[i] = statsObj.toStringArray();
-			i++;
+			if(!MenuManager.currentUser.isShowOnlyFavorites() 
+					|| MenuManager.currentUser.isFavorite(statsObj.getGameType()))
+			{
+				tableStrings[keep] = statsObj.toStringArray();
+				keep++;
+			}
 		}
 		
-		DefaultTableModel data = new DefaultTableModel(tableStrings, Stats.headerStringArray());
+		String[][] keptTableStrings = Arrays.copyOf(tableStrings, keep);
+		
+		DefaultTableModel data = new DefaultTableModel(keptTableStrings, Stats.headerStringArray());
 		statsTable.setModel(data);
 	}
 

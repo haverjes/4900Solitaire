@@ -100,8 +100,10 @@ public class Stats implements Serializable
 			fastestTimeString = String.valueOf(this.fastestTime);
 		}
 		
+		String gameTypeFormatted = String.join(
+				" ",this.gameType.split("(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])"));
 		DecimalFormat avgFormat = new DecimalFormat("0.00");
-		return new String[] {this.gameType, String.valueOf(avgFormat.format(this.avgScore)), 
+		return new String[] {gameTypeFormatted, String.valueOf(avgFormat.format(this.avgScore)), 
 				fastestTimeString, String.valueOf(this.highScore), 
 				String.valueOf(this.wins), String.valueOf(this.losses)};
 	}
