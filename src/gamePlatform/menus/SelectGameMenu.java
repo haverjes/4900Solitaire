@@ -1,10 +1,17 @@
 package gamePlatform.menus;
 
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JButton;
+import javax.swing.JPanel;
+
 import binaryStar.XML_Loader;
 
 public class SelectGameMenu extends Menu{
@@ -15,6 +22,7 @@ public class SelectGameMenu extends Menu{
 	private static final long serialVersionUID = 1L;
 	private List<JButton> buttons;
 	private List<String> games;
+	protected static int buttonsPerRow = 1;
 	
 	public SelectGameMenu() {
 		super();
@@ -28,6 +36,20 @@ public class SelectGameMenu extends Menu{
 		// TODO: Remove hard coded Engines path.
 		games = XML_Loader.getXMLFiles();
 		
+		int numGames = games.size();
+		
+		JPanel gridPanel = new JPanel();
+		gridPanel.setBackground(new Color(0, 180, 0));
+		GridBagLayout selectGameLayout = new GridBagLayout();
+		GridBagConstraints selectGameConstraints = new GridBagConstraints();
+		gridPanel.setLayout(selectGameLayout);
+		selectGameConstraints.fill = GridBagConstraints.HORIZONTAL;
+		selectGameConstraints.anchor = GridBagConstraints.PAGE_START;
+		selectGameConstraints.gridx = 0;
+		selectGameConstraints.gridy = 0;
+		selectGameConstraints.weightx = 0;
+		selectGameConstraints.insets = new Insets(0,300,0,300);
+		
 		buttons = new LinkedList<JButton>();
 		
 		if (games != null) {
@@ -37,17 +59,36 @@ public class SelectGameMenu extends Menu{
 
 		      // System.out.println(gameName);
 		      JButton button = new JButton(gameName);
+		      
 		      buttons.add(button);
-		      contentPanel.add(button);
+		      gridPanel.add(button, selectGameConstraints);
+		      
+		      if((selectGameConstraints.gridx+1) % buttonsPerRow == 0)
+		      {
+		    	  selectGameConstraints.gridx = 0;
+		    	  selectGameConstraints.gridy++;
+		      }
+		      else
+		      {
+		    	  selectGameConstraints.gridx++;
+		      }
 		    }
-		  } else {
-		    // Handle the case where dir is not really a directory.
-		    // Checking dir.isDirectory() above would not be sufficient
-		    // to avoid race conditions with another process that deletes
-		    // directories.
-		  }	
+		  }
 		
-		contentPanel.add(back);
+		selectGameConstraints.gridx = (int) Math.ceil(buttonsPerRow/2);
+		selectGameConstraints.gridy++;
+		
+		if (selectGameConstraints.gridx % 2 == 0) {
+			selectGameConstraints.gridwidth = 2;
+		}
+		
+		selectGameConstraints.fill = GridBagConstraints.NONE;
+		selectGameConstraints.insets = new Insets(50,350,10,350);
+		
+		gridPanel.add(back, selectGameConstraints);
+		
+		contentPanel.setLayout(new FlowLayout());
+		contentPanel.add(gridPanel);
 	}
 	
 	@Override

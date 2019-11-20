@@ -1,5 +1,10 @@
 package gamePlatform.menus;
 
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -10,14 +15,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Paths;
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.Timer;
 import binaryStar.BinaryStar;
 import gamePlatform.main.Launcher;
 
 public class PlatformMenu extends Menu{
 	
-	//private Screen screen;
-	//private JPanel main;
 	private JButton gameSelect, resumeGame, showStatistics, logout, quit;
 	protected static String defaultGame = "BinaryStar";
 	private Timer t;
@@ -30,24 +35,50 @@ public class PlatformMenu extends Menu{
 	protected void initComponents() {
 		super.initComponents();
 		
+		JPanel gridPanel = new JPanel();
+		
+		GridBagLayout platformMenuLayout = new GridBagLayout();
+		GridBagConstraints platformMenuConstraints = new GridBagConstraints();
+		gridPanel.setLayout(platformMenuLayout);
+		platformMenuConstraints.fill = GridBagConstraints.HORIZONTAL;
+		platformMenuConstraints.anchor = GridBagConstraints.PAGE_START;
+		platformMenuConstraints.gridx = 0;
+		platformMenuConstraints.gridy = 0;
+		platformMenuConstraints.weighty = 0;
+		platformMenuConstraints.insets = new Insets(0,300,0,300);
+		
 		gameSelect = new JButton("Select Game");
 		//gameSelect.setBounds(100,100,100,100);
-		contentPanel.add(gameSelect);
+		gridPanel.add(gameSelect, platformMenuConstraints);
 		
 		resumeGame = new JButton("Play Default");
 		//resumeGame.setBounds(100,300,100,100);
-		contentPanel.add(resumeGame);
+		platformMenuConstraints.gridx = 0;
+		platformMenuConstraints.gridy = 1;
+		gridPanel.add(resumeGame, platformMenuConstraints);
 		
 		showStatistics = new JButton("Show Statistics");
 		//showStatistics.setBounds(100, 500, 100, 100);
-		contentPanel.add(showStatistics);
+		platformMenuConstraints.gridx = 0;
+		platformMenuConstraints.gridy = 2;
+		gridPanel.add(showStatistics, platformMenuConstraints);
 		
 		logout = new JButton("Logout");
-		contentPanel.add(logout);
+		platformMenuConstraints.gridx = 0;
+		platformMenuConstraints.gridy = 3;
+		gridPanel.add(logout, platformMenuConstraints);
 		
 		quit = new JButton("Quit");
 		//quit.setBounds(100, 900, 100, 100);
-		contentPanel.add(quit);
+		platformMenuConstraints.gridx = 0;
+		platformMenuConstraints.gridy = 5;
+		platformMenuConstraints.fill = GridBagConstraints.NONE;
+		platformMenuConstraints.insets = new Insets(50,300,0,300);		
+		gridPanel.add(quit, platformMenuConstraints);
+		gridPanel.setBackground(new Color(0, 180, 0));
+
+		contentPanel.setLayout(new FlowLayout());
+		contentPanel.add(gridPanel);
 	}
 	
 	@Override

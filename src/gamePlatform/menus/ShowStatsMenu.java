@@ -1,7 +1,18 @@
 package gamePlatform.menus;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -18,16 +29,39 @@ public class ShowStatsMenu extends Menu{
 	protected void initComponents() {
 		super.initComponents();
 		
-		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-				
+		contentPanel.setLayout(new FlowLayout());
+		
+		JPanel tablePanel = new JPanel();
+		tablePanel.setLayout(new GridBagLayout());
+		GridBagConstraints tablePanelConstraints = new GridBagConstraints();
+		tablePanel.setBackground(new Color(0, 180, 0));
+		tablePanelConstraints.gridx = 0;
+		tablePanelConstraints.gridy = 0;
+		tablePanelConstraints.weightx = 1;
+		tablePanelConstraints.weighty = 1;
+		tablePanelConstraints.fill = GridBagConstraints.HORIZONTAL;
+		
 		statsTable = new JTable();
+		statsTable.getTableHeader().setBackground(Color.lightGray);
 		statsTable.setAlignmentX(CENTER_ALIGNMENT);
 		statsTable.setAlignmentY(CENTER_ALIGNMENT);
+		statsTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		statsTable.setBorder(BorderFactory.createCompoundBorder());
+		statsTable.setForeground(Color.BLACK);
+		statsTable.setGridColor(Color.gray);
+		statsTable.setShowGrid(true);
+        statsTable.setDefaultEditor(Object.class, null);
 		JScrollPane scrollPane = new JScrollPane(statsTable);
-		contentPanel.add(scrollPane);
+		scrollPane.setBackground(new Color(0, 180, 0));
+		tablePanel.add(scrollPane,tablePanelConstraints);
 		
-		back.setAlignmentX(CENTER_ALIGNMENT);
-		contentPanel.add(back);
+		tablePanelConstraints.insets = new Insets(10,0,0,0);
+		tablePanelConstraints.gridy = 0;
+		tablePanelConstraints.gridy = 1;
+		tablePanelConstraints.fill = GridBagConstraints.NONE;
+		tablePanel.add(back,tablePanelConstraints);
+		
+		contentPanel.add(tablePanel);
 	}
 
 	@Override
