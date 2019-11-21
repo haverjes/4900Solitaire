@@ -4,10 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.nio.file.Paths;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -124,20 +122,14 @@ public class LoginMenu extends Menu {
 						{
 							userSaveDir.mkdir();
 						}
-						
-						File userStatsDir = new File(Paths.get(UserLogin.userStatsFolders,userName).toString());
-
-						if(!userStatsDir.exists())
-						{
-							userStatsDir.mkdir();
-						}
-						
+												
 						MenuManager.currentUser.saveUserSettings();
 						// System.out.println("Successfully wrote user data for user " 
 						//		+ MenuManager.currentUser.getUserName());
 					}
 					
 					usernameEntry.setText("");
+					((PlatformMenu) MenuManager.MENUS[MenuManager.PLAT_MENU]).updatePlayResumeText();
 					MenuManager.switchMenu(MenuManager.PLAT_MENU);
 				}
 				else {

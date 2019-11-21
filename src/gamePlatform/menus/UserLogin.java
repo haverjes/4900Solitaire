@@ -77,7 +77,7 @@ public class UserLogin implements java.io.Serializable
 	
 	public String getUserSaveFolder() { return Paths.get(userSaveFolders,userName).toString(); }
 	
-	public String getUserStatsFolder() { return Paths.get(userStatsFolders,userName).toString(); }
+	public String getUserStatsFolder() { return Paths.get(userStatsFolders).toString(); }
 	
 	public List<File> getUserSaves() 
 	{

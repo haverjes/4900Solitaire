@@ -710,7 +710,7 @@ public class BinaryStar implements SolitaireEngine
 			reInitStatus();
 			solitaireStatus.setGameSaveFileFromStr(newSaveFile);
 			autoSaveFile = solitaireStatus.getGameSaveFile().toString();
-			System.out.println(autoSaveFile);
+			// System.out.println(autoSaveFile);
 		}
 		
 		mainGameBoard.status = solitaireStatus;

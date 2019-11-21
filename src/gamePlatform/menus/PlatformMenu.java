@@ -174,13 +174,12 @@ public class PlatformMenu extends Menu{
 					
 		if (statusFlag >= 0 && statusFlag <= 2)
 		{
-			String userStatsDirectoryPath = Paths.get(".","UserStatistics",MenuManager.currentUser.getUserName()).toString();
+			String userStatsDirectoryPath = Paths.get(".","UserStatistics").toString();
 			File userStatsDirectory = new File(userStatsDirectoryPath);
 			
 			File statsFile = new File(
 					Paths.get(userStatsDirectory.toString(),
-							MenuManager.currentUser.getUserName()+ "_"
-							+ MenuManager.currentUser.getSelectedGame() + ".stats").toString());
+							MenuManager.currentUser.getSelectedGame() + ".stats").toString());
 			
 				if(statsFile.exists() && !statsFile.isFile())
 				{
