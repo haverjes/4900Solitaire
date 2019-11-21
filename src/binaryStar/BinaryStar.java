@@ -184,6 +184,7 @@ public class BinaryStar implements SolitaireEngine
 	private static final class SaveExitListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			AutoSaveGame();
 			solitaireStatus.setGameStatusFlag(3);
 			mainFrame.dispose();
 		}
@@ -534,19 +535,18 @@ public class BinaryStar implements SolitaireEngine
 			solitaireStatus = new GameStatus();
 		reInitStatus();
 		mainGameBoard.status = solitaireStatus;
+		solitaireStatus.setGameTime(0);
 		playNewGame();
+		
 	}
 	
 	private static void playNewGame()
 	{
 		// reset stacks if user starts a new game in the middle of one
-		
-		
 		table.removeAll();
 		
 
 		// Load the gameboard using XML_Loader
-		
 		for (int x = 0; x < mainGameBoard.Stacks.size(); x++)
 		{
 			CardStack stack = mainGameBoard.Stacks.get(x);
@@ -555,7 +555,7 @@ public class BinaryStar implements SolitaireEngine
 		}
 		
 
-		solitaireStatus.setGameTime(0);
+		
 		timer = new Timer();
 
 

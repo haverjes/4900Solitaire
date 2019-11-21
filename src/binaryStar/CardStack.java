@@ -144,7 +144,6 @@ public class CardStack extends JComponent implements Cloneable
 	{
 		if (cards.size() > 0)
 		getTopCard().faceUp = true;
-
 	}					  
 
 	public int getCardIndex(Card card) 
@@ -338,8 +337,6 @@ public class CardStack extends JComponent implements Cloneable
 	
 
 	// Draw Deck stuff
-
-	
 	public void Draw() {
 		// TODO Auto-generated method stub
 		if (cards.size() > 0) 
