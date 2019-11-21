@@ -51,7 +51,7 @@ public class LoginMenu extends Menu {
 		login.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(!usernameEntry.getText().isEmpty()) {
+				if(!usernameEntry.getText().isEmpty() && !usernameEntry.getText().contains("_")) {
 					
 					File saveDir = new File(UserLogin.userSaveFolders);
 					

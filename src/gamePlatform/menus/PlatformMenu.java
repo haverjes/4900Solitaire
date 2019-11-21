@@ -48,12 +48,14 @@ public class PlatformMenu extends Menu{
 		
 		gameSelect = new JButton("Select Game");
 		//gameSelect.setBounds(100,100,100,100);
+		platformMenuConstraints.gridx = 0;
+		platformMenuConstraints.gridy = 1;
 		gridPanel.add(gameSelect, platformMenuConstraints);
 		
 		resumeGame = new JButton("Play Default");
 		//resumeGame.setBounds(100,300,100,100);
 		platformMenuConstraints.gridx = 0;
-		platformMenuConstraints.gridy = 1;
+		platformMenuConstraints.gridy = 0;
 		gridPanel.add(resumeGame, platformMenuConstraints);
 		
 		showStatistics = new JButton("Show Statistics");
@@ -113,12 +115,8 @@ public class PlatformMenu extends Menu{
 						Paths.get(userSaveDirectory.toString(),
 								userName + "_" + selectedGame + ".save").toString());
 					
-				// Load Classes and start the game here
-				// File engineLocation = new File(SolitairePlatformConstants.enginePckgDir);
 				Launcher.mainScreen.setVisible(false);
 				
-				// Start running the game engine
-				// Magic happens, God knows (maybe) what it looks like.
 				BinaryStar engine = new BinaryStar();
 								
 				MenuManager.lastGameStatus = engine.play(inFile, (selectedGame + ".xml"));

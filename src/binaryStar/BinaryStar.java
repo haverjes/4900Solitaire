@@ -48,6 +48,7 @@ public class BinaryStar implements SolitaireEngine
 	protected static final JPanel table = new JPanel();
 	
 	// other components
+	private static boolean isAlive = false; // flag to see if initGame has been run at least once to create listeners.
 	private static JEditorPane gameTitle = new JEditorPane("text/html", "");
 	private static JButton toggleTimerButton = new JButton("Pause Timer");
 	private static JTextField scoreBox = new JTextField();// displays the score
@@ -61,16 +62,10 @@ public class BinaryStar implements SolitaireEngine
 	private static Timer timer = new Timer();
 	private static boolean initTimer = false;
 	private static ScoreClock scoreClock = new ScoreClock();
-	public static boolean isAlive;
 	
 	// Store last XML File loaded.
 	public static String XMLFile;
 	protected static String autoSaveFile;
-	
-	public BinaryStar()
-	{
-		// Does nothing really, but other groups requested play to not be static.
-	}
 	
 	// moves a card to abs location within a component
 	protected static Card moveCard(Card c, int x, int y)
@@ -96,6 +91,8 @@ public class BinaryStar implements SolitaireEngine
 			updateTimer();
 		}
 	}
+	
+	// Isn't used, but could be used for restart menu item.
 	private static class NewGameListener implements ActionListener
 	{
 		@Override
@@ -231,8 +228,6 @@ public class BinaryStar implements SolitaireEngine
 		}
 	}
 	
-	
-	
 	/*
 	 * This class handles all of the logic of moving the Card components
 	 * All this class needs to do is identify what card has been selected, and 
@@ -282,45 +277,52 @@ public class BinaryStar implements SolitaireEngine
 			stop = e.getPoint();
 			// used for status bar updates
 			boolean validMoveMade = false;
-
-//			System.out.println("Releasing mouse");
-			// PLAY STACK OPERATIONS
-			if (card != null && source != null)
-			{ // Moving from PLAY TO PLAY
-				for (int x = 0; x < mainGameBoard.Stacks.size(); x++)
-				{
-					dest = mainGameBoard.Stacks.get(x);
-					
-
-					// MOVING TO POPULATED STACK
-					if (card.faceUp == true && dest.contains(stop) && source != dest )
+			
+			// Don't allow moving the cards if the timer is paused.
+			if (timeRunning)
+			{
+				// System.out.println("Releasing mouse");
+				// PLAY STACK OPERATIONS
+				if (card != null && source != null)
+				{ // Moving from PLAY TO PLAY
+					for (int x = 0; x < mainGameBoard.Stacks.size(); x++)
 					{
-						
-						validMoveMade = mainGameBoard.DragDropMove(card, dest);
-						if (validMoveMade)
-						{
-							source.ShowTopCard();
-						
-							if((source.Type == CardStack.StackType.TAB) && (dest.Type == CardStack.StackType.FOUNDATION)) {
-								setScore(1);
-							}
-						}
-						dest.repaint();
-						table.repaint();
-						
-						//TODO: Implement scoring in GameBoard?
-						break;
-					} 
-					
-				}
-				
-			}// end cycle through play decks
+						dest = mainGameBoard.Stacks.get(x);
 
+
+						// MOVING TO POPULATED STACK
+						if (card.faceUp == true && dest.contains(stop) && source != dest )
+						{
+
+							validMoveMade = mainGameBoard.DragDropMove(card, dest);
+							if (validMoveMade)
+							{
+								source.ShowTopCard();
+
+								if((source.Type == CardStack.StackType.TAB) && (dest.Type == CardStack.StackType.FOUNDATION)) {
+									setScore(1);
+								}
+							}
+							dest.repaint();
+							table.repaint();
+
+							break;
+						} 
+					}
+				}// end cycle through play decks
+			}
+			
 			// SHOWING STATUS MESSAGE IF MOVE INVALID
 			if (!validMoveMade && dest != null && card != null && dest != source && card.stackCallBack != source)
 			{
-				statusBox.setText("That Is Not A Valid Move");
-
+				if (timeRunning)
+				{
+					statusBox.setText("That Is Not A Valid Move");
+				}
+				else
+				{
+					statusBox.setText("Unpause to Move Cards");
+				}
 			}
 
 			if (transferStack != null)
@@ -333,8 +335,6 @@ public class BinaryStar implements SolitaireEngine
 				table.repaint();
 			}
 			
-			// CHECKING FOR WIN				
-			CheckForVictory();
 			
 			// RESET VARIABLES FOR NEXT EVENT
 			start = null;
@@ -342,6 +342,10 @@ public class BinaryStar implements SolitaireEngine
 			source = null;
 			dest = null;
 			card = null;
+
+			// CHECKING FOR WIN				
+			CheckForVictory();
+			
 		}// end mousePressed()
 		
 		@Override
@@ -350,36 +354,42 @@ public class BinaryStar implements SolitaireEngine
 			if (pointedStack == null)
 				return;
 			
-			
-			if (pointedStack.Type == CardStack.StackType.DRAW)
+			// Only allow movement if timer is running.
+			if (timeRunning)
 			{
-				pointedStack.Draw();
-			}
-			else if(e.getClickCount()==2)
-			{
-				Card card = getPointedCard(e.getPoint());
-				
-	        	if (card != null && card.isTopCard())
-	        	{
-	        		CardStack stack = card.stackCallBack;
-	        		if (mainGameBoard.ClickMove(card))
-	        		{
-	        			stack.ShowTopCard();
-	        			if((stack.Type == CardStack.StackType.TAB) && (card.stackCallBack.Type == CardStack.StackType.FOUNDATION)) {
-							setScore(1);
+				if (pointedStack.Type == CardStack.StackType.DRAW)
+				{
+					pointedStack.Draw();
+				}
+				else if(e.getClickCount()==2)
+				{
+					Card card = getPointedCard(e.getPoint());
+
+					if (card != null && card.isTopCard())
+					{
+						CardStack stack = card.stackCallBack;
+						if (mainGameBoard.ClickMove(card))
+						{
+							stack.ShowTopCard();
+							if((stack.Type == CardStack.StackType.TAB) && (card.stackCallBack.Type == CardStack.StackType.FOUNDATION)) {
+								setScore(1);
+							}
 						}
-	        		}
-	        		else
-	        		{
-	        			statusBox.setText("No valid moves for this card.");
-	        		}
-	        		card.stackCallBack.repaint();
-	        		CheckForVictory();
-	        	}
-	        }
+						else
+						{
+							statusBox.setText("No Valid Moves for This Card.");
+						}
+						card.stackCallBack.repaint();
+						CheckForVictory();
+					}
+				}
+			}
+			else
+			{
+				statusBox.setText("Unpause to Move Cards.");
+			}
 			table.repaint();
 	    }
-		
 		
 		@Override
 		public void mouseDragged(MouseEvent e)
@@ -444,6 +454,7 @@ public class BinaryStar implements SolitaireEngine
 			}
 			return null;
 		}
+
 		protected CardStack getPointedStack(Point p) 
 		{
 			
@@ -461,130 +472,13 @@ public class BinaryStar implements SolitaireEngine
 			}
 			return null;
 		}
-		
-		
+			
 	}
 
 	public static void AutoSaveGame()
 	{
 		SaveGame(autoSaveFile);
 	}
-	
-	public static void SaveGame(String filename)
-	{
-		try { 
-			  
-            // Saving of object in a file 
-            FileOutputStream file = new FileOutputStream(filename); 
-            ObjectOutputStream out = new ObjectOutputStream(file); 
-  
-            // Method for serialization of object 
-            out.writeObject(mainGameBoard); 
-  
-            out.close(); 
-            file.close(); 
-            
-            mainGameBoard.status.setGameSaveFile(new File(filename));
-            autoSaveFile = filename;
-        } 
-  
-        catch (IOException ex) { 
-            System.out.println("IOException is caught"); 
-        } 
-		
-	}
-	public static void LoadGame(String filename)
-	{
-		try { 
-			  
-            // Reading the object from a file 
-            FileInputStream file = new FileInputStream(filename); 
-            ObjectInputStream in = new ObjectInputStream(file); 
-  
-            // Method for deserialization of object 
-            mainGameBoard = (GameBoard)in.readObject(); 
-            mainGameBoard.status.setGameSaveFile(new File(filename));
-            
-//            solitaireStatus = mainGameBoard.status;
-            reInitStatus(mainGameBoard.status);
-            in.close(); 
-            file.close(); 
-            autoSaveFile = filename;
-            playNewGame();
-            
-        } 
-  
-        catch (IOException ex) { 
-            System.out.println("IOException is caught"); 
-            System.out.println(ex);
-        } 
-  
-        catch (ClassNotFoundException ex) { 
-            System.out.println("ClassNotFoundException" + 
-                                " is caught"); 
-            System.out.println(ex);
-        } 
-		
-	}
-	
-
-	private static void playNewGame(String sXMLFile)
-	{
-		mainGameBoard = XML_Loader.LoadXML(sXMLFile);
-		if (solitaireStatus == null)
-			solitaireStatus = new GameStatus();
-		reInitStatus();
-		mainGameBoard.status = solitaireStatus;
-		solitaireStatus.setGameTime(0);
-		playNewGame();
-		
-	}
-	
-	private static void playNewGame()
-	{
-		// reset stacks if user starts a new game in the middle of one
-		table.removeAll();
-		
-
-		// Load the gameboard using XML_Loader
-		for (int x = 0; x < mainGameBoard.Stacks.size(); x++)
-		{
-			CardStack stack = mainGameBoard.Stacks.get(x);
-			stack.setXY(stack.xPos, stack.yPos);
-			table.add(stack);
-		}
-		
-
-		
-		timer = new Timer();
-
-
-		scoreBox.setText("Score: " + solitaireStatus.getGameScore());
-		scoreBox.setEditable(false);
-		scoreBox.setOpaque(false);
-
-		timeBox.setText("Seconds: " + solitaireStatus.getGameTime());
-		timeBox.setEditable(false);
-		timeBox.setOpaque(false);
-
-		startTimer();
-		
-		statusBox.setEditable(false);
-		statusBox.setOpaque(false);
-
-		setFrameSize(); 
-		
-		table.add(statusBox);
-		table.add(toggleTimerButton);
-		table.add(gameTitle);
-		table.add(timeBox);
-		table.add(scoreBox);
-		
-		table.repaint();
-		
-		//System.out.println("Done setting up");
-	}
-	
 	
 	static public void setFrameSize() 
 	{
@@ -647,16 +541,20 @@ public class BinaryStar implements SolitaireEngine
 		initGame(file);
 		solitaireStatus = new GameStatus();
 		solitaireStatus.setGameScore(0);
+		solitaireStatus.setGameTime(0);
+		playNewGame(file);
+		mainGameBoard.status = solitaireStatus;
+		SaveGame((new File(file)).getAbsolutePath());
 	}
 	
 	public static void initGame(String file)
 	{
+		// Set flag to show this has been run at least once this execution.
 		isAlive = true;
 		mainFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
             	solitaireStatus.setGameStatusFlag(3);
-            	isAlive = false;
     			mainFrame.dispose();
     			//System.exit(0);
             }
@@ -675,10 +573,14 @@ public class BinaryStar implements SolitaireEngine
 
 		toggleTimerButton.addActionListener(new ToggleTimerListener());
 		XMLFile = file;
-		playNewGame(file);
+		//playNewGame(file);
 		mouseManager = new CardMovementManager();
 		table.addMouseListener(mouseManager);
 		table.addMouseMotionListener(mouseManager);
+		
+		timer = new Timer();
+		
+		startTimer();
 		
 	}
 
@@ -689,27 +591,173 @@ public class BinaryStar implements SolitaireEngine
 	
 	public GameStatus play(File inFile, String gameRuleXML)
 	{
-		solitaireStatus = new GameStatus();
-		solitaireStatus.setGameScore(0);
 		mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		solitaireStatus.setGameSaveFile(inFile);
-		initGame(gameRuleXML);
-		mainGameBoard.status = solitaireStatus;
+		
+		// Only create the basic components if they haven't already been created.
+		// This issue wasn't seen in the main and is specific to platform calls because everything (more or less) is static.
+		if(!isAlive)
+		{
+			initGame(gameRuleXML);
+		}
+		else
+		{
+			// If init has been run, we only need to set the frame as visible again.
+			mainFrame.setVisible(true);
+		}
+		
 		autoSaveFile = inFile.getPath();
 		
 		if (inFile.exists())
 		{
+			solitaireStatus = new GameStatus();
 			LoadGame(inFile.getAbsolutePath());
 		}
 		else
 		{
+			solitaireStatus = new GameStatus();
+			solitaireStatus.setGameScore(0);
+			solitaireStatus.setGameTime(0);
+			solitaireStatus.setGameSaveFile(inFile);
+			playNewGame(gameRuleXML);
+			mainGameBoard.status = solitaireStatus;
 			SaveGame(inFile.getAbsolutePath());
 		}
 		
 		return solitaireStatus;
 	}
 	
+	public static void SaveGame(String filename)
+	{
+		try { 
+			  
+            // Saving of object in a file 
+            FileOutputStream file = new FileOutputStream(filename); 
+            ObjectOutputStream out = new ObjectOutputStream(file); 
+  
+            // Method for serialization of object 
+            out.writeObject(mainGameBoard); 
+  
+            out.close(); 
+            file.close(); 
+            
+            mainGameBoard.status.setGameSaveFile(new File(filename));
+            autoSaveFile = filename;
+        } 
+  
+        catch (IOException ex) { 
+            System.out.println("IOException is caught"); 
+        } 
+		
+	}
+
+	public static void LoadGame(String filename)
+	{
+		try {
+            // Reading the object from a file 
+            FileInputStream file = new FileInputStream(filename); 
+            ObjectInputStream in = new ObjectInputStream(file); 
+  
+            // Method for deserialization of object 
+            mainGameBoard = (GameBoard)in.readObject(); 
+            mainGameBoard.status.setGameSaveFile(new File(filename));
+            
+            // Ensures that solitaireStatus reflect values stored in saved serial file.
+            reInitStatus(mainGameBoard.status);
+            
+            // Redirects mainGameBoard.status to point at new solitiareStatus
+            // (solitaireStatus is what is actually updated by timer and score system)
+            mainGameBoard.status = solitaireStatus;
+            
+            in.close(); 
+            file.close(); 
+            autoSaveFile = filename;
+            playNewGame();
+            
+        } 
+  
+        catch (IOException ex) { 
+            System.out.println("IOException is caught"); 
+            System.out.println(ex);
+        } 
+  
+        catch (ClassNotFoundException ex) { 
+            System.out.println("ClassNotFoundException" + 
+                                " is caught"); 
+            System.out.println(ex);
+        } 
+		
+	}
 	
+	private static void playNewGame(String sXMLFile)
+	{
+		mainGameBoard = XML_Loader.LoadXML(sXMLFile);
+		
+		if (solitaireStatus == null)
+		{
+			solitaireStatus = new GameStatus();
+			reInitStatus();
+		}
+		else
+		{
+			String previousSave = solitaireStatus.getGameSaveFile().toString();
+			// Doesn't quite work right if Game XML users contain underscores in their names.
+			// Hotfixed by changing login to disallow creation of users with underscores in name.
+			// Need the username to do this properly but that requires an interface change.
+			//
+			// If this bit doesn't exist, starting a new Klondike game can get saved as Binary Star, etc.
+			String newSaveFile = previousSave.substring(0, previousSave.indexOf("_"));
+			newSaveFile = newSaveFile + "_" + sXMLFile.substring(0, sXMLFile.lastIndexOf('.')) + ".save";
+			reInitStatus();
+			solitaireStatus.setGameSaveFileFromStr(newSaveFile);
+			autoSaveFile = solitaireStatus.getGameSaveFile().toString();
+			System.out.println(autoSaveFile);
+		}
+		
+		mainGameBoard.status = solitaireStatus;
+				
+		playNewGame();
+	}
+	
+	private static void playNewGame()
+	{
+		// Reset stacks if user starts a new game in the middle of one
+		// Also tosses buttons and score/timer components (doesn't delete just removes from frame).
+		//   buttons and score/timer components can be added back without creating new instances b/c of this.
+		// Does not remove menu bar because it is part of the base frame and not the table.
+		table.removeAll();
+
+		// Load the gameboard using XML_Loader
+		for (int x = 0; x < mainGameBoard.Stacks.size(); x++)
+		{
+			CardStack stack = mainGameBoard.Stacks.get(x);
+			stack.setXY(stack.xPos, stack.yPos);
+			table.add(stack);
+		}
+		
+		scoreBox.setText("Score: " + solitaireStatus.getGameScore());
+		scoreBox.setEditable(false);
+		scoreBox.setOpaque(false);
+
+		timeBox.setText("Seconds: " + solitaireStatus.getGameTime());
+		timeBox.setEditable(false);
+		timeBox.setOpaque(false);
+		
+		statusBox.setEditable(false);
+		statusBox.setOpaque(false);
+		
+		setFrameSize(); 
+		
+		table.add(statusBox);
+		table.add(toggleTimerButton);
+		table.add(gameTitle);
+		table.add(timeBox);
+		table.add(scoreBox);
+		
+		table.repaint();
+		
+		//System.out.println("Done setting up");
+	}
+		
 	public static JPanel getTable()
 	{
 		return table;
@@ -767,6 +815,7 @@ public class BinaryStar implements SolitaireEngine
 			JMenuItem item = (JMenuItem)e.getSource();
 			GameOption option = (GameOption) item.getClientProperty("option");
 			XMLFile = option.file;
+			
 			playNewGame(XMLFile);
 		}
 	}

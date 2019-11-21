@@ -36,7 +36,7 @@ public class GameBoard implements Serializable
 	
 	public boolean DragDropMove(Card card, CardStack destStack) 
 	{
-		System.out.println("Attempting to move " + card.toString() + " to " + destStack.toString());
+		//System.out.println("Attempting to move " + card.toString() + " to " + destStack.toString());
 		if (card.stackCallBack.getLockCards())
 			return false;
 			
