@@ -1,0 +1,60 @@
+<GameFile name="Binary Star">
+	
+	<Board>
+		<Deck numDecks="2" />
+		<Rules>
+		<![CDATA[
+		<p><b>Binary Star Solitaire</b></p>
+	<p>Objective<p>
+	<p style = "margin-left: 40px">
+		Move all cards to one of the two foundation piles at the top of the game board.  Cards can be moved onto a foundation
+		if and only if the moved card has a value one less or one greater than the card on the top of the foundation. It doesnt matter 
+		how many cards are in each foundation.  As long as all the cards are in either of the foundations, you win!
+	</p>
+	<p>Layout<p>
+	<p style = "margin-left: 40px">
+		There are two foundation piles in the top center of the screen. An ace is placed on the first foundation and a king on the second.
+		The 17 tableaus beneath them contain 6 cards each, for a total of 102 cards.
+	</p>
+	<p><b>Have fun!</b></p>
+		]]>
+		</Rules>
+
+		<!--  Foundations are defined for each suit.  Each one is defined as starting out empty, and specifies the first card that can be played on it.
+				The firstCard examples here represent "Ace of any suit".  This attribute would only be needed if initialCard is not empty.
+		-->
+		<Stack type="Foundation" xpos="5" ypos="5" initialCard="1S" lockCards="0" shape="Stack" />
+		<Stack type="Foundation" xpos="470" ypos="5" initialCard="KH" lockCards="0" shape="Stack" />
+		
+		
+		<!--  Tab, or tableau,  Can have varying card counts.  
+			Orientation:  Whether cards placed face up or down.  'DownTopUp' means all are face down, except the top card.
+			splayed refers to how the cards are fanned out, the defined position being that of the first card.   
+		-->
+		<Stack type="Tab" xpos="10" ypos="200" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="125" ypos="200" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="240" ypos="200" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="355" ypos="200" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="470" ypos="200" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="585" ypos="200" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="700" ypos="200" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="815" ypos="200" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="940" ypos="200" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="10" ypos="500" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="125" ypos="500" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="240" ypos="500" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="355" ypos="500" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="470" ypos="500" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="585" ypos="500" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="700" ypos="500" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+		<Stack type="Tab" xpos="815" ypos="500" cardCount="6" initFaceDown="0" shape="FanDown" firstCard="K*" lockCards="0"/>
+	
+		
+		
+	</Board>
+	<MoveRules>
+		<MoveRule destType="Foundation" cardSequence="UpOrDown" suitRequirement="NONE" allowGroup="0" rankRollover="1"/>
+	</MoveRules>
+</GameFile>
+
+

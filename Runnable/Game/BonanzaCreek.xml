@@ -1,0 +1,35 @@
+<GameFile name="Bonanza Creek">
+	<Board>
+		<Deck numDecks="1" />
+		<Rules>
+		<![CDATA[<b>Object</b><p>
+To move all the cards to the foundations.></p>
+<p><b>Layout</b></p>
+<p>
+•	4 foundation piles (top right) - build up in suit from Ace to King.<br>
+•	10 tableau piles (below foundations) - build down in suit.  Move groups of cards regardless of any sequence.  Fill spaces with Kings or groups of cards headed by a King.   At the start of the game 1 card is dealt face up to the first pile, 1 card face down and 2 face up to the 2nd pile, 1 card face down and 5 face up to the 3rd and 4th piles, 2 cards face down and 4 face up to the 5th and 6th piles, 3 cards face down and 3 face up to the 7th and 8th piles, and 4 cards face down and 2 face up to the 9th and 10th piles.
+></p>]]>
+		</Rules>
+		<Stack type="Foundation" xpos="10" ypos="5"  initialCard="" firstCard="A*" lockCards="1" shape="Stack"/>
+		<Stack type="Foundation" xpos="125" ypos="5" initialCard="" firstCard="A*" lockCards="1" shape="Stack"/>
+		<Stack type="Foundation" xpos="240" ypos="5" initialCard="" firstCard="A*" lockCards="1" shape="Stack"/>
+		<Stack type="Foundation" xpos="355" ypos="5" initialCard="" firstCard="A*" lockCards="1" shape="Stack"/>
+		
+		<Stack type="Tab" xpos="10" ypos="200" cardCount="1" initFaceDown="0" firstCard="K*" shape="FanDown"/>
+		<Stack type="Tab" xpos="125" ypos="200" cardCount="3" initFaceDown="1" firstCard="K*" shape="FanDown"/>
+		<Stack type="Tab" xpos="240" ypos="200" cardCount="6" initFaceDown="1" firstCard="K*" shape="FanDown"/>
+		<Stack type="Tab" xpos="355" ypos="200" cardCount="6" initFaceDown="1" firstCard="K*" shape="FanDown"/>
+		<Stack type="Tab" xpos="470" ypos="200" cardCount="6" initFaceDown="2" firstCard="K*" shape="FanDown"/>
+		<Stack type="Tab" xpos="585" ypos="200" cardCount="6" initFaceDown="2" firstCard="K*" shape="FanDown"/>
+		<Stack type="Tab" xpos="700" ypos="200" cardCount="6" initFaceDown="3" firstCard="K*" shape="FanDown"/>
+		<Stack type="Tab" xpos="815" ypos="200" cardCount="6" initFaceDown="3" firstCard="K*" shape="FanDown"/>
+		<Stack type="Tab" xpos="940" ypos="200" cardCount="6" initFaceDown="4" firstCard="K*" shape="FanDown"/>
+		<Stack type="Tab" xpos="1055" ypos="200" cardCount="6" initFaceDown="4" firstCard="K*" shape="FanDown"/>
+		
+	</Board> 
+	<MoveRules>
+		<!--  Here, group moves and moving a card onto a tableau are not valid.  -->
+		<MoveRule destType="Foundation" cardSequence="Up" suitRequirement="Same" allowGroup="0"/>
+		<MoveRule destType="Tab" cardSequence="Down" suitRequirement="Same" allowGroup="1" rankRollover="1"/>
+	</MoveRules>
+</GameFile>
